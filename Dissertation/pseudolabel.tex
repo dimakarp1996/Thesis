@@ -46,10 +46,10 @@
      \end{itemize}
    
          \begin{equation}
-    \color{black} \mathit{MNLIpred}^{!e}_{n} = \mathit{MNLIpred}^n/(\mathit{MNLIpred}^n + \mathit{MNLIpred}^c) \label{eq:ref}
+    \color{black} \mathit{MNLIpred}^{!e}_{n} = \mathit{MNLIpred}^n/(\mathit{MNLIpred}^n + \mathit{MNLIpred}^c) \label{eq:ps0:0}
     \end{equation}
              \begin{equation}
-    \color{black} \mathit{MNLIpred}^{!e}_{c} = \mathit{MNLIpred}^c/(\mathit{MNLIpred}^n + \mathit{MNLIpred}^c) \label{eq:ref}
+    \color{black} \mathit{MNLIpred}^{!e}_{c} = \mathit{MNLIpred}^c/(\mathit{MNLIpred}^n + \mathit{MNLIpred}^c) \label{eq:ps0:1}
     \end{equation}
 
     Вероятностные вектора обозначаются квадратными скобками.
@@ -64,31 +64,31 @@
 Вероятности, подаваемые на вход модели, для данного метода можно представить следующими формулами:
 
  \begin{equation}
-		\color{black} prob^{\varepsilon}_{RTE}  = [1_{\varepsilon}, 0_{!\varepsilon},0_{e},0_{c},0_{n},0_{d}, 0_{!d},0_{+},0_{-}]  \label{eq:ref}
+		\color{black} prob^{\varepsilon}_{RTE}  = [1_{\varepsilon}, 0_{!\varepsilon},0_{e},0_{c},0_{n},0_{d}, 0_{!d},0_{+},0_{-}]  \label{eq:ps1:0}
 \end{equation}
 \begin{equation}
-		\color{black} prob^{!\varepsilon}_{RTE} = [0_{\varepsilon}, 1_{!\varepsilon},0_{e},0_{c},0_{n},0_{d}, 0_{!d},0_{+},0_{-}] \label{eq:ref}
+		\color{black} prob^{!\varepsilon}_{RTE} = [0_{\varepsilon}, 1_{!\varepsilon},0_{e},0_{c},0_{n},0_{d}, 0_{!d},0_{+},0_{-}] \label{eq:ps1:1}
 \end{equation}
 \begin{equation}
-\color{black} prob^{e}_{MNLI} = [0_{\varepsilon}, 0_{!\varepsilon},1_{e},0_{c},0_{n},0_{d}, 0_{!d},0_{+},0_{-}] \label{eq:ref}
+\color{black} prob^{e}_{MNLI} = [0_{\varepsilon}, 0_{!\varepsilon},1_{e},0_{c},0_{n},0_{d}, 0_{!d},0_{+},0_{-}] \label{eq:ps5}
 \end{equation}
 \begin{equation}
-\color{black} prob^{c}_{MNLI} = [0_{\varepsilon}, 0_{!\varepsilon},0_{e},1_{c},0_{n},0_{d}, 0_{!d},0_{+},0_{-}] \label{eq:ref}
+\color{black} prob^{c}_{MNLI} = [0_{\varepsilon}, 0_{!\varepsilon},0_{e},1_{c},0_{n},0_{d}, 0_{!d},0_{+},0_{-}] \label{eq:ps6}
 \end{equation}
 \begin{equation}
-\color{black} prob^{n}_{MNLI} = [0_{\varepsilon}, 0_{!\varepsilon},0_{e},0_{c},1_{n},0_{d}, 0_{!d},0_{+},0_{-}] \label{eq:ref}
+\color{black} prob^{n}_{MNLI} = [0_{\varepsilon}, 0_{!\varepsilon},0_{e},0_{c},1_{n},0_{d}, 0_{!d},0_{+},0_{-}] \label{eq:ps7}
 \end{equation}
 \begin{equation}
-\color{black} prob^{d}_{QQP} = [0_{\varepsilon}, 0_{!\varepsilon},0_{e},0_{c},0_{n},1_{d}, 0_{!d},0_{+},0_{-}] \label{eq:ref}
+\color{black} prob^{d}_{QQP} = [0_{\varepsilon}, 0_{!\varepsilon},0_{e},0_{c},0_{n},1_{d}, 0_{!d},0_{+},0_{-}] \label{eq:ps8}
 \end{equation}
 \begin{equation}
-\color{black} prob^{!d}_{QQP} = [0_{\varepsilon}, 0_{!\varepsilon},0_{e},0_{c},0_{n},0_{d}, 1_{!d},0_{+},0_{-}] \label{eq:ref}
+\color{black} prob^{!d}_{QQP} = [0_{\varepsilon}, 0_{!\varepsilon},0_{e},0_{c},0_{n},0_{d}, 1_{!d},0_{+},0_{-}] \label{eq:ps9}
 \end{equation}
 \begin{equation}
-\color{black} prob^{+}_{SST} = [0_{\varepsilon}, 0_{!\varepsilon},0_{e},0_{c},0_{n},0_{d}, 0_{!d},1_{+},0_{-}] \label{eq:ref}
+\color{black} prob^{+}_{SST} = [0_{\varepsilon}, 0_{!\varepsilon},0_{e},0_{c},0_{n},0_{d}, 0_{!d},1_{+},0_{-}] \label{eq:ps10}
 \end{equation}
 \begin{equation}
-\color{black} prob^{-}_{SST} = [0_{\varepsilon}, 0_{!\varepsilon},0_{e},0_{c},0_{n},0_{d}, 0_{!d},0_{+},1_{-}] \label{eq:ref}
+\color{black} prob^{-}_{SST} = [0_{\varepsilon}, 0_{!\varepsilon},0_{e},0_{c},0_{n},0_{d}, 0_{!d},0_{+},1_{-}] \label{eq:ps11}
 \end{equation}
 
 \subsection{Мягкие независимые метки}\label{subsec:ch3/sect3/sub2}
