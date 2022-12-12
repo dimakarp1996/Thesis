@@ -140,11 +140,13 @@
 Данный подход аналогичен подходам \textbf{Независимые метки} и \textbf{Мягкие независимые метки}, кроме одного отличия. Для каждого примера, вероятности всех классов из “не своего” датасета не считаются одинаковыми, а определяются в соответствии с предсказаниями модели, обученной на этом “не своем” датасете в рамках воспроизведения оригинальной статьи.
 Вероятности, подаваемые на вход модели, для данного метода можно описать следующими формулами:
 
-\begin{eqnarray}
+\begin{equation}
+\begin{split}
 \color{black} prob^{\varepsilon}_{RTE}  = [1_{\varepsilon}, 0_{!\varepsilon},{\mathit{MNLIpred}}_{e},\mathit{MNLIpred}_{c},\mathit{MNLIpred}_{n},\mathit{QQPpred}_{d}, \nonumber\\
 \color{black} \mathit{QQPpred}_{!d},\mathit{SSTpred}_{+},\mathit{SSTpred}_{-}]
+\end{split}
 \label{eq:ref}
-\end{eqnarray}
+\end{equation}
 \begin{eqnarray}
 \color{black} prob^{!\varepsilon}_{RTE} = [0_{\varepsilon}, 1_{!\varepsilon},{\mathit{MNLIpred}}_{e},\mathit{MNLIpred}_{c},\mathit{MNLIpred}_{n},\mathit{QQPpred}_{d},\nonumber\\ \color{black} \mathit{QQPpred}_{!d},\mathit{SSTpred}_{+},\mathit{SSTpred}_{-}]
 \label{eq:ref}
@@ -284,11 +286,13 @@
 
 Данный подход аналогичен подходу \textbf{Мягкие предсказанные метки} с одним изменением. Для меток, полученных из предсказаний оригинальной модели, максимальная вероятность для каждой задачи округляется до 1, а все остальные вероятности до 0.
 Вероятности, подаваемые на вход модели, для данного метода можно описать следующими формулами:
-\begin{eqnarray}
+\begin{equation}
+\begin{align}
 \color{black} prob^{\varepsilon}_{RTE}  = [{1}_{e}, {0}_{c},{0}_{n},
 \color{black}I({\mathit{SSTpred}}_{+}),{I(\mathit{SSTpred}}_{-})]
+\end{align}
 \label{eq:ref}
-\end{eqnarray}
+\end{equation}
 \begin{eqnarray}
 \color{black} prob^{!\varepsilon}_{RTE}  = [{0}_{e}, \mathit{MNLIpred}^{!e}_{c},\mathit{MNLIpred}^{!e}_{n},\nonumber\\\color{black}I({\mathit{SSTpred}}_{+}),{Id(\mathit{SSTpred}}_{-})]
 \label{eq:ref}
