@@ -51,7 +51,7 @@
 В задаче-специфичных слоях для решения задачи классификации,вычисление  вероятности $P(x)$ (вектор вероятностей $P_{1}$,.... $P_{n}$ для принадлежности к классу $x_{1}$,... $x_{n}$) для векторного представления X токена [CLS] производится по формуле:
 
 \begin{equation}
-\color{black} P(x) = softmax(W^{T}X +B)  \label{eq:ref}
+\color{black} P(x) = softmax(W^{T}X +B)  \label{mtl:0}
 \end{equation}
 
 где $W^{T}$ матрица с тренируемыми коэффициентами размерности $H*n$, $H$ размерность скрытых состояний и $n$ число классов, B тренируемый вектор размерности $n$
@@ -60,7 +60,7 @@
 Для решения задачи определения семантической близости (такой, как STS-B) используется похожая формула:
 
 \begin{equation}
-\color{black} S(x) = W^{T}X +B \label{eq:ref}
+\color{black} S(x) = W^{T}X +B \label{mtl:1}
 \end{equation}
 
 где $W^{T}$ матрица тренируемых весовых коэффициентов размерности $H*1$, $H$ размерность скрытых состояний и 1 число классов, $B$ тренируемый весовой коэффициент размерности 1. 
@@ -88,7 +88,7 @@
 Слои, встраиваемые "в тело" такой модели, называются PALs - Projective Attention Layers (проективные слои внимания). Их действие описывается формулой 
 
 \begin{equation}
-\color{black}PAL(h) = V_{d}*g(V_{e}*h) \label{eq:ref}
+\color{black}PAL(h) = V_{d}*g(V_{e}*h) \label{mtl:2}
 \end{equation}
 
 где $V_{e}$ матрица кодировщика размерности $S$*$H$, H размерность вектора скрытого слоя $h$, $S$<$H$ (авторы статьи предложили $S$=204 для BERT-LARGE), $V_{d}$ матрица декодировщика размерности $H$*$S$ и где g - многоголовое внимание.
@@ -97,13 +97,13 @@
 Эти слои добавляются авторами данной нейросетевой архитектуры в модель BERT следующим образом. Если выход каждого следующего слоя стандартной модели BERT $BERT_{i}$ зависит от выхода предыдущего слоя $BERT_{i-1}$ по формуле
 
 \begin{equation}
-\color{black}BERT_{i} =LayerNorm(BERT_{i-1})\label{eq:ref}
+\color{black}BERT_{i} =LayerNorm(BERT_{i-1})\label{mtl:3}
 \end{equation},
 
 то для модели PAL-BERT зависимость имеет такой вид:
 
 \begin{equation}
-\color{black}BERT_{i} =LayerNorm(BERT_{i-1} + PAL(BERT_{i-1})\label{eq:ref}
+\color{black}BERT_{i} =LayerNorm(BERT_{i-1} + PAL(BERT_{i-1})\label{mtl:4}
 \end{equation}
 
 \begin{figure}[ht]
@@ -119,7 +119,7 @@
 
 \begin{equation}
 \color{black}P_{i} ~N^{(1-0.8*(e-1))/(E-1)}
-\label{eq:ref}
+\label{mtl:5}
 \end{equation}
   
  где $e$ - номер эпохи, а $E$ - общее число эпох. 
