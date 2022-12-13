@@ -1,4 +1,4 @@
-\chapter{Использование псевдоразметки данных в многозадачных моделях для решения задач GLUE}\label{ch:ch3}
+\chapter{Использование псевдоразметки данных в многозадачных моделях для решения задач GLUE}\label{ch:pseudolabel}
 % https://www.overleaf.com/7535984655svjbkdpsdgpc И ЦИТАТЫ И ВИД ТАБЛИЦ
 
 Простейшим способом трансформер-инвариантной модели для решения большого количества задач является использование модели с одним “трансформером” в качестве тела(например, BERT-base-uncased) и одним линейным слоем на все задачи. Данный вид модели максимально экономичен по потребляемой памяти, как и по технической реализации. Тем не менее, при обучении его на нескольких датасетах возникает проблема, так как у каждого датасета есть метки только для классов “своей” задачи. У некоторых датасетов классы могут быть схожими, у других - кардинально различаться. В работе \cite{Karpov_Burtsev_2021} автором диссертации была подробно исследована данная проблема. Эксперименты, проделанные в данной работе, подробно описаны ниже.
@@ -140,45 +140,43 @@
 Данный подход аналогичен подходам \textbf{Независимые метки} и \textbf{Мягкие независимые метки}, кроме одного отличия. Для каждого примера, вероятности всех классов из “не своего” датасета не считаются одинаковыми, а определяются в соответствии с предсказаниями модели, обученной на этом “не своем” датасете в рамках воспроизведения оригинальной статьи.
 Вероятности, подаваемые на вход модели, для данного метода можно описать следующими формулами:
 
-\begin{equation}
-\begin{split}
+\begin{align}
 \color{black} prob^{\varepsilon}_{RTE}  = [1_{\varepsilon}, 0_{!\varepsilon},{\mathit{MNLIpred}}_{e},\mathit{MNLIpred}_{c},\mathit{MNLIpred}_{n},\mathit{QQPpred}_{d}, \nonumber\\
 \color{black} \mathit{QQPpred}_{!d},\mathit{SSTpred}_{+},\mathit{SSTpred}_{-}]
-\end{split}
 \label{eq:ps3:0}
-\end{equation}
-\begin{eqnarray}
+\end{align}
+\begin{align}
 \color{black} prob^{!\varepsilon}_{RTE} = [0_{\varepsilon}, 1_{!\varepsilon},{\mathit{MNLIpred}}_{e},\mathit{MNLIpred}_{c},\mathit{MNLIpred}_{n},\mathit{QQPpred}_{d},\nonumber\\ \color{black} \mathit{QQPpred}_{!d},\mathit{SSTpred}_{+},\mathit{SSTpred}_{-}]
 \label{eq:ps3:1}
-\end{eqnarray}
-\begin{eqnarray}
+\end{align}
+\begin{align}
 \color{black} prob^{e}_{MNLI} = [\mathit{RTEpred}_{\varepsilon}, \mathit{RTEpred}_{!\varepsilon},1_{e},0_{c},0_{n},\mathit{QQPpred}_{d},\nonumber\\ \color{black} \mathit{QQPpred}_{!d},\mathit{SSTpred}_{+},\mathit{SSTpred}_{-}]
 \label{eq:ps3:2}
-\end{eqnarray}
-\begin{eqnarray}
+\end{align}
+\begin{align}
 \color{black} prob^{c}_{MNLI} = [\mathit{RTEpred}_{\varepsilon}, \mathit{RTEpred}_{!\varepsilon},0_{e},1_{c},0_{n},\mathit{QQPpred}_{d},\nonumber\\ \color{black} \mathit{QQPpred}_{!d},\mathit{SSTpred}_{+},\mathit{SSTpred}_{-}]
 \label{eq:ps3:3}
-\end{eqnarray}
-\begin{eqnarray}
+\end{align}
+\begin{align}
 \color{black} prob^{n}_{MNLI} = [\mathit{RTEpred}_{\varepsilon}, \mathit{RTEpred}_{!\varepsilon},0_{e},0_{c},1_{n},\mathit{QQPpred}_{d},\nonumber\\ \color{black} \mathit{QQPpred}_{!d},\mathit{SSTpred}_{+},\mathit{SSTpred}_{-}]
 \label{eq:ps3:4}
-\end{eqnarray}
-\begin{eqnarray}
+\end{align}
+\begin{align}
 \color{black} prob^{d}_{QQP} = [\mathit{RTEpred}_{\varepsilon}, \mathit{RTEpred}_{!\varepsilon},\mathit{MNLIpred}_{e},\nonumber\\ \color{black} \mathit{MNLIpred}_{c},\mathit{MNLIpred}_{n},1_{d},0_{!d},\mathit{SSTpred}_{+},\mathit{SSTpred}_{-}]
 \label{eq:ps3:5}
-\end{eqnarray}
-\begin{eqnarray}
+\end{align}
+\begin{align}
 \color{black} prob^{!d}_{QQP} = [\mathit{RTEpred}_{\varepsilon}, \mathit{RTEpred}_{!\varepsilon},\mathit{MNLIpred}_{e},\mathit{MNLIpred}_{c},\nonumber\\ \color{black} \mathit{MNLIpred}_{n},0_{d},1_{!d},\mathit{SSTpred}_{+},\mathit{SSTpred}_{-}]
 \label{eq:ps3:6}
-\end{eqnarray}
-\begin{eqnarray}
+\end{align}
+\begin{align}
 \color{black} prob^{+}_{SST} = [\mathit{RTEpred}_{\varepsilon}, \mathit{RTEpred}_{!\varepsilon},\mathit{MNLIpred}_{e},\mathit{MNLIpred}_{c},\nonumber\\ \color{black} \mathit{MNLIpred}_{n},\mathit{QQPpred}_{d},\mathit{QQPpred}_{!d},1_{+},0_{-}]
 \label{eq:ps3:7}
-\end{eqnarray}
-\begin{eqnarray}
+\end{align}
+\begin{align}
 \color{black} prob^{-}_{SST} = [\mathit{RTEpred}_{\varepsilon}, \mathit{RTEpred}_{!\varepsilon},\mathit{MNLIpred}_{e},\mathit{MNLIpred}_{c},\nonumber\\ \color{black} \mathit{MNLIpred}_{n},\mathit{QQPpred}_{d},\mathit{QQPpred}_{!d},0_{+},1_{-}]
 \label{eq:ps3:8}
-\end{eqnarray}
+\end{align}
 
 \subsection{Мягкое вероятностное предположение}\label{subsec:ch3/sect3/sub4}
 
