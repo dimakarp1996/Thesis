@@ -20,7 +20,7 @@
 Механизм внимания подробнее проиллюстрирован на рисунке \ref{fig:Transformer1-Attention}
 \begin{figure}[ht]
   \centerfloat{
-    \includegraphics[scale=0.27]{Transformer1-Attention}
+    \includegraphics[width=\textwidth]{Transformer1-Attention}
   }
   \caption{Механизм Attention.}\label{fig:Transformer1-Attention}
 \end{figure}
@@ -44,7 +44,7 @@
 
 \begin{figure}[ht]
   \centerfloat{
-    \includegraphics[scale=0.27]{Transformer2-MultiHeadSelfAttention}
+    \includegraphics[width=\textwidth]{Transformer2-MultiHeadSelfAttention}
   }
   \caption{Многоголовое самовнимание.}\label{fig:Transformer2-MultiHeadSelfAttention}
 \end{figure}
@@ -56,7 +56,7 @@
 
 \begin{figure}[ht]
   \centerfloat{
-    \includegraphics[scale=0.27]{Transformer3-CompareToRNN}
+    \includegraphics[width=\textwidth]{Transformer3-CompareToRNN}
   }
   \caption{Передача информации в рекуррентной и Трансформер сетях.}\label{fig:Transformer3-CompareToRNN}
 \end{figure}
@@ -68,7 +68,7 @@
 
 \begin{figure}[ht]
   \centerfloat{
-    \includegraphics[scale=0.27]{Transformer4-EncoderDecoder}
+    \includegraphics[width=\textwidth]{Transformer4-EncoderDecoder}
   }
   \caption{Модули кодировщика и декодировщика в архитектуре Трансформер.}\label{fig:Transformer4-EncoderDecoder}
 \end{figure}
@@ -100,7 +100,7 @@ BERT(Bidirectional Encoder Representations from Transformer) \cite{devlin_2018} 
 
 \begin{figure}[ht]
   \centerfloat{
-    \includegraphics[scale=0.27]{Transformer5-BERTTokenTypes}
+    \includegraphics[width=1.0\textwidth]{Transformer5-BERTTokenTypes}
   }
   \caption{Три типа представления токенов в модели BERT}\label{fig:Transformer5-BERTTokenTypes}
 \end{figure}
@@ -117,6 +117,4 @@ BERT(Bidirectional Encoder Representations from Transformer) \cite{devlin_2018} 
 
 Эффективность модели BERT обусловлена переносом знаний: BERT получает знания на этапе предобучения, и применяет их на этапе дообучения для решения иных задач. Таким образом, в модели BERT происходит перенос знаний. 
 
-На момент проведения описанных в данной работе исследований, модель BERT(с определёнными модификациями) считалась стандартом в машинном обучении. В связи с этим, именно модели такого типа считались базовыми в дальнейшей работе, и при работе над многозадачными моделями приоритет в рассмотрении отдавался именно архитектурам, основанным на модели BERT. Применявшиеся в данной работе архитектуры многозадачных моделей описаны в следующей главе \ref{ch:mtl}
-
-\clearpage
+На момент проведения описанных в данной работе исследований, модель BERT(с определёнными модификациями) считалась стандартом в машинном обучении. В связи с этим, именно модели такого типа считались базовыми в дальнейшей работе, и при работе над многозадачными моделями приоритет в рассмотрении отдавался именно архитектурам, основанным на модели BERT. Применявшиеся в данной работе архитектуры многозадачных моделей описаны в следующей главе \ref{ch:mtl}.

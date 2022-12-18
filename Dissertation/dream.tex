@@ -24,7 +24,7 @@
 
 \begin{figure}[ht]
   \centerfloat{
-    \includegraphics[scale=0.27]{Alexa1}
+    \includegraphics[width=\textwidth]{Alexa1}
   }
   \caption{Архитектура диалоговой системы DREAM в конкурсе “Alexa Prize Challenge 3”}\label{fig:Alexa1}
 \end{figure}
@@ -143,7 +143,7 @@ GPT (3 датасета) & 86(14.2) & 92(11.6) & 83(31.5) & 92(16.3) \\
 
 ConveRT Reddit - нейросетевой ранжирующий навык, обученный на наборе комментариев с сайта REDDIT \cite{na_website_ndu} (отфильтрованном аннотаторами Cobot Conversation Evaluator и Toxic Classifier до 80 тыс.примеров) и использующий нейросетевую модель CONVERT \cite{henderson_2019} для получения векторных представления реплики и контекста(конкатенации предыдущих реплик). Данная модель вместо модели BERT была выбрана в целях экономии вычислительных ресурсов и для повышения быстродействия.
 
-\subsection{Навыки закрытого домена}\ref{dream:1:closed}
+\subsection{Навыки закрытого домена}\label{dream:1:closed}
 
 Тем не менее, вышеупомянутых навыков все еще в большинстве случаев было недостаточно для того, чтобы вести долгий, логически завершенный диалог на популярные темы. В связи с этим также был создан ряд навыков закрытого домена, основанных на правилах, использовании нейросетевых аннотаций и при необходимости делающий внешние запросы. Такие навыки, как Movie Skill, Game Skill, News Skill, Weather Skill, Small Talk Skill, Personal Info Skill, News Skill, Christmas Skill, Valentine’s Day Skill, Superbowl Skill, Oscar Skill, подробно описаны в \cite{dream1} и \cite{dream1_trudy}. Ниже будут описаны три навыка закрытого домена, являющихся личным вкладом автора.
 
@@ -167,7 +167,7 @@ Coronavirus Skill был добавлен на завершающем этапе
 
 
 \begin{figure}[ht]
-  \includegraphics[scale=0.27]{Alexa2}
+  \includegraphics[width=\textwidth]{Alexa2}
   \caption{Архитектура диалоговой системы DREAM в конкурсе “Alexa Prize Challenge 4”}\label{fig:Alexa2}
 \end{figure}
 Диалоговая система DREAM для участия в конкурсе следующего, 2021 года основывалась на доработанной системе прошлого года. Её схема представлена на рисунке \ref{fig:Alexa2}.
@@ -241,4 +241,3 @@ Coronavirus Skill был добавлен на завершающем этапе
 
 В конце февраля-начале марта, как показано  в работе \cite{dream2}, интеграция Midas Classification и изменение модели диалога в сторону более частого показа Book Skill помогли поднять рейтинг диалоговой системы DREAM с ~3.11 до ~3.28. 
 
-\clearpage
