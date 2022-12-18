@@ -38,8 +38,8 @@
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{|c||c|c|c|c|}
 \hline
-Задача/Модель & 7 в 1, без истории & \begin{tabular}[c]{@{}l@{}}7 в 1, без истории,\\жесткие метки\end{tabular}  & \begin{tabular}[c]{@{}l@{}}7 в 1, PAL-BERT,\\ без истории,\\жесткие метки\end{tabular}  & Оригинальные модели \\
-\hline\includegraphics{images/personal-signature.png}
+Задача | Модель & \begin{tabular}[c]{@{}l@{}}7 в 1\\ без истории\end{tabular}  & \begin{tabular}[c]{@{}l@{}}7 в 1\\ без истории \\ жесткие метки\end{tabular} &  \begin{tabular}[c]{@{}l@{}}7 в 1\\ PAL-BERT \\ без истории \\ жесткие метки\end{tabular} & \begin{tabular}[c]{@{}l@{}}Оригинальные\\ модели\end{tabular} \\
+\hline
 cobot topics & \textbf{0.819(0.8)} & 0.802(0.781) & 0.818(0.795) & 1(1) \\
 \hline
 cobot dialogact topics & 0.805(0.626) & 0.799(0.616) & \textbf{0.814(0.632)} & 1(1) \\
@@ -71,14 +71,14 @@ factoid classification & 0.805(0.806) & 0.816(0.814) & \textbf{0.829(0.831)} & 0
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{|c||c|c|c|c|}
 \hline
-Задача/Модель & Без истории, 1 модель для 3 задач & История из 3 шагов, 1 модель для 3 задач & Без истории, 1 модель для каждой задачи & История из 3 шагов, 1 модель для каждой задачи \\
+Задача | Модель & \begin{tabular}[c]{@{}l@{}}Без истории\\ 1 модель\end{tabular} & \begin{tabular}[c]{@{}l@{}}С историей\\ 1 модель \end{tabular} & \begin{tabular}[c]{@{}l@{}}Без истории\\ 3 разные модели\end{tabular} & \begin{tabular}[c]{@{}l@{}}С историей\\ 3 разные модели \end{tabular} \\
 \hline
 \hline
-cobot topics & 0.795(0.818) & 0.785(0.814) & 0.804(0.828) & 0.802(0.825) \\
+cobot topics & \textbf{0.795(0.818)} & 0.785(0.814) & \textbf{0.804(0.828)} & 0.802(0.825) \\
 \hline
-cobot dialogact topics & 0.752(0.683) & 0.841(0.82) & 0.759(0.685) & 0.837(0.816) \\
+cobot dialogact topics & 0.752(0.683) & \textbf{0.841(0.82)} & 0.759(0.685) & \textbf{0.837(0.816)} \\
 \hline
-cobot dialogact intents & 0.666(0.669) & 0.777(0.755) & 0.672(0.668) & 0.779(0.765) \\
+cobot dialogact intents & 0.666(0.669) & \textbf{0.777(0.755)} & 0.672(0.668) & \textbf{0.779(0.765)} \\
 \hline
 Видеопамять, Мб & 3500 & 3502 & 10500 & 10506 \\     
 \hline
@@ -116,7 +116,7 @@ cobot dialogact intents & 0.666(0.669) & 0.777(0.755) & 0.672(0.668) & 0.779(0.7
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{|c||c|c|}
 \hline
-Задача/Модель & Модель с одним линейным слоем & PAL-BERT \\
+Задача | Модель & Модель с одним линейным слоем & PAL-BERT \\
 \hline
 \hline
 cobot topics & 0.826(0.606) & \textbf{0.828(0.807)} \\
@@ -163,7 +163,7 @@ cobot dialogact intents & 0.763(0.637) & \textbf{0.774(0.639)} \\
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{|c||c|c|c|c|}
 \hline
-Задача/Модель & 7 в 1, без истории & 7 в 1, без истории, жесткие метки & 7 в 1, PAL-BERT, без истории, жесткие метки & Оригинальные модели \\
+Задача | Модель & \begin{tabular}[c]{@{}l@{}}7 в 1\\ без истории\end{tabular}  & \begin{tabular}[c]{@{}l@{}}7 в 1\\ без истории \\ жесткие метки\end{tabular} &  \begin{tabular}[c]{@{}l@{}}7 в 1\\ PAL-BERT \\ без истории \\ жесткие метки\end{tabular} & \begin{tabular}[c]{@{}l@{}}Оригинальные\\ модели\end{tabular} \\
 
 \hline
 \hline
@@ -221,7 +221,8 @@ factoid classification & 0.805(0.806) & 0.816(0.814) & \textbf{0.829(0.831)} & 0
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{|c||c|c|c|c|c|c|c|}
 \hline
-Модель/Задача &  \begin{tabular}[c]{@{}l@{}}7 в 1\\ без истории\\базовый\end{tabular} 7 в 1, без истории, базовый & 7 в 1, с историей, базовый & 7 в 1, PAL-BERT, без псевдоразметки & \begin{tabular}[c]{@{}l@{}}7 в 1, PAL-BERT, \\ псевдоразметка  только неКоботовских данных\end{tabular} & 7in1, PAL-BERT, полная псевдоразметка & 7in1, PAL-BERT, псевдоразметка только для sentiment и factoid & Оригинальные модели \\
+Модель/Задача &  \begin{tabular}[c]{@{}l@{}}7 в 1\\ без истории\\базовый\end{tabular} &\begin{tabular}[c]{@{}l@{}}7 в 1\\ с историей\\базовый\end{tabular} & \begin{tabular}[c]{@{}l@{}}7 в 1\\ PAL-BERT\\без псевдоразметки\end{tabular}  & \begin{tabular}[c]{@{}l@{}}7 в 1\\ PAL-BERT \\ псевдоразметка \\ только \\ неКоботовских \\данных\end{tabular} & \begin{tabular}[c]{@{}l@{}}7 в 1\\ PAL-BERT \\ полная \\псевдоразметка\end{tabular} & \begin{tabular}[c]{@{}l@{}}7 в 1\\ PAL-BERT \\псевдоразметка \\только \\для sentiment\\ и factoid\end{tabular} & \begin{tabular}[c]{@{}l@{}} Оригинальные \\ модели \end{tabular}\\
+\hline
 \hline
 cobot topics & \textbf{0.701(0.666)} & 0.568(0.533) & 0.833(0.81) & 0.831(0.808) & \textbf{0.863(0.843)} & 0.828(0.81) & 1(1) \\
 \hline

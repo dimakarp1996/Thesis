@@ -5,21 +5,32 @@
 \begin{table}[htbp]
 \caption{Фактоидная классификация}
 \label{appendix:factoid}
-\begin{tabular}{lll}
-class & примеров & примеров после дополнительной псевдоразметки \\
+\begin{tabular}{|c||c|c|}
+\hline
+класс & \begin{tabular}[c]{@{}l@{}}примеров\\ до псевдоразметки \end{tabular} &  \begin{tabular}[c]{@{}l@{}}примеров\\ после псевдоразметки \end{tabular}\\
+\hline
+\hline
 factoid & 2007 & 86582\\
+\hline
 conversational & 1606 & 259068 \\
+\hline
 \end{tabular}
 \end{table}
 
 \begin{table}[]
 \caption{Классификация тональности}
 \label{appendix:sentiment}
-\begin{tabular}{lll}
-class & примеров & примеров после дополнительной псевдоразметки \\
+\begin{tabular}{|c||c|c|}
+\hline
+класс & \begin{tabular}[c]{@{}l@{}}примеров\\ до псевдоразметки \end{tabular} &  \begin{tabular}[c]{@{}l@{}}примеров\\ после псевдоразметки \end{tabular}\\
+\hline
+\hline
 positive & 3446 & 44671 \\
+\hline
 neutral & 1549 & 168281 \\
-negative & 3122 & 137202
+\hline
+negative & 3122 & 137202 \\
+\hline
 \end{tabular}
 \end{table}
 
@@ -27,16 +38,27 @@ negative & 3122 & 137202
 \begin{table}[]
 \caption{Классификация токсичности}
 \label{appendix:toxic}
-\begin{tabular}{lll}
-class & примеров & примеров после дополнительной псевдоразметки \\
+\begin{tabular}{|c||c|c|}
+\hline
+класс & \begin{tabular}[c]{@{}l@{}}примеров\\ до псевдоразметки \end{tabular} &  \begin{tabular}[c]{@{}l@{}}примеров\\ после псевдоразметки \end{tabular}\\
+\hline
+\hline
 not\_toxic & 149734 & 480249 \\
+\hline
 identity\_hate & 360 & 383 \\
+\hline
 insult & 3518 & 3674 \\
+\hline
 toxic & 5572 & 15058 \\
+\hline
 obscene & 544 & 2211 \\
+\hline
 threat & 131 & 175 \\
+\hline
 sexual\_explicit & 107 & 248 \\
-severe\_toxic & 28 & 28
+\hline
+severe\_toxic & 28 & 28 \\
+\hline
 \end{tabular}
 \end{table}
 
@@ -44,15 +66,25 @@ severe\_toxic & 28 & 28
 \begin{table}[]
 \caption{Классификация эмоций}
 \label{appendix:emo}
-\begin{tabular}{lll}
-class & примеров & примеров после дополнительной псевдоразметки \\
+\begin{tabular}{|c||c|c|}
+\hline
+класс & \begin{tabular}[c]{@{}l@{}}примеров\\ до псевдоразметки \end{tabular} &  \begin{tabular}[c]{@{}l@{}}примеров\\ после псевдоразметки \end{tabular}\\
+\hline
+\hline
 fear & 38012 & {40036} \\
+\hline
 love & 27555 & {31230} \\
+\hline
 neutral & 22220 & {218607} \\
+\hline
 anger & 45800 & 129582 \\
+\hline
 joy & 112399 & 165015 \\
+\hline
 sadness & 96615 & 99830 \\
-surprise & 11966 & 12304
+\hline
+surprise & 11966 & 12304 \\
+\hline
 \end{tabular}
 \end{table}
 
@@ -60,30 +92,37 @@ surprise & 11966 & 12304
 \begin{table}[]
 \caption{Классификация cobot topics}
 \label{appendix:ct}
-\begin{tabular}{lll}
-class & примеров & примеров после дополнительной псевдоразметки \\
+\begin{tabular}{|c||c|c|}
+\hline
+класс & \begin{tabular}[c]{@{}l@{}}примеров\\ до псевдоразметки \end{tabular} &  \begin{tabular}[c]{@{}l@{}}примеров\\ после псевдоразметки \end{tabular}\\
+\hline
+\hline
 Phatic & 644421 & {826800} \\
+\hline
 Games & 14576 & {26464} \\
+\hline
 Sports & 18401 & {31507} \\
+\hline
 Literature & 12300 & 23680 \\
-Other & 45917 & 84295 \\
-Music & 44411 & 77516 \\
-Celebrities & 18630 & 34347 \\
-Movies\_TV & 69448 & 111029 \\
-Food\_Drink & 14270 & 27621 \\
-Travel\_Geo & 28303 & 47445 \\
-Art\_Event & 20046 & 29015 \\
-Weather\_Time & 12951 & 22808 \\
-Math & 1453 & 3276 \\
-Politics & 9905 & 17738 \\
-Entertainment & 800 & 1627 \\
-SciTech & 23163 & 44529 \\
-News & 4482 & 6923 \\
-Pets\_Animals & 17295 & 33579 \\
-Psychology & 6257 & 15190 \\
-Sex\_Profanity & 4659 & 10319 \\
-Religion & 6671 & 14440 \\
-Fashion & 435 & 1003
+\hline
+Other & 45917 & 84295 \\ \hline
+Music & 44411 & 77516 \\ \hline
+Celebrities & 18630 & 34347 \\ \hline
+Movies\_TV & 69448 & 111029 \\ \hline
+Food\_Drink & 14270 & 27621 \\ \hline
+Travel\_Geo & 28303 & 47445 \\ \hline
+Art\_Event & 20046 & 29015 \\ \hline
+Weather\_Time & 12951 & 22808 \\ \hline
+Math & 1453 & 3276 \\ \hline
+Politics & 9905 & 17738 \\ \hline
+Entertainment & 800 & 1627 \\ \hline
+SciTech & 23163 & 44529 \\ \hline
+News & 4482 & 6923 \\ \hline
+Pets\_Animals & 17295 & 33579 \\ \hline
+Psychology & 6257 & 15190 \\ \hline
+Sex\_Profanity & 4659 & 10319 \\ \hline
+Religion & 6671 & 14440 \\ \hline
+Fashion & 435 & 1003 \\ \hline
 \end{tabular}
 \end{table}
 
@@ -91,19 +130,22 @@ Fashion & 435 & 1003
 \begin{table}[]
 \caption{Классификация cobot dialogact topics}
 \label{appendix:dct}
-\begin{tabular}{lll}
-class & примеров & примеров после дополнительной псевдоразметки \\
-Other & 700476 & {1567293} \\
-Entertainment\_Movies & 69740 & {162181} \\
-Entertainment\_Music & 24877 & {59848} \\
-Phatic & 71032 & 173091 \\
-Sports & 17804 & 42714 \\
-Entertainment\_General & 32341 & 75531 \\
-Entertainment\_Books & 34282 & 81727 \\
-Science\_And\_Technology & 59555 & 141303 \\
-Inappropriate\_Content & 2828 & 7019 \\
-Politics & 10554 & 24539 \\
-Interactive & 136 & 348
+\begin{tabular}{|c||c|c|}
+\hline
+класс & \begin{tabular}[c]{@{}l@{}}примеров\\ до псевдоразметки \end{tabular} &  \begin{tabular}[c]{@{}l@{}}примеров\\ после псевдоразметки \end{tabular}\\
+\hline
+\hline
+Other & 700476 & {1567293} \\ \hline
+Entertainment\_Movies & 69740 & {162181} \\ \hline
+Entertainment\_Music & 24877 & {59848} \\ \hline
+Phatic & 71032 & 173091 \\ \hline
+Sports & 17804 & 42714 \\ \hline
+Entertainment\_General & 32341 & 75531 \\ \hline
+Entertainment\_Books & 34282 & 81727 \\ \hline
+Science\_And\_Technology & 59555 & 141303 \\ \hline
+Inappropriate\_Content & 2828 & 7019 \\ \hline
+Politics & 10554 & 24539 \\ \hline
+Interactive & 136 & 348 \\ \hline
 \end{tabular}
 \end{table}
 
@@ -111,18 +153,32 @@ Interactive & 136 & 348
 \begin{table}[]
 \caption{Классификация cobot dialogact intents}
 \label{appendix:dci}
-\begin{tabular}{lll}
-class & примеров & примеров после дополнительной псевдоразметки \\
+\begin{tabular}{|c||c|c|}
+\hline
+класс & \begin{tabular}[c]{@{}l@{}}примеров\\ до псевдоразметки \end{tabular} &  \begin{tabular}[c]{@{}l@{}}примеров\\ после псевдоразметки \end{tabular}\\
+\hline
+\hline
 Information\_RequestIntent & 118206 & 280886 \\
+\hline
 General\_ChatIntent & 468990 & 1112838 \\
+\hline
 Information\_DeliveryIntent & 331007 & 370136 \\
+\hline
 Opinion\_ExpressionIntent & 17558 & 33114 \\
+\hline
 ClarificationIntent & 18533 & 47428 \\
+\hline
 User\_InstructionIntent & 22142 & 54682 \\
+\hline
 Topic\_SwitchIntent & 9660 & 30011 \\
+\hline
 OtherIntent & 22288 & 48475 \\
+\hline
 Opinion\_RequestIntent & 17558 & 23241 \\
+\hline
 InteractiveIntent & 179 & 453 \\
-Multiple\_GoalsIntent & 40 & 109
+\hline
+Multiple\_GoalsIntent & 40 & 109 \\
+\hline
 \end{tabular}
 \end{table}
