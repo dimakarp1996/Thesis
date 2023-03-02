@@ -1,0 +1,156 @@
+In DREAM, new multitask “9 in 1” model was trained on the following datasets:
+Sentiment classification - on DynaBench (94k samples). Note: in previous multitask models SST was used(8k samples) what led to the overfit. Head is single-label.
+Factoid classification - on YAHOO dataset(3.6k samples) as before. Headl is single-label.
+Emotion classification - on go_emotion dataset(42k samples). Head is single-label, as using multilabel head yielded worse results.(So we used only singlelabel samples.) Note - in previous multitask models custom dataset was used, which also led to overfitting
+Midas classification - on Midas dataset(~9k samples). Head is singlelabel, only semantic classes were used as if in the DREAM now. Note - it is the first time we add this head to the multitask DREAM model!
+Topic classification - on Dilya’s dataset (1.8m samples). Head is single-label, as using multilabel head proved to be inconsistent. Note - this model still is insufficient for passing tests, so we still need Cobot replacement classifiers. Also, class names for this classifier and for Cobot replacement classifiers are different, so special functions for every such topic were added to support this difference.
+Toxic classification - on Kaggle dataset(170k samples). Note - to make the classifier single-label, non_toxic class was added to this dataset, as if in the previous multitask models.
+Cobot topics - on the private DREAM-2 dataset, from which one the most frequent “garbage” class (Phatic) was excluded, and all multilabel examples were converted to the single-label format. All these measures made model less likely to overfit on the “garbage” classes, thus improving it’s quality on the real-world data. Cleaned dataset size: 216k samples
+Cobot dialogact topics - on the private DREAM-2 dataset, from which one the most frequent “garbage” class (other) was excluded, all multilabel examples were converted to the single-label format, and history support was also removed. All these measures made model less likely to overfit on the “garbage” classes, thus improving it’s quality on the real-world data. Cleaned dataset size: 127k samples
+Cobot dialogact intents - on the private DREAM-2 dataset, from which all multilabel examples were converted to the single-label format, and history support was also removed. All these measures made model less likely to overfit on the “garbage” classes, thus improving it’s quality on the real-world data. Cleaned dataset size: 318k samples
+There also were tried the ideas of improving architecture: using task_specific tokens in concatenation with the CLS for classification, or instead of the CLS. Which was not successful. However, increasing of the batch size from 32 to 640(for distil model) or 320(for ordinary model) yielded an improvement. 
+More detailed description of experiment, with raw data, can be found here.
+
+In the setting of 25-12-2022, only midas classifier utilized history. Training the model without history from scratch, almost didn;t impact performance and paradoxically yielded some improvement for Midas(setting 3 VS setting 2). And it allowed to use 2x less max sequence length and have only 1 model prediction to cache, which decreased the prediction time from 0.73 sec to 0.55 sec/
+We show the results below
+
+Setting
+
+
+
+
+1
+2
+3
+4
+5
+Task / model
+dataset modification?
+Train size
+Singletask, distilbert base uncased,batch 640
+Multitask, distilbert base uncased, batch 640
+Multitask, distilbert base uncased, batch 640, all tasks trained without history
+Singletask, bert base uncased, batch 320
+Multitask, bert base uncased
+batch 320
+Emotion classification (go_emotions)
+
+
+converted to multi-class
+39.5к
+70.47/70.30
+68.18/67.86
+67.59/67.32
+71.48/71.16
+67.27/67.23
+Toxic classification(Kaggle
++non-toxic class
+1.62m
+94.53/93.64
+93.84/93.5
+93.86/93.41
+94.54/93.15
+93.94/93.4
+Sentiment classification(DynaBench, v1+v2)
+no
+94k
+74.75/74.63
+72.55/72.21
+72.22/71.9
+75.95/75.88
+75.65/75.62
+Factoid classification(Yahoo)
+no
+3.6k
+81.69/81.66
+81.02/81.07/81.24
+80.0/79.86/79.25
+84.41/84.44
+80.34/80.09
+Midas classification
+only semantic classes
+7.1k
+80.53/79.81(with history)
+72.73/71.56 (with history)
+62.26 /60.68 (without history)
+73.69/73.26(without history)
+82.3/82.03(with history)
+
+
+77.01/76.38(with history)
+Topics classification(Dilya)
+no
+1.8m
+87.48/87.43
+86.98/86.9
+87.01/87.05
+88.09/88.1
+87.43/87.47
+Cobot topics classification
+converted to single label no history, removed 1 widespread garbage class Phatic
+216k
+79.88/79.9
+77.31/77.36
+77.45/77.35
+80.68/80.67
+78.21/78.22
+Cobot dialogact topics classification
+converted to single label no history, removed 1 widespread garbage class Other
+127k
+76.81/76.71
+76.92/76.79
+76.8/76.7
+77.02/76.97
+76.86/76.74
+Cobot dialogact intents classification
+converted to single label no history
+318k
+77.07/77.7
+76.83/76.76
+76.65/76.57
+77.28/77.72
+76.96/76.89
+Total(9in1)
+
+
+to count
+to count
+78.48/78.22
+78.36/78.15
+to count
+79.3/79.11
+Memory used, Mb
+
+
+
+
+2418*9=21762
+2420
+2420
+3499*9=31491
+3501
+Test inference time, sec ( for the tests)
+
+
+
+
+
+
+0.76
+0.55
+
+
+~ 1.33
+
+
+For the sake of achieving the best trade-off between the memory use, inference time and test metrics, the model in green (Multitask, distilbert base uncased, batch 640) was used. It is now merged to dev as PR-213.
+
+
+New multitask: GPU memory economy
+If we treated absolutely all models as singletask, 6 models that are being replaced by the current combined classifier in DREAM(emo,toxic,sentiment and 3 cobot models) would have taken ~3500*6 ~ 21000 Mb of the GPU memory. Midas classifier would have taken ~3500 Mb of the GPU memory, as it takes in current dev.  We don’t count topic classifier model as it is unclear what kind of singletask topic classifiers we would have used. If we would have used distilbert-like topic classifier, it would have taken ~2418 Mb of the GPU memory. In this case, replacements of all singletask models would have taken ~27000 Mb of the GPU memory.  Compared to this setting, our Multitask gives ~91% GPU memory economy. 
+This economy is caused by the replacement of many BERTs by one BERT, and also by the transformer-agnosticity that helped to quickly add distilbert-base-uncased instead of the BERT-base-uncased.
+CPU memory use for the multitask model: 2909 Mb. If treating absolutely all models as singletask, the economy estimate is 2594*8 + 2594*0.6 = 22308 Mb. Compared to this seitting, our Multitask gives ~87% CPU memory economy.
+Compared to the previous dev ( where multitask 6in1 bert-base is already used), our multitask gives ~75% GPU memory economy, ~57% CPU economy and ~80-85% postannotation inference time economy. (Inference time economy is due to the fact that current multitask is much faster than Midas thanks to the transformer-agnosticity, and we no longer need to use them both).
+
+
+
