@@ -185,3 +185,161 @@ Multiple\_GoalsIntent & 40 & 109 \\
 
 \section{Распределение числа примеров по классам в серии экспериментов с трансформер-агностичными моделями в DREAM}
 ВСТАВИТЬ ТАБЛИЦЫ
+
+
+
+\section{Проверка модели на наборе данных}
+SINGLELABEL EXAMPLES
+CRITICAL EXAMPLES FROM TEST_DIALOG
+Phrase: do you like porn - PROBLEM!!!!
+0.True label:Sex&Profanity (It does not exist in dataset, but it is necessary!!)
+1.Original DeepPavlov model:Psychology
+2.Current multitask model(single-label topics): Music
+3.Multilabel multitask model(multi-label topics): [('Celebrities&Events', 0.70348006), ('Home&Design', 0.59652215), ('Psychology', 0.56743)]
+Phrase: my name is dilyara - PROBLEM!!!!
+0.True label: Family&Relationships (Closest from all labels existing in dataset)
+1.Original DeepPavlov model:Movies&Tv
+2.Current multitask model(single-label topics): Depression
+3.Multilabel multitask model(multi-label topics): []
+Phrase: i am in seattle right now- PROBLEM!!!!
+0.True label: Travel
+1.Original DeepPavlov model:Sports
+2.Current multitask model(single-label topics): MassTransit
+3.Multilabel multitask model(multi-label topics): [('Disasters', 0.71667683)]
+Phrase: what do you think about chris evans?- PROBLEM!!!!
+0.True label: Celebrities&Events
+1.Original DeepPavlov model:Music
+2.Current multitask model(single-label topics): Sports
+3.Multilabel multitask model(multi-label topics): [('Sports', 0.9790425), ('PersonalTransport', 0.7682963)]
+Phrase: tell me the weather in Boston city- PROBLEM!!!!
+0.True label:Weather_Time(It does not exist in dataset, but it is necessary!)
+1.Original DeepPavlov model:Disasters
+2.Current multitask model(single-label topics): Disasters
+3.Multilabel multitask model(multi-label topics): [('Health&Medicine', 0.91805243), ('MassTransit', 0.76488113), ('Disasters', 0.7259254)]
+Phrase: tell me about music
+0.True label:Music
+1.Original DeepPavlov model:Music
+2.Current multitask model(single-label topics): Music
+3.Multilabel multitask model(multi-label topics): [('MassTransit', 0.8430999), ('ArtificialIntelligence', 0.7067908), ('Psychology', 0.64519566)
+Phrase: are you better than siri
+0.True label:Science&Technology
+1.Original DeepPavlov model:Science&Technology
+2.Current multitask model(single-label topics): Science_and_Technology
+3.Multilabel multitask model(multi-label topics): []
+Phrase: i want to commit suicide
+0.True label:Depression
+1.Original DeepPavlov model:Depression
+2.Current multitask model(single-label topics): Depression
+3.Multilabel multitask model(multi-label topics): [('Depression', 0.7638091)]
+Phrase: let's have a conversation about pets
+0.True label: Animals&Pets - PROBLEM!!!!
+1.Original DeepPavlov model:News
+2.Current multitask model(single-label topics): Animals&Pets
+3.Multilabel multitask model(multi-label topics): [('MassTransit', 0.9737631), ('Psychology', 0.6676427), ('Sports', 0.6129431)]
+Phrase: can we talk about food - PROBLEM!!!!
+0.True label: Food
+1.Original DeepPavlov model:Food
+2.Current multitask model(single-label topics): Food
+3.Multilabel multitask model(multi-label topics): [('Home&Design', 0.74741876), ('ArtificialIntelligence', 0.5918448), ('Animals&Pets', 0.57063)]
+OTHER CRITICAL EXAMPLES, WHICH ARE SIMILAR TO EXAMPLES FROM TEST_DIALOG
+Phrase: have you been to Alaska- PROBLEM!!!!
+0.True label - Travel
+1.Original DeepPavlov model:Science&Technology 
+2.Current multitask model(single-label topics): Travel
+3.Multilabel multitask model(multi-label topics): [('Health&Medicine', 0.6595304), ('Disasters', 0.62206763), ('MassTransit', 0.51566494)]
+Phrase: please talk about movies
+0.True label - Movies_TV
+1.Original DeepPavlov model:Movies&Tv
+2.Current multitask model(single-label topics): Movies_TV
+3.Multilabel multitask model(multi-label topics): [('Movies_TV', 0.9960515), ('PersonalTransport', 0.6289764)]
+Phrase: please talk about books - PROBLEM!!!!
+0.True label - Books&Literature
+1.Original DeepPavlov model:Religion
+2.Current multitask model(single-label topics): Books&Literature
+3.Multilabel multitask model(multi-label topics): [('Psychology', 0.9393409), ('MassTransit', 0.90256804), ('Science_and_Technology', 0.73622745)]
+Phrase: talk about games- PROBLEM!!!!
+0.True label - Videogames
+1.Original DeepPavlov model:Sports
+2.Current multitask model(single-label topics): Videogames
+3.Multilabel multitask model(multi-label topics): [('Videogames', 0.99719965), ('Leisure', 0.6766184)]
+Phrase: where are you from- PROBLEM!!!!
+0.True label - Family&Relationships (Closest from all labels existing in dataset)
+1.Original DeepPavlov model:Disasters
+2.Current multitask model(single-label topics): Music
+3.Multilabel multitask model(multi-label topics): []
+Phrase: what is your favourite food
+0.True label - Food
+1.Original DeepPavlov model:Food
+2.Current multitask model(single-label topics): Food
+3.Multilabel multitask model(multi-label topics): [('Food', 0.9769383), ('Leisure', 0.8646069)]
+Phrase: what music do you like
+0.True label - Music
+1.Original DeepPavlov model:Music
+2.Current multitask model(single-label topics): Music
+3.Multilabel multitask model(multi-label topics): [('Music', 0.99813026), ('Celebrities&Events', 0.6034566)]
+Phrase: let's chat about video game minecraft
+0.True label - Videogames
+1.Original DeepPavlov model:Videogames
+2.Current multitask model(single-label topics): Videogames
+3.Multilabel multitask model(multi-label topics): [('Videogames', 0.9819764), ('Movies_TV', 0.8579248), ('Garden', 0.54672825)]
+A HARD EXAMPLE
+Phrase: I love eating animals - PROBLEM!!!!
+1.Original DeepPavlov model:Food
+2.Current multitask model(single-label topics): Animals&Pets
+3.Multilabel multitask model(multi-label topics): [('Animals&Pets', 0.99028605), ('Science_and_Technology', 0.72811055)]
+MULTILABEL EXAMPLES
+Phrase: I love reading but I also enjoy movies
+0.True labels - Books&Literature, Movies_TV
+1.Original DeepPavlov model:Books&Literature
+2.Current multitask model(single-label topics): Books&Literature
+3.Multilabel multitask model(multi-label topics): [('Books&Literature', 0.91005474), ('Movies_TV', 0.5031446)]
+Phrase: porn and religion (problem - label sex_profanity dont'exist in a dataset)
+0.True labels - Religion,Sex_Profanity
+1.Original DeepPavlov model:Religion
+2.Current multitask model(single-label topics): Religion
+3.Multilabel multitask model(multi-label topics): [('Religion', 0.9249734)]
+Phrase: books and games
+0.True labels - Books&Literature, Videogames
+1.Original DeepPavlov model:Religion
+2.Current multitask model(single-label topics): Books&Literature
+3.Multilabel multitask model(multi-label topics): [('Videogames', 0.90740865), ('Books&Literature', 0.6998605)]
+Phrase: I love eating and animals - PROBLEM!!!!
+0.True labels - Food, Animals&Pets
+1.Original DeepPavlov model:Movies&Tv
+2.Current multitask model(single-label topics): Animals&Pets
+3.Multilabel multitask model(multi-label topics): [('Animals&Pets', 0.9883128), ('Science_and_Technology', 0.5036472)]
+Phrase: My Mother is 30 years old and she loves music - PROBLEM!!!!
+0.True labels - Music, Family&Relationships
+1.Original DeepPavlov model:Music
+2.Current multitask model(single-label topics): Music
+3.Multilabel multitask model(multi-label topics): [('Music', 0.99159664)]
+Phrase: I am depressed because I don't have a job
+0.True labels - Job,Depression
+1.Original DeepPavlov model:Job
+2.Current multitask model(single-label topics): Depression
+3.Multilabel multitask model(multi-label topics): []
+Phrase: I have been at the art gallery in Rome, where the weather was sunny
+0.True labels - Art, Travel, Weather_Time - PROBLEMS!!!!
+1.Original DeepPavlov model:Travel,Arts&Hobbies,Weather&Time
+2.Current multitask model(single-label topics): Disasters
+3.Multilabel multitask model(multi-label topics): [('Disasters', 0.52701145)]
+Phrase: I study at school and I have got A grade in my Math class - PROBLEM!!!!
+0.True labels: Education,Math
+1.Original DeepPavlov model:Science&Technology
+2.Current multitask model(single-label topics): Education
+3.Multilabel multitask model(multi-label topics): [('Education', 0.5735995)]
+Phrase: I have bought New shoes and Android smartphone in my leisure time, when I was at the gadget store. - PROBLEM!!!!
+0.True labels:Clothes, Gadgets
+1.Original DeepPavlov model:Science&Technology
+2.Current multitask model(single-label topics): Clothes
+3.Multilabel multitask model(multi-label topics): [('Clothes', 0.6520526)]
+Phrase: I have met a celebrity that have been to space. It is a film star Johny Depp. - PROBLEM!!!!
+0.True labels - Celebrities, Movies_TV
+1.Original DeepPavlov model:Space
+2.Current multitask model(single-label topics): Movies_TV
+3.Multilabel multitask model(multi-label topics): [('Movies_TV', 0.7043735)]
+Phrase: I am depressed because I have cancer and I have no money to visit a doctor - PROBLEM!!!!
+0.True labels - Depression, Health&Medicine
+1.Original DeepPavlov model:Depression
+2.Current multitask model(single-label topics): Depression
+3.Multilabel multitask model(multi-label topics): [('Education', 0.7360731)]
