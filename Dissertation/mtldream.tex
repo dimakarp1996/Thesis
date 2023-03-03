@@ -255,8 +255,13 @@ factoid classification & 0.789(0.809) & 0.794(0.817) & \textbf{0.834(0.831)} & 0
 
 \section{Использование многозадачной трансформер-агностичной модели в диалоговой платформе DREAM} 
 
-Многозадачная модель, основанная на модели PAL-BERT, помогла добиться
-.... Кратко описать достижения и проблемы
+Многозадачная модель, основанная на модели PAL-BERT, помогла добиться существенной экономии вычислительных ресурсов. Тем не менее, модели подобного рода имеют и свои недостатки. Так, модель PAL-BERT не является трансформер-агностичной, что ограничивает использование подобных моделей с разными типами трансформеров в качестве их "ядра". Помимо этого, было необходимо расширить набор задач, поддерживаемых многозадачной  нейросетевой моделью в диалоговой платформе DREAM, а также  улучшить обучающую выборку для борьбы с переобучением этой модели. 
+
+В связи с этим было принято решение использовать многозадачную трансформер-агностичную модель, описанную в главе \ref{sec:tr-ag}, для решения задач диалоговой платформы DREAM. В данной модели к описанным выше задачам была добавлена классификация интентов на диалоговых данных из набора данных MIDAS, подробнее описанных в разделе \ref{sec:midas}. Помимо этого, была добавлена классификация на новом тематическом наборе данных DeepPavlov Topics\cite{dp_topics}, которая позволила расширить набор покрываемых тем. 
+
+Итоговая многозадачная модель обучалась одновременно для \textbf{девяти} задач. Ниже будет подробно описана каждая из этих задач вместе с обучающим набором данных для этой задачи. 
+\begin{itemize} 
+\item[*]Классификация тональности
 
 
 
@@ -284,6 +289,34 @@ In the setting of 25-12-2022, only midas classifier utilized history. Training t
 For the sake of achieving the best trade-off between the memory use, inference time and test metrics, the model in green (Multitask, distilbert base uncased, batch 640) was used. It is now merged to dev.
 We show the results below.
 TODO ВСТАВИТЬ ТАБЛИЦУ. 
+
+\begin{table}[htbp]
+\centering
+\caption {Точность(f1) для оценки моделей в третьей серии экспериментов. Для не-Коботовских задач при оценке используются оригинальные тестовые наборы данных, для коботовских - тестовое разбиение данных.}
+\label{mtldream:5}% label всегда желательно идти после caption
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|c||c|c|c|c|c|c|c|}
+\hline
+Модель/Задача &  \begin{tabular}[c]{@{}l@{}}7 в 1\\ без истории\\базовый\end{tabular} &\begin{tabular}[c]{@{}l@{}}7 в 1\\ с историей\\базовый\end{tabular} & \begin{tabular}[c]{@{}l@{}}7 в 1\\ PAL-BERT\\без псевдоразметки\end{tabular}  & \begin{tabular}[c]{@{}l@{}}7 в 1\\ PAL-BERT \\ псевдоразметка \\ только \\ неКоботовских \\данных\end{tabular} & \begin{tabular}[c]{@{}l@{}}7 в 1\\ PAL-BERT \\ полная \\псевдоразметка\end{tabular} & \begin{tabular}[c]{@{}l@{}}7 в 1\\ PAL-BERT \\псевдоразметка \\только \\для sentiment\\ и factoid\end{tabular} & \begin{tabular}[c]{@{}l@{}} Оригинальные \\ модели \end{tabular}\\
+\hline
+\hline
+cobot topics & \textbf{0.701(0.666)} & 0.568(0.533) & 0.833(0.81) & 0.831(0.808) & \textbf{0.863(0.843)} & 0.828(0.81) & 1(1) \\
+\hline
+cobot dialogact topics & 0.756(0.519) & 0.852(0.667) & \textbf{0.871(0.704)} & 0.869(0.704) & \textbf{0.906(0.804)} & 0.868(0.698) & 1(1) \\
+\hline
+cobot dialogact intents & 0.515(0.406) & 0.728(0.516) & \textbf{0.768(0.563)} & 0.765(0.561) & \textbf{0.828(0.685)} & 0.753(0.554) & 1(1) \\
+\hline
+emotion classification & 0.905(0.88) & 0.917(0.883) & \textbf{0.927(0.906)} & 0.924(0.893) & 0.923(0.897) & 0.926(0.91) & 0.92(0.751) \\
+\hline
+sentiment classification & 0.72(0.633) & 0.713(0.657) & \textbf{0.706(0.648)} & 0.727(0.659) & 0.713(0.647) & \textbf{0.754(0.664)} & 0.721(0.681) \\
+\hline
+toxic classification & 0.938(0.199) & 0.932(0.21) & \textbf{0.928(0.253)} & 0.932(0.298) & 0.932(0.269) & \textbf{0.939(0.259)} & 0.922(0.596) \\
+\hline
+factoid classification & 0.789(0.809) & 0.794(0.817) & \textbf{0.834(0.831)} & 0.846(0.844) & \textbf{0.869(0.866)} & 0.854(0.853) & 0.886(0.884) \\
+\hline
+\end{tabular}
+}
+\end{table}
 
 New multitask: GPU memory economy
 If we treated absolutely all models as singletask, 6 models that are being replaced by the current combined classifier in DREAM(emo,toxic,sentiment and 3 cobot models) would have taken ~3500*6 ~ 21000 Mb of the GPU memory. Midas classifier would have taken ~3500 Mb of the GPU memory, as it takes in current dev.  We don’t count topic classifier model as it is unclear what kind of singletask topic classifiers we would have used. If we would have used distilbert-like topic classifier, it would have taken ~2418 Mb of the GPU memory. In this case, replacements of all singletask models would have taken ~27000 Mb of the GPU memory.  Compared to this setting, our Multitask gives ~91% GPU memory economy. 
