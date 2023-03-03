@@ -1,11 +1,11 @@
-  \chapter{  Использование в диалоговой системе DREAM многозадачных моделей}\label{ch:mtldream} 
+  \chapter{  Использование в диалоговой платформе DREAM многозадачных моделей}\label{ch:mtldream} 
 
 \section{Использование многозадачных моделей с одним линейным слоем }
 \subsection{Использование многозадачных моделей с одним линейным слоем для объединения и замены классификаторов реплик}
-Автором данной диссертационной работы многозадачные модели для диалоговой системы DREAM начали использоваться во время конкурса Alexa Prize Challenge 4.Необходимость использования многозадачных моделей была обусловлена как необходимостью экономии вычислительных ресурсов(в первую очередь видеопамяти),
+Автором данной диссертационной работы многозадачные модели для диалоговой платформы DREAM начали использоваться во время конкурса Alexa Prize Challenge 4.Необходимость использования многозадачных моделей была обусловлена как необходимостью экономии вычислительных ресурсов(в первую очередь видеопамяти),
 так и лимитом на количество ежедневных запросов к сервисам Amazon, который часто превышался в условиях интенсивных нагрузок конкурса.В связи с этим, была поставлена задача объединить шесть моделей - модель для классификации эмоций(далее будет использоваться также название emotion classification), модель для классификации тональности(далее будет использоваться также название sentiment classification), модель для классификации токсичности(далее будет использоваться также название toxic classification), модель Cobot Topics, модель Cobot DialogAct Topics и модель Cobot DialogAct Intents. 
 
-Первой версией многозадачной модели, использовавшейся в диалоговой системе DREAM, являлась модель, имеющая такую же архитектуру,
+Первой версией многозадачной модели, использовавшейся в диалоговой платформу DREAM, являлась модель, имеющая такую же архитектуру,
 как и модель, описанная в главе \ref{ch:pseudolabel}.
 
  Заметим, что набор данных из конкурса Alexa Prize Challenge 3 для обучения модели имел следующую особенность - все пользовательские фразы имели аннотации сразу от всех моделей. В связи с этим, модель BERT в первой серии экспериментов обучалась на этих данных, получая на вход предсказания этих моделей(сохранённые в архиве диалогов во время конкурса) в качестве меток. Иными словами, использовался подход, аналогичный подходу "Жёсткие независимые метки" из вышеупомянутого раздела, но без объединения меток. 
@@ -87,19 +87,19 @@ cobot dialogact intents & 0.666(0.669) & \textbf{0.777(0.755)} & 0.672(0.668) & 
 \end{table}
 
 Данный эксперимент показал потенциал улучшения качества многозадачной модели. Тем не менее, в связи с ограничением по вычислительным мощностям, было принято решение не увеличивать размер входа многозадачной модели с 32 до 64 и не добавлять туда историю. Такому решению также способствовал тот факт, что большинство выявлявшихся на Коботовских задачах при ручном тестировании ошибок многозадачной модели  было связано не с несоответствием выхода многозадачной модели выходу оригинальной модели, а с неидеальностью самой разметки, использовавшейся при обучении. 
-На задачах же, на которых у нас была "чистая" разметка, просадка, связанная с использованием многозадачной модели, была относительно небольшой (у классификаторов эмоций и тональности точность упала на 6\%, f1 упало для классификатора эмоций на 7\%,для классификатора тональности на 10\%). Данные показатели были сочтены приемлемыми. Именно поэтому классификатор без истории был встроен в диалоговую систему DREAM, он же использовался в этой системе в течение всего конкурса Alexa Prize Challenge 4.
+На задачах же, на которых у нас была "чистая" разметка, просадка, связанная с использованием многозадачной модели, была относительно небольшой (у классификаторов эмоций и тональности точность упала на 6\%, f1 упало для классификатора эмоций на 7\%,для классификатора тональности на 10\%). Данные показатели были сочтены приемлемыми. Именно поэтому классификатор без истории был встроен в диалоговую платформу DREAM, он же использовался в этой системе в течение всего конкурса Alexa Prize Challenge 4.
 
 \subsection{Использование многозадачных моделей с одним линейным слоем для замены модели для оценки диалога}
 Другой классификационной моделью с одним линейным слоем, использовавшейся в диалоговой системе DREAM, стала замена CoBot Conversation Evaluator. Данная модель была встроена после окончания конкурса Alexa Prize Challenge 4(в сентябре 2021 года) с тем, чтобы после прекращения доступа к Amazon API продолжать получать оценки диалога по 5 параметрам: isResponseInteresting(ответ интересный), responseEngagesUser(ответ развлекает пользователя), isResponseComprehensible(ответ понятный), isResponseErroneous(ответ ошибочный), isResponseOnTopic(ответ по теме). Обученный на массиве диалогов из Alexa Prize Challenge 4, линейный слой предсказывал вектор из 5 величин от 0 до 1, метрик для мониторинга считалась средним квадратичным отклонением. 
 
 Размер батча равнялся 32, максимальный размер диалога - 128 токенов, все остальные параметры обучения были как в предыдущем эксперименте. Размер тренировочной выборки составлял 11456585 диалогов(75\%), тестовой 356250 тыс(2.23\%),валидационной 3462611 тыс(22.67\%).  Дубликаты фильтровались на уровне фразы.
 
-При помощи нейросетевой модели было достигнуто СКО равное 0.31 на тестовом наборе данных. Данный уровень СКО был сочтен достаточно хорошим для использования в диалоговой системе DREAM, дальнейшие возможности его улучшения не изучались.
+При помощи нейросетевой модели было достигнуто СКО равное 0.31 на тестовом наборе данных. Данный уровень СКО был сочтен достаточно хорошим для использования в диалоговой платформе DREAM, дальнейшие возможности его улучшения не изучались.
 
 
-\section{Использование модели PAL-BERT в диалоговой системе DREAM} 
+\section{Использование модели PAL-BERT в диалоговой платформе DREAM} 
 
-Летом 2021 года под руководством автора диссертационной работы модель типа PAL-BERT \cite{stickland_2019} была успешно встроена в одну из веток библиотеки DeepPavlov. Это дало возможность провести серию экспериментов для того, чтобы исследовать возможности дальнейшего улучшения качества и покрытия многозадачной модели в диалоговой системе DREAM. Везде в нижеописанных экспериментах в модели PAL-BERT использовался  тип сэмплирования annealed с рекомендованными авторами работы \cite{stickland_2019} параметрами.
+Летом 2021 года под руководством автора диссертационной работы модель типа PAL-BERT \cite{stickland_2019} была успешно встроена в одну из веток библиотеки DeepPavlov. Это дало возможность провести серию экспериментов для того, чтобы исследовать возможности дальнейшего улучшения качества и покрытия многозадачной модели в диалоговой платформе DREAM. Везде в нижеописанных экспериментах в модели PAL-BERT использовался  тип сэмплирования annealed с рекомендованными авторами работы \cite{stickland_2019} параметрами.
 
 Заметим, что во всех нижеописанных экспериментах использовались только те предсказания модели Cobot на диалогах DREAM, которые были получены после 10 февраля 2021, т.к именно в этот день Amazon обновил свою модель.
 
@@ -251,5 +251,44 @@ factoid classification & 0.789(0.809) & 0.794(0.817) & \textbf{0.834(0.831)} & 0
 
 При этом псевдоразметка ухудшает результаты для задач, где она не была применена, и не приносит улучшений для задач классификации эмоций и токсичности.
 
-По итогам данного эксперимента, в диалоговую систему DREAM была встроена модель \textbf{7 в 1, PAL-BERT, полная псевдоразметка} в конце 2021 года. 
+По итогам данного эксперимента, в диалоговую платформу DREAM была встроена модель \textbf{7 в 1, PAL-BERT, полная псевдоразметка} в конце 2021 года. Данная модель использовалась в диалоговой платформе DREAM до момента ее замены на трансформер-агностичную модель. 
 
+\section{Использование многозадачной трансформер-агностичной модели в диалоговой платформе DREAM} 
+
+Многозадачная модель, основанная на модели PAL-BERT, помогла добиться
+.... Кратко описать достижения и проблемы
+
+
+
+In DREAM, new multitask “9 in 1” model was trained on the following datasets:
+Sentiment classification - on DynaBench (94k samples). Note: in previous multitask models SST was used(8k samples) what led to the overfit. Head is single-label.
+Factoid classification - on YAHOO dataset(3.6k samples) as before. Headl is single-label.
+Emotion classification - on go_emotion dataset(42k samples). Head is single-label, as using multilabel head yielded worse results.(So we used only singlelabel samples.) Note - in previous multitask models custom dataset was used, which also led to overfitting
+Midas classification - on Midas dataset(~9k samples). Head is singlelabel, only semantic classes were used as if in the DREAM now. Note - it is the first time we add this head to the multitask DREAM model!
+Topic classification - on Dilya’s dataset (1.8m samples). Head is single-label, as using multilabel head proved to be inconsistent. Note - this model still is insufficient for passing tests, so we still need Cobot replacement classifiers. Also, class names for this classifier and for Cobot replacement classifiers are different, so special functions for every such topic were added to support this difference.
+Toxic classification - on Kaggle dataset(170k samples). Note - to make the classifier single-label, non_toxic class was added to this dataset, as if in the previous multitask models.
+Cobot topics - on the private DREAM-2 dataset, from which one the most frequent “garbage” class (Phatic) was excluded, and all multilabel examples were converted to the single-label format. All these measures made model less likely to overfit on the “garbage” classes, thus improving it’s quality on the real-world data. Cleaned dataset size: 216k samples
+Примечание 2. Была неудачная попытка убрать из cobot topics классы Phatic и Other, и использовать Other как класс-исключение, если вероятности всех классов слишком малы. Идея не сработала ( 0.729<0.806)
+2)Все multi-label примеры были приведены к single-label формату. Для каждого примера ( где метка - Коботовское предсказание) выбирался самый редкий класс. Это было связано с тем, что во-первых, multilabel встречался в нескольких процентах случаев, а во-вторых, с тем, что даже в этих нескольких процентах он, как правило, был вида нормальны класс+мусорный класс, т.е по сути он учил модель оверфититься на мусорные классы other/phatic.
+3)Для всех utterances, которые могли в имевшемся коботовском датасете(фраза+история из 3 реплик) быть классифицированы разным способом в зависимости от своей истории (что налюбдалось лишь для ~3% примеров) выбирался наиболее часто встречаемый класс после приведению к пункту 2. Примеры, где этот самый часто встречаемый класс относился к пункту 1, исключались.
+4)Был переразбит датасет в соотношении 70/15/15 - 70 процентов тренировочных примеров, 15 тестовых, 15 валидационных.
+
+Cobot dialogact topics - on the private DREAM-2 dataset, from which one the most frequent “garbage” class (other) was excluded, all multilabel examples were converted to the single-label format, and history support was also removed. All these measures made model less likely to overfit on the “garbage” classes, thus improving it’s quality on the real-world data. Cleaned dataset size: 127k samples
+Cobot dialogact intents - on the private DREAM-2 dataset, from which all multilabel examples were converted to the single-label format, and history support was also removed. All these measures made model less likely to overfit on the “garbage” classes, thus improving it’s quality on the real-world data. Cleaned dataset size: 318k samples
+There also were tried the ideas of improving architecture: using task_specific tokens in concatenation with the CLS for classification, or instead of the CLS. Which was not successful. However, increasing of the batch size from 32 to 640(for distil model) or 320(for ordinary model) yielded an improvement. 
+
+In the setting of 25-12-2022, only midas classifier utilized history. Training the model without history from scratch, almost didn;t impact performance and paradoxically yielded some improvement for Midas(setting 3 VS setting 2). And it allowed to use 2x less max sequence length and have only 1 model prediction to cache, which decreased the prediction time from 0.73 sec to 0.55 sec
+
+
+
+For the sake of achieving the best trade-off between the memory use, inference time and test metrics, the model in green (Multitask, distilbert base uncased, batch 640) was used. It is now merged to dev.
+We show the results below.
+TODO ВСТАВИТЬ ТАБЛИЦУ. 
+
+New multitask: GPU memory economy
+If we treated absolutely all models as singletask, 6 models that are being replaced by the current combined classifier in DREAM(emo,toxic,sentiment and 3 cobot models) would have taken ~3500*6 ~ 21000 Mb of the GPU memory. Midas classifier would have taken ~3500 Mb of the GPU memory, as it takes in current dev.  We don’t count topic classifier model as it is unclear what kind of singletask topic classifiers we would have used. If we would have used distilbert-like topic classifier, it would have taken ~2418 Mb of the GPU memory. In this case, replacements of all singletask models would have taken ~27000 Mb of the GPU memory.  Compared to this setting, our Multitask gives ~91% GPU memory economy. 
+This economy is caused by the replacement of many BERTs by one BERT, and also by the transformer-agnosticity that helped to quickly add distilbert-base-uncased instead of the BERT-base-uncased.
+CPU memory use for the multitask model: 2909 Mb. If treating absolutely all models as singletask, the economy estimate is 2594*8 + 2594*0.6 = 22308 Mb. Compared to this seitting, our Multitask gives ~87% CPU memory economy.
+Compared to the previous dev ( where multitask 6in1 bert-base is already used), our multitask gives ~75% GPU memory economy, ~57% CPU economy and ~80-85% postannotation inference time economy. (Inference time economy is due to the fact that current multitask is much faster than Midas thanks to the transformer-agnosticity, and we no longer need to use them both).
+
+TODO UPDATE THE TABLES WITH DATA SIZES IN APPENDIX OLD->NEW
