@@ -81,25 +81,18 @@ As a Russian language dataset, we used the dataset \texttt{RuReviews}~\cite{ru_s
 For the sentiment classification, we utilized \texttt{DynaSent}(r1)~\cite{sentiment} dataset. It contains naturally occurring sentences. i.e. \textit{Need a cheap spatula?} There are three classes in this balanced multi-class dataset -- \textit{positive},  \textit{negative}, and \textit{neural}. % One can contend that classes from the \texttt{go\_emotions} dataset can be grouped by sentiment, as proposed in~\cite{emotions}, but also by emotions. However, our experiments show that augmentation of the sentiment dataset with such samples decreases the metrics rather than increasing them. That shows that these datasets are sufficiently different for separate use, as sentiment-grouping of the emotion dataset is too rough. 
 
 
-\subsection{Toxicity classification}
+\subsection{Классификация токсичности}
 
-For the English language, we used the \texttt{Wiki Talk} dataset~\cite{toxic} for the toxicity classification. This Wikipedia comment dataset had two classes: toxic and not toxic. This dataset has ~127k training samples, ~31k validation samples, and ~62k testing samples.\footnote{We used the cleaned version of this dataset provided by HuggingFace at \url{https://huggingface.co/datasets/OxAISH-AL-LLM/wiki\_toxic}}. Nevertheless, we also performed some additional data cleaning, such as removing quotes. 
+Для английского языка в работе использовался набор данных  \texttt{Wiki Talk}~\cite{toxic} для задачи классификации токсичности. В этом наборе данных, состоящем из комментариев из Википедии, есть всего два класса: \textit{toxic} и \textit{not toxic}. К первому классу относится примерно 10 процентов примеров (часть из которых слишком неблагозвучна для того, чтобы приводить их в диссертации). Ко второму классу, соответственно, примерно 90 процентов.  В работе использовалась предобработанная версия набора данных, предоставленная HuggingFace\footnote{\url{https://huggingface.co/datasets/OxAISH-AL-LLM/wiki_toxic}}. Данная версия подверглась незначительной очистке - к примеру, если какая фраза начиналась и заканчивалась с кавычек, эти кавычки удалялись. 
+... ДОДЕЛАТЬ
+Для русского языка в работе использовался двухклассовый набор данных \texttt{RuToxic} ~\cite{ru_toxic}. Этот  %! (of toxic comments from the largest Russian anonymous imageboard Dvach\footnote{Link to the imageboard: \url{http://2ch.hk}}. This dataset originally had ~162k training samples. As the authors didn't provide the original split in their repository\footnote{Russian toxicity dataset was retrieved from \url{https://github.com/s-nlp/rudetoxifier}}, we split this dataset in the same proportions as the split proportions of the Wiki Talk dataset.
 
-For the Russian languages, we used the two-class dataset \texttt{RuToxic}~\cite{ru_toxic} of toxic comments from the largest Russian anonymous imageboard Dvach\footnote{Link to the imageboard: \url{http://2ch.hk}}. This dataset originally had ~162k training samples. As the authors didn't provide the original split in their repository\footnote{Russian toxicity dataset was retrieved from \url{https://github.com/s-nlp/rudetoxifier}}, we split this dataset in the same proportions as the split proportions of the Wiki Talk dataset.
-We used the \texttt{Wiki Talk}~\cite{toxic} dataset for the toxicity classification. This Wikipedia comment dataset had two classes: \textit{toxic} and \textit{not toxic}. Unsurprisingly, the dataset contains vulgar slang. However, about 90\% of examples from this dataset are not toxic, i.e \textit{"Hi! so umm i guess yer incharge here hehehe. so wassup?"} We used the preprocessed version of this dataset provided by HuggingFace\footnote{\url{https://huggingface.co/datasets/OxAISH-AL-LLM/wiki_toxic}}.
+\subsection{Классификация интентов и тематическая классификация }
+%TODO. Набор данных - - датасет? Топик - тема? 
+Мы использовали набор данных \texttt{MASSIVE}~\cite{massive} для классификации интентов и для тематической классификации как для русского, так и для английского языка. Этот набор данных основан на англоязычном наборе данных SLURP\cite{clurp}, содержащем фразы, предназначенные голосовому ассистенту. 
+ Все примеры из этого набора данных были одновременно размечены(с адаптацией под национальные особенности) для 51 языка, включая русский и английский. Этот набор данных содержит для каждого языка 11514 тренировочных примера, 2033 валидационных примера и 2974 тестовых примера. Каждый пример принадлежит одному из 60 интентов и одной из 18 тем. 
 
 
-\subsection{Intent classification and topic classification}
-
-We used dataset \texttt{MASSIVE}~\cite{massive} for the intent classification for the Russian and English languages. All examples in this dataset were labeled simultaneously for 51 languages, including the English and Russian languages. This dataset has 11514 train samples, 2033 validation samples, and 2974 test samples. Every sample belongs to one of 60 intent classes. 
-
-We used the same dataset in the same way for topic classification as well, as this dataset is labeled by intent and by topic. Every sample from this dataset belongs to one of the 18 topic classes.
-
-We also used the multi-class \texttt{SLURP}~\cite{slurp} dataset for the intent classification and topic classification. The \texttt{SLURP} dataset contains the spoken utterances, which aim for the voice assistant, e.g. \textit{play rock playlist} or \textit{show me news from c. n. n.}.
-% Every sample is single-label and belongs to one intent and one topic.
-
-To demonstrate the MTL model performance on other domains and datasets, we have also benchmarked our model on the GLUE tasks~\cite{GLUE:19}.
-%For every task and every task split, the total number of labels for every class is included in Appendix. 
 \section {Настройки экспериментов}
 
 Для всех 
