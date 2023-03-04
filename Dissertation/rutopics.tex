@@ -1,1 +1,361 @@
 Тут будет глава, основанная на статье YAQTopics
+  В этой статье мы предлагаем новый русскоязычный датасет для разговорной тематической классификации - YAQTopics. Этот тематический датасет объединяет большое количество примеров (265,068принадлежащих одному классу, 65,514 -2 классам и более) с обширным охватом классов (76 классов). Этот набор данных сгруппирован по темам из «Яндекс.Кью»; для каждого вопроса приводится суммаризованный вариант ответа, ссылка на полный ответ и темы вопросов и ответов в «Яндекс.Кью».
+Оценивая модели, обученные YAQTopics, на 6 совпадающих классах русскоязычного набора данных  MASSIVE, мы доказали, что набор данных YAQTopics подходит для реальных разговорных задач, поскольку модель, состоящая только из вопросов, дает точность в 76,2\% и макро-f1 72,9\%. Мы также выяснили, что для многоязычного BERT, обученного на YAQTopics 
+на тех же 6 классах MASSIVE (для всех языков из набора данных MASSIVE),точносит для каждого языка тесно коррелирует(корреляция Спирмена 0,71 с p-значением 5,37e-9) с размером данных предварительного обучения BERT для этого языка, который был аппроксимирован в соответствии с оригинальной статьей. 
+  
+\textbf{Ключевые слова:} датасет, тематическая классификация, перенос знаний, перенос знаний между языками
+
+
+\section{Introduction}
+Topic classification is a widespread task in dialog systems\cite{dream1_trudy}. The dialog system must in some way classify the topic of user utterance, to make the dialog go as planned. For this reason, researchers have made different datasets for solving a topic classification problem. 
+The dataset \texttt{MASSIVE}~\cite{massive} is created for the conversational topic and intent classification. In this dataset with ~17k samples(train+test+valid), one of the 18 topic classes and one of the 60 intent classes is assigned to every utterance. This dataset is massively multilingual, as every utterance from that is provided in 52 different languages (including Russian). Also, every utterance from the dataset looks like a real conversational user request to Amazon Alexa. However, the nomenclature of topics provided in this dataset does not even remotely cover all possible user topics.
+
+Another class of topic datasets is comprised of the datasets which are created for the classification of large texts. Among such datasets, we can consider, for example, DeepPavlov Topics~\cite{dp_topics}. The positive sides of this dataset are the large class nomenclature (33 classes) and the large number of samples (~1.6 million training samples). However, this dataset contains samples only for the English language. Also, samples in this dataset are much larger than ordinary conversational utterances, which can introduce undesirable biases while using models trained on this dataset for the classification of short conversational utterances.
+\iffalse
+For 4 class dp topics:
+en & 5,731,625 & 0 & 74.6 & 75.6 & 94.2 & 91.4 & 93.6 & 86.4 & 79.3 & 78.1 & 82.1 & 76.9\\ \hline
+en & 5,731,625 & 1 & 77.5 & 78.1 & 93.7 & 90.8 & 94.0 & 86.9 & 81.5 & 80.1 & 85.8 & 82.5\\ \hline
+
+For 3 class dp topics:
+en & 5,731,625 & 0 & 88.0 & 87.7 & 93.8 & 92.9 & 94.1 & 90.8 & 88.1 & 88.1\\ \hline
+en & 5,731,625 & 1 & 88.4 & 87.8 & 93.9 & 93.0 & 93.9 & 90.1 & 89.0 & 89.0\\ \hline
+\fi
+
+
+A large variety of topic datasets is explicitly about the classification of large pieces of text (mostly - news) and therefore suffers from the same problems as~\cite{dp_topics}. 
+These datasets include, for example, the dataset \texttt{AG-NEWS}~\cite{ag_news} which has only 4 topics, or the dataset from \texttt{The Guardian}~\cite{guardian_authorship}. These datasets are also English-only. 
+
+The news dataset \texttt{MLSUM}~\cite{mlsum} has versions for several languages (French, German, Turkish, Spanish, Russian). Due to the large size of news articles (compared to the conversational utterances), this dataset should have the same problem. Also, the 16 Russian topical classes from this dataset are derived from the news categories. That classes still don't cover the vast majority of conversational topics. 
+
+The same problem probably also holds for the dataset~\cite{xglue}. This 10-class news dataset has an English-only training set, and a test sample from 5 European languages, including Russian. 
+An ontology dataset~\cite{dbpedia} probably also suffers from the same problems as it contains very long texts. Also, the nomenclature of this dataset (14 classes) is by no means sufficient for topical classification. 
+
+Another idea is to extract topic datasets from the question-answering website. The creators of dataset~\cite{yahoo_answers_topics} implemented this idea. This 10-topic dataset contains questions and answers for topics from Yahoo. Answers service. However, the variety of topics covered in this dataset is far from exhaustive. This dataset also does not cover the Russian language. 
+
+The dataset~\cite{chatbotru} has a very large nomenclature of Russian intents and topics (79 classes). However, the size of the dataset is too small for such amount of classes (~7.1k total samples). Given that this dataset is also imbalanced, it means that the vast majority of intents of topics in this dataset have less than 100 samples per class(or even much less, up to 10-20). Such a small number of samples per class makes the dataset more suitable for the few-shot setting than for the finetuning of BERT-like models. Therefore, the room for the larger Russian topical dataset remained open at the time of writing this article. 
+
+We can also single out the massively multilabel Russian-language dataset from the website "Kill Me Please"~\cite{kill_me_please}. This dataset contained sad stories that belong to any number of 12 topics covered on this website. However, the list of 12 covered topics is not exhaustive, the large percentage of stories on the website have much larger sizes than any conversational utterance, and the body of stories on this website, by definition, is biased. Therefore, we still cannot rely on this dataset in the dialog system.
+Some other topic classification datasets are too topic-specific to be the main backbone of the general-purpose dialog system. For example, datasets~\cite{lexglue} and~\cite{lextreme} are focused on legal-specific topics. Dataset~\cite{hupd} is created for the patent classification task. Dataset~\cite{blbooksgenre} serves for book title classification.
+ Among the Russian-language datasets, a small dataset~\cite{pstu}(less than 1k samples) is created for the classification between seven university-specific intents. The dataset~\cite{healthcare_facilities_reviews} contains reviews of Russian medical facilities, which is also too specific for the vast majority of conversational topics. 
+The multilingual product review dataset from Amazon~\cite{amazon_reviews} contains reviews of products sold on Amazon from different categories, grouped by the topic. However, the topics provided in this dataset are still insufficient for building the general-purpose topic classifier, as the possible range of topics to discuss differs from the range of Amazon product categories. 
+
+As one can see from our review, not all topic datasets are suitable for use to train the dialog system, that works with real user phrases. Some datasets have a too small number of classes, some other datasets have very specific class nomenclature, and other datasets' examples are too different from the real-world dialog data which can cause additional distortions. Also, the body of work especially lacks the Russian language topic datasets, as existing Russian datasets are incomplete and either too small or too specific. Our article aims to bridge this gap. 
+
+
+\section{\texttt{YAQTopics} dataset} 
+We propose the new Russian topic classification dataset - \texttt{YAQTopics}. This dataset was parsed from Yandex. Que service~\cite{yandex_q} on the allowance of administration of this service. 
+
+The utterances in this dataset have 76 topics. We have selected the topics to parse, based on the dataset \cite{dp_topics}. The topic of every question corresponded to this question's topic from Yandex.Que. We note that some of the topics can be similar to each other, as the real Yandex.Que topics are - therefore, the utilization of the \texttt{YAQTopics} dataset in the applied setting might require the merging of some topics. 
+
+ For all the parsed topics, 330,582 unique questions were parsed, of which 123,748 are answered. Instead of the full answers, we have saved the versions of answers which are summarized by TextRank~\cite{summarizer}. Nevertheless, we provide all questions with links, so the full texts of answers can be retrieved from the Yandex website.
+Among all the questions, 265,068 belong to only one topic, and another 65,514 belong to multiple topics. Among all the answers, 93,087 answers belong to only one topic and 30,661 belong to multiple topics. 
+
+% TODO. CHECK THE TOPIC NUMBER. PROVIDE a LINK TO EVERY QUESTION in the final dataset version. 
+
+ We have split the question-answer pairs we obtained in the ratio 80/10/10 for training, validation, and testing samples. We also have split the training set, validation set, and testing set for the 2 parts. In part 1 (singlelabel) we select only those pairs where the question belongs to only one topic, and the answer either not exists or can be found solely in this topic. All other examples belong to part 2 (multilabel). 
+Sizes of all parts and splits of the dataset can be found in Table \ref{data_sizes}. 
+
+% TODO. INSERT HERE A TABLE WITH DATA SIZES. SCALEBOX 0.6. IT SHOULD TAKE 1 PAGE
+
+\begin{table}[t]
+%\centering
+\caption{Dataset sizes for the \texttt{YAQTopics} task, for every class. \textbf{Dataset size} refers to the total dataset size.}
+\label{data_sizes}
+\scalebox{0.6}{
+\begin{tabular}{|c||c|c|c||c|c|c||c|c|c||c|c|c|} \hline
+\textbf{data type} & \textbf{train} & \textbf{valid} & \textbf{test} & \textbf{train} & \textbf{valid} & \textbf{test} & \textbf{train} & \textbf{valid} & \textbf{test} & \textbf{train} & \textbf{valid} & \textbf{test} \\ \hline
+\textbf{by label}  & \multicolumn{6}{c|}{singlelabel} & \multicolumn{6}{c|}{multilabel} \\ \hline
+\textbf{class}  & \multicolumn{3}{c|}{all} & \multicolumn{3}{c|}{answered} & \multicolumn{3}{c|}{all} & \multicolumn{3}{c|}{answered}\\ \hline \hline
+\textbf{Dataset size} & 212,021 & 26,562 & 26,485 & 74,600 & 9,308 & 9,179 & 52,444 & 6,497 & 6,573 & 24,576 & 3,042 & 3,043\\ \hline
+\textbf{PersonalTransport} & 6,873 & 892 & 895 & 1,557 & 200 & 208 & 676 & 107 & 86 & 209 & 45 & 29\\ \hline
+\textbf{Politics} & 6,199 & 758 & 804 & 2,711 & 335 & 352 & 2,119 & 263 & 298 & 1,133 & 153 & 147\\ \hline
+\textbf{Law} & 5,512 & 697 & 687 & 1,831 & 252 & 231 & 2,508 & 299 & 333 & 1,052 & 132 & 134\\ \hline
+\textbf{Sex} & 5,173 & 641 & 622 & 1,869 & 224 & 238 & 2,552 & 284 & 286 & 1,243 & 143 & 142\\ \hline
+\textbf{ForeignLanguages} & 5,112 & 634 & 664 & 2,148 & 268 & 269 & 1,127 & 137 & 141 & 530 & 63 & 68\\ \hline
+\textbf{Smartphones} & 5,064 & 660 & 641 & 806 & 108 & 94 & 924 & 128 & 112 & 204 & 38 & 29\\ \hline
+\textbf{Money} & 4,943 & 579 & 657 & 1,623 & 165 & 216 & 1,615 & 173 & 211 & 807 & 85 & 105\\ \hline
+\textbf{Sport} & 4,834 & 598 & 595 & 1,948 & 228 & 250 & 1,668 & 200 & 202 & 727 & 99 & 84\\ \hline
+\textbf{MovieSeries} & 4,760 & 629 & 624 & 813 & 103 & 98 & 1,083 & 135 & 139 & 360 & 48 & 52\\ \hline
+\textbf{Movies} & 4,602 & 594 & 622 & 1,569 & 214 & 205 & 2,359 & 293 & 296 & 938 & 117 & 134\\ \hline
+\textbf{Religion} & 4,505 & 584 & 591 & 2,408 & 321 & 307 & 2,588 & 312 & 320 & 1,468 & 167 & 164\\ \hline
+\textbf{FoodDrinksCulinary} & 4,472 & 586 & 546 & 1,570 & 196 & 158 & 2,012 & 242 & 272 & 927 & 121 & 119\\ \hline
+\textbf{Technology} & 4,453 & 567 & 595 & 1,238 & 154 & 168 & 3,258 & 389 & 419 & 1,280 & 153 & 157\\ \hline
+\textbf{Music} & 4,442 & 563 & 529 & 1,102 & 145 & 122 & 1,018 & 128 & 118 & 422 & 43 & 48\\ \hline
+\textbf{Literature} & 4,430 & 558 & 531 & 1,535 & 187 & 170 & 2,464 & 351 & 315 & 1,162 & 161 & 144\\ \hline
+\textbf{Videogames} & 4,418 & 528 & 552 & 1,072 & 129 & 138 & 771 & 105 & 110 & 264 & 41 & 40\\ \hline
+\textbf{Animals} & 4,406 & 556 & 557 & 1,495 & 177 & 174 & 2,081 & 271 & 281 & 826 & 114 & 112\\ \hline
+\textbf{Psychology} & 4,368 & 513 & 539 & 2,435 & 295 & 293 & 4,865 & 582 & 586 & 2,862 & 328 & 359\\ \hline
+\textbf{Maths} & 4,353 & 559 & 478 & 1,401 & 189 & 152 & 1,888 & 221 & 227 & 886 & 113 & 104\\ \hline
+\textbf{Space} & 4,323 & 532 & 545 & 1,672 & 211 & 215 & 1,460 & 183 & 164 & 725 & 93 & 75\\ \hline
+\textbf{Love} & 4,236 & 548 & 509 & 1,962 & 237 & 206 & 2,732 & 348 & 347 & 1,480 & 182 & 197\\ \hline
+\textbf{Relationships} & 4,150 & 522 & 505 & 2,055 & 250 & 232 & 4,570 & 557 & 548 & 2,530 & 293 & 320\\ \hline
+\textbf{Health\_Medicine} & 4,032 & 496 & 518 & 1,372 & 167 & 179 & 1,530 & 205 & 192 & 666 & 97 & 83\\ \hline
+\textbf{Science} & 3,997 & 499 & 465 & 1,728 & 218 & 199 & 4,733 & 568 & 604 & 2,406 & 284 & 306\\ \hline
+\textbf{War} & 3,949 & 438 & 495 & 1,397 & 157 & 178 & 1,083 & 128 & 150 & 541 & 63 & 60\\ \hline
+\textbf{History} & 3,924 & 500 & 458 & 2,063 & 245 & 233 & 2,722 & 359 & 372 & 1,479 & 195 & 185\\ \hline
+\textbf{Education} & 3,919 & 506 & 476 & 1,637 & 215 & 186 & 4,542 & 545 & 543 & 2,196 & 275 & 268\\ \hline
+\textbf{Design} & 3,721 & 447 & 482 & 1,442 & 189 & 186 & 1,554 & 202 & 219 & 685 & 89 & 94\\ \hline
+\textbf{Taxes} & 3,681 & 452 & 451 & 1,408 & 191 & 178 & 815 & 106 & 123 & 372 & 50 & 61\\ \hline
+\textbf{Job} & 3,644 & 452 & 447 & 1,553 & 192 & 170 & 2,678 & 322 & 329 & 1,396 & 175 & 176\\ \hline
+\textbf{Travel} & 3,494 & 433 & 402 & 1,508 & 200 & 199 & 2,689 & 355 & 372 & 1,444 & 168 & 175\\ \hline
+\textbf{Family} & 3,447 & 470 & 452 & 1,298 & 164 & 161 & 1,072 & 148 & 143 & 559 & 70 & 82\\ \hline
+\textbf{Physics} & 3,332 & 407 & 416 & 1,390 & 172 & 178 & 3,536 & 451 & 444 & 1,656 & 213 & 221\\ \hline
+\textbf{Philosophy} & 2,955 & 318 & 386 & 1,536 & 162 & 192 & 4,390 & 560 & 535 & 2,506 & 291 & 298\\ \hline
+\textbf{Food} & 2,873 & 340 & 346 & 1,285 & 141 & 163 & 1,844 & 201 & 245 & 943 & 110 & 116\\ \hline
+\textbf{Transport} & 2,864 & 353 & 357 & 590 & 65 & 81 & 702 & 101 & 70 & 218 & 35 & 27\\ \hline
+\textbf{Business\_Management} & 2,811 & 324 & 381 & 1,038 & 121 & 143 & 2,872 & 355 & 335 & 1,313 & 162 & 155\\ \hline
+\textbf{Career} & 2,779 & 325 & 311 & 1,098 & 139 & 106 & 3,572 & 424 & 441 & 1,830 & 208 & 231\\ \hline
+\textbf{Finance} & 2,662 & 326 & 316 & 1,006 & 115 & 124 & 2,348 & 286 & 254 & 1,159 & 143 & 123\\ \hline
+\textbf{Clothes} & 2,570 & 315 & 353 & 595 & 68 & 85 & 862 & 108 & 120 & 301 & 35 & 42\\ \hline
+\textbf{Celebrities} & 2,570 & 294 & 320 & 411 & 50 & 51 & 365 & 44 & 41 & 131 & 14 & 11\\ \hline
+\textbf{Tourism} & 2,498 & 323 & 337 & 829 & 104 & 96 & 1,943 & 260 & 267 & 1,046 & 125 & 128\\ \hline
+\textbf{Television} & 2,344 & 272 & 279 & 380 & 54 & 59 & 589 & 86 & 72 & 143 & 24 & 31\\ \hline
+\textbf{Shopping} & 2,312 & 279 & 290 & 424 & 45 & 39 & 584 & 76 & 67 & 165 & 25 & 13\\ \hline
+\textbf{Gadgets} & 2,171 & 281 & 272 & 407 & 58 & 61 & 846 & 101 & 114 & 237 & 29 & 34\\ \hline
+\textbf{Crime} & 2,043 & 266 & 262 & 626 & 82 & 91 & 404 & 44 & 70 & 170 & 21 & 33\\ \hline
+\textbf{Art\_Culture} & 1,957 & 265 & 249 & 880 & 123 & 111 & 3,796 & 453 & 475 & 1,859 & 206 & 233\\ \hline
+\textbf{Depression} & 1,841 & 211 & 182 & 856 & 98 & 89 & 333 & 34 & 34 & 192 & 19 & 20\\ \hline
+\textbf{Home} & 1,803 & 222 & 249 & 569 & 64 & 73 & 388 & 48 & 58 & 151 & 22 & 26\\ \hline
+\textbf{Garden} & 1,741 & 232 & 244 & 945 & 138 & 125 & 261 & 32 & 27 & 149 & 20 & 15\\ \hline
+\textbf{Electronics} & 1,712 & 222 & 186 & 300 & 37 & 36 & 555 & 58 & 74 & 140 & 23 & 17\\ \hline
+\textbf{Dogs} & 1,707 & 233 & 233 & 561 & 75 & 73 & 1,681 & 232 & 220 & 624 & 86 & 71\\ \hline
+\textbf{Feminism} & 1,656 & 239 & 175 & 741 & 106 & 88 & 425 & 44 & 56 & 173 & 11 & 25\\ \hline
+\textbf{Fashion} & 1,653 & 226 & 198 & 457 & 61 & 50 & 1,145 & 152 & 156 & 414 & 56 & 56\\ \hline
+\textbf{CropProduction} & 1,414 & 175 & 185 & 699 & 91 & 79 & 351 & 40 & 35 & 183 & 29 & 16\\ \hline
+\textbf{Pets} & 1,371 & 185 & 139 & 354 & 43 & 38 & 2,269 & 292 & 272 & 821 & 110 & 93\\ \hline
+\textbf{Cats} & 1,319 & 188 & 152 & 400 & 62 & 58 & 1,600 & 190 & 198 & 588 & 69 & 71\\ \hline
+\textbf{Fitness} & 1,318 & 174 & 185 & 498 & 63 & 73 & 1,072 & 126 & 126 & 454 & 57 & 51\\ \hline
+\textbf{Business} & 1,281 & 188 & 162 & 381 & 65 & 52 & 964 & 126 & 122 & 402 & 57 & 53\\ \hline
+\textbf{Beauty\_Care} & 1,238 & 153 & 143 & 537 & 68 & 58 & 909 & 113 & 101 & 354 & 40 & 42\\ \hline
+\textbf{News} & 1,224 & 151 & 151 & 385 & 49 & 54 & 299 & 42 & 43 & 127 & 17 & 15\\ \hline
+\textbf{Art} & 1,213 & 147 & 164 & 396 & 43 & 59 & 752 & 88 & 87 & 417 & 45 & 51\\ \hline
+\textbf{Reading} & 1,065 & 132 & 136 & 324 & 42 & 45 & 408 & 54 & 51 & 181 & 25 & 22\\ \hline
+\textbf{Cosmetology} & 1,020 & 121 & 113 & 370 & 42 & 55 & 713 & 103 & 82 & 284 & 35 & 37\\ \hline
+\textbf{Weather} & 826 & 113 & 107 & 120 & 17 & 12 & 94 & 6 & 13 & 31 & 3 & 3\\ \hline
+\textbf{Airplanes} & 803 & 105 & 122 & 194 & 25 & 22 & 225 & 37 & 29 & 84 & 13 & 12\\ \hline
+\textbf{MassTransit} & 700 & 90 & 95 & 63 & 6 & 14 & 242 & 26 & 21 & 44 & 5 & 4\\ \hline
+\textbf{BoardGames} & 521 & 65 & 64 & 80 & 16 & 14 & 41 & 5 & 3 & 14 & 2 & 1\\ \hline
+\textbf{MachineLearning} & 516 & 73 & 67 & 191 & 27 & 23 & 401 & 63 & 48 & 135 & 24 & 13\\ \hline
+\textbf{ArtificialIntelligence} & 513 & 62 & 55 & 177 & 19 & 16 & 251 & 27 & 28 & 134 & 17 & 9\\ \hline
+\textbf{Toys} & 341 & 44 & 45 & 65 & 6 & 8 & 49 & 5 & 6 & 10 & 0 & 1\\ \hline
+\textbf{Tablets} & 335 & 48 & 29 & 39 & 3 & 1 & 119 & 17 & 17 & 33 & 4 & 3\\ \hline
+\textbf{SexualEducation} & 307 & 37 & 35 & 103 & 12 & 11 & 397 & 48 & 39 & 161 & 15 & 12\\ \hline
+\textbf{TV} & 196 & 21 & 24 & 17 & 0 & 0 & 110 & 11 & 8 & 24 & 4 & 1\\ \hline
+\textbf{Media\_Communications} & 177 & 23 & 32 & 49 & 5 & 7 & 60 & 7 & 3 & 38 & 6 & 0\\ \hline
+\textbf{Disasters} & 33 & 3 & 4 & 8 & 0 & 1 & 4 & 2 & 1 & 2 & 0 & 0\\ \hline
+\end{tabular}
+}
+\end{table}
+
+As a baseline model, we use model \textit{sbert\_large\_nlu\_ru}~\cite{sbert_large_nlu_ru}.\footnote{All hyperparameters of the baseline model, except for backbone, were exactly as described in the subsection "Parameters of comparison model".} We have trained and tested this model in the all dataset settings mentioned in the \ref{tab:versions}. We provide the scores of the model in the table \ref{tab:rubaseline}.  We denote macro-averaged f1 score as "f1" in all tables in this article.
+
+\begin{table*}
+\centering
+\caption{Accuracy(f1) of the Russian baseline models for different versions of \texttt{YAQTopics}. \textbf{Q} means questions, \textbf{A} means answers, \textbf{Q and A} means treating questions and answers as separate examples, and \textbf{Q [SEP] A} means concatenation  of every questions with the corresponding answer(if that answer exist) using [SEP] token. Full means we have used singlelabel and multilabel data. Otherwise we have used only singlelabel data/  Backbone: \textit{sbert\_large\_nlu\_ru}.}
+\scalebox{0.8}{
+\label{tab:rubaseline}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Trained and tested on} & \multicolumn{2}{c|}{\textbf{Singlelabel}} & \multicolumn{2}{c|}{\textbf{Full}} \\ \hline
+ & & Acc & f1 & Acc & f1  \\
+\hline 
+\textbf{Q}              & 65.2 & 59.5 & 39.5 & 58.9 \\ \hline
+\textbf{A}              & tbd & tbd & tbd & tbd \\ \hline
+\textbf{Q [SEP] A}        & 65.81 & 59.87 & tbd & tbd \\ \hline
+\textbf{Q and A}          & 61.08 & 55.75 & tbd & tbd \\ \hline
+\end{tabular}
+}
+\end{table*}
+
+%rularge_yandex_question.json
+
+We note that, as some \texttt{YAQTopics} classes are similar to each other, the scores can be improved by merging some classes(e.g \textit{Food} and \textit{FoodDrinksCulinary}). Anyway, we provide the baseline scores for the most intact version of the dataset. 
+
+%TODO. DISCUSS WITH VASILY - WHAT SHOULD BE THE BASELINE MODEL?? 
+
+ In this article, here and further, we work only with singlelabel examples for the sake of simplicity. Therefore we assumed that all example we work with belongs to only one topic. 
+
+
+\section{Selecting dataset setting} 
+
+We need to figure out the best method of utilization of \texttt{YAQTopics} for training on conversational tasks, and to score it on conversational tasks. We can utilize only answers from \texttt{YAQTopics}, only questions, utilize questions and answers as separate examples or concatenate(with [SEP] token) questions to answers where answers exist. 
+
+Anyway, to evaluate the suitability of \texttt{YAQTopics}(preprocessed in any way) for the topical classification, we:
+\begin{itemize}
+\item Select the comparison model and train it on the \texttt{YAQTopics} subset 
+\item Evaluate the model on the corresponding \texttt{MASSIVE} subset after the end of the training. 
+\end{itemize}
+This method is explained in the next two subsections. 
+
+\subsection{Parameters of comparison model}
+Here and further, to score the \texttt{YAQTopics} dataset, we train the Transformer model with the following hyperparameters. Backbone \textit{bert-base-multilingual-cased}, batch size 160, optimizer AdamW, betas (0.9,0.99), learning rate 2e-5, learning rate drops by 2 times if accuracy does not improve for 2 epochs, validation patience 3 epochs, max 100 training epochs. The max sequence length is 32 tokens. Results for all runs are averaged by 3 times. 
+%Even though we used cased models, we converted to the lower case all words before the tokenization. We have done that because our preliminary experiments have demonstrated that lowercasing all words yielded a persistent improvement - about 1\%. AS WE PROVIDE ONLY LOWERCASED RUNS 
+Despite this model not being state of the art, it still allows relatively fast comparison of the metrics for different languages. Also, this model allows for studying cross-lingual knowledge transfer. 
+
+\subsection{Training a comparison model} 
+While comparing our dataset with the \texttt{MASSIVE} dataset, we see that only 6 \texttt{MASSIVE} classes can be directly mapped on the \texttt{YAQTopics}. Therefore, we train the comparison model only on the 6 corresponding \texttt{YAQTopics} classes: \textit{FoodDrinksCulinary} (corresponds to the \textit{cooking} \texttt{MASSIVE} class),\textit{News} (corresponds to the \textit{news} \texttt{MASSIVE} class), \textit{Transport} (corresponds to the \textit{transport} \texttt{MASSIVE} class),\textit{Music} (corresponds to the \textit{music} \texttt{MASSIVE} class),\textit{MediaCommunications} (corresponds to the \textit{social} \texttt{MASSIVE} class) and \textit{Weather} (corresponds to the \textit{weather} \texttt{MASSIVE} class). 
+After the end of the training, we test the model on the subset of all \texttt{MASSIVE} samples from that class (training, testing, and validation samples, combined). This method allows testing the suitability of the dataset for the conversational topic classification - at least on the subset of classes. However, as examples for all classes were collected similarly, one can expect similar results for other conversational classes as well. 
+
+\subsection{Results of training the comparison model} 
+We present t results of the comparison model's evaluation on the \texttt{MASSIVE} dataset in the Table \ref{tab:versions}. Here and further, all the metrics were averaged by 3 runs, and we use f1 macro(average) as a multi-class f1 metric. 
+\footnote{For all the experiments presented in this article, the data for all runs are attached to the article. The link to the data will be provided in the camera-ready article version.} 
+We see that the concatenation of answers to questions does not bring out any improvement over the question-only classification, whereas using answers as additional samples leads even to a decrease in accuracy and f1. Using only answers without questions brings a severe metric deterioration. 
+% TODO. AFTER REMAKING THE DATASET WITHOUT SKIPPED VALUES AND OBTAINING THE FINAL DATA SIZES TABLE - RESTART ALL EXPERIMENTS
+
+\begin{table*}
+\centering
+\caption{Accuracy(f1) on the Russian \texttt{MASSIVE} for different versions of \texttt{YAQTopics}. \textbf{Q} means questions, \textbf{A} means answers, \textbf{Q and A} means treating questions and answers as separate examples, and \textbf{Q [SEP] A} means concatenation  of every questions with the corresponding answer(if that answer exist) using [SEP] token. Averaged by three runs. Backbone: \textit{bert-base-multilingual-cased}. Total score for majority baseline: accuracy 22.9, f1 6.2}
+\scalebox{0.8}{
+\label{tab:versions}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Trained on}  &  \multicolumn{2}{c|}{\textbf{Total}} &  \multicolumn{2}{c|}{\textbf{music}} &  \multicolumn{2}{c|}{\textbf{cooking}} &  \multicolumn{2}{c|}{\textbf{news}} &  \multicolumn{2}{c|}{\textbf{transport}} &  \multicolumn{2}{c|}{\textbf{weather}} &  \multicolumn{2}{c|}{\textbf{social}} \\ \hline
+& Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 \\
+\hline 
+\textbf{Q}              & 76.0 & 72.1 & 94.9 & 17.3 & 98.9 & 27.6 & 78.5 & 14.7 & 89.6 & 16.8 & 76.5 & 15.4 & 23.8 & 6.4 \\ \hline
+\textbf{A}              & 61.9 & 56.1 & 97.9 & 27.5 & 95.4 & 25.5 & 52.6 & 12.1 & 82.0 & 18.0 & 58.4 & 14.7 & 0.7 & 0.2\\ \hline
+\textbf{Q [SEP] A}        & 74.9 & 70.9 & 95.4 & 20.1 & 98.8 & 27.6 & 77.4 & 14.5 & 87.6 & 16.6 & 74.4 & 15.2 & 23.4 & 6.3\\ \hline
+\textbf{Q and A}              & 73.8 & 69.0 & 95.7 & 22.8 & 99.3 & 38.8 & 77.6 & 14.6 & 87.0 & 17.6 & 73.5 & 15.1 & 17.5 & 4.9 \\ \hline
+\end{tabular}
+}
+\end{table*}
+% TODO. HOW TO PRETTIFY THE TABLE FOR IT NOT TO GO UPPER. AND HOW TO MAKE BEAUTIFUL MULTIROW. ASK VASILY
+
+
+\subsection {Are questions more informative than answers?} 
+One can contend that the previous table does not fully prove that the questions are more informative than the answers, as the numbers of questions and answers in the \texttt{YAQTopics} are different. To perform the toe-to-toe comparison between question data and answer data from the \texttt{YAQTopics}, we select only those questions that have unique answers, i.e answers, which do not correspond to any other question\footnote{About 200 answers of all the singlelabel set were not unique.}. We call such versions of the \texttt{YAQTopics} "subsampled". 
+The results of such a comparison are presented in the Table \ref{subsampled}. 
+\begin{table*}
+\centering
+\caption{Accuracy(f1) on the Russian \texttt{MASSIVE} for the subsampled versions of \texttt{YAQTopics}, with the one question corresponding to exactly one answer. Q means questions, and A means answers. Averaged by three runs. Backbone: \textit{bert-base-multilingual-cased}. Total score for majority baseline: accuracy 22.9, f1 6.2}
+\scalebox{0.8}{
+\label{subsampled}
+\begin{tabular}{|c||c|c|c|c|c|c|c|c|c|c|c|c|c|c|} \hline
+{\textbf{Trained on}}  &  \multicolumn{2}{c|}{\textbf{Total}} &  \multicolumn{2}{c|}{\textbf{music}} &  \multicolumn{2}{c|}{\textbf{cooking}} &  \multicolumn{2}{c|}{\textbf{news}} &  \multicolumn{2}{c|}{\textbf{transport}} &  \multicolumn{2}{c|}{\textbf{weather}} &  \multicolumn{2}{c|}{\textbf{social}} \\ \hline
+& Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 \\ \hline \hline
+\textbf{Q}  & 72.3 & 65.5 & 94.3 & 22.6 & 98.6 & 21.5 & 81.7 & 16.0 & 88.3 & 17.7 & 73.2 & 16.9 & 3.1 & 1.0\\ \hline
+\textbf{A} & 62.0 & 56.6 & 98.4 & 23.1 & 94.3 & 38.8 & 57.0 & 12.8 & 80.2 & 19.3 & 57.5 & 14.5 & 0.1 & 0.0\\ \hline
+\end{tabular}
+}
+\end{table*}
+
+We see that the questions are indeed more informative for the conversational tasks than the answers. And overall, the suitability of the \texttt{YAQTopics} for the classification of the conversational aforementioned topics remains fairly high. However, we take for the next section the \textbf{Q and A} setting (treating questions and answer as separate examples), as using answers as separate samples still boosts the scores. 
+
+%REMAINS IT. 
+\section{Crosslingual knowledge transfer} 
+
+
+After we have selected the best setting, other questions are: how effectively does the knowledge from this setting transfer across multiple languages? And what influences the efficiency of this transfer. To answer this question, we infer the comparison model trained in the \textbf{Q} setting (as described in the previous section) not only on the Russian-language \texttt{MASSIVE} but also on the \texttt{MASSIVE} dataset for all languages it contains \footnote{We use \texttt{MASSIVE} version 1.1, which contains the Catalan language. For the Chinese language, we have utilized both character sets as \texttt{MASSIVE} has two Chinese versions.}. 
+
+An interesting research question is the correlation of the model quality for different languages with the training sample size. The work~\cite{bert} claims that the learning sample for every utilized language contained from the text of Wikipedia for that language, and that they performed an exponential smoothing of the training sample with the factor of 0.7 to balance the languages. Therefore, as a proxy of the Wikipedia size for every language, we used the number of articles in the Wikipedia of this language at the time of the BERT article's release, smoothed by the factor of 0.7. 
+
+We present the metrics obtained by the evaluation of the \textbf{Q and A} model on all \texttt{MASSIVE} languages in the Table \ref{crosslingual}. We also provide the original Wikipedia sizes we used in the same table. 
+% TODO. INSERT TABLE VALUES AND CORRELATIONS
+
+\begin{table*}
+\centering
+\caption{Accuracy(f1) for the "Q" version of \texttt{YAQTopics}, with the one question corresponding to exactly one answer. "Code" means ISO 639-1 language code, and "N" means the number of Wikipedia articles on that language on 11-10-2018. Backbone: \textit{bert-base-multilingual-cased}. Total score for majority baseline: accuracy 22.9, f1 6.2}
+\scalebox{0.8}{
+\label{crosslingual}
+\begin{tabular}{|c|c|c||c|c|c|c|c|c|c|c|c|c|c|c|c|c|} \hline
+{\textbf{Language}}  & \textbf{Code} & \textbf{N}  &  \multicolumn{2}{c|}{\textbf{Total}} &  \multicolumn{2}{c|}{\textbf{music}} &  \multicolumn{2}{c|}{\textbf{cooking}} &  \multicolumn{2}{c|}{\textbf{news}} &  \multicolumn{2}{c|}{\textbf{transport}} &  \multicolumn{2}{c|}{\textbf{weather}} &  \multicolumn{2}{c|}{\textbf{social}} \\ \hline
+& & & Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 \\ \hline \hline
+Russian & ru & 1,501,878 & 76.0 & 72.0 & 95.0 & 17.3 & 98.9 & 27.6 & 78.5 & 14.7 & 89.5 & 16.8 & 76.5 & 15.4 & 23.7 & 6.4\\ \hline
+Chinese (Taiwan) & zh-TW & 1,025,366 & 72.9 & 71.0 & 96.3 & 24.5 & 99.4 & 38.8 & 59.9 & 12.3 & 85.1 & 15.3 & 71.9 & 14.8 & 38.5 & 9.2\\ \hline
+Chinese & zh & 1,025,366 & 70.4 & 68.3 & 95.2 & 22.8 & 97.6 & 27.5 & 57.8 & 12.0 & 85.8 & 16.4 & 67.5 & 13.4 & 32.4 & 8.1\\ \hline
+English & en & 5,731,625 & 70.4 & 68.6 & 96.8 & 23.0 & 98.7 & 35.9 & 54.1 & 11.5 & 84.3 & 16.2 & 67.0 & 13.4 & 38.2 & 9.8\\ \hline
+Japanese & ja & 1,124,097 & 69.5 & 66.9 & 92.8 & 24.1 & 92.8 & 38.5 & 52.2 & 11.2 & 87.1 & 15.5 & 71.1 & 16.6 & 31.3 & 7.9\\ \hline
+Swedish & sv & 3,763,579 & 64.1 & 62.5 & 92.7 & 19.8 & 93.6 & 25.3 & 50.7 & 11.1 & 84.3 & 16.3 & 48.1 & 13.9 & 35.7 & 8.7\\ \hline
+Italian & it & 1,466,064 & 63.3 & 61.3 & 94.7 & 21.1 & 98.8 & 35.9 & 44.7 & 9.9 & 89.2 & 16.8 & 39.7 & 9.9 & 38.8 & 9.3\\ \hline
+Spanish & es & 1,480,965 & 63.0 & 61.4 & 93.7 & 19.9 & 98.9 & 35.9 & 51.1 & 11.2 & 83.9 & 16.2 & 43.4 & 9.9 & 31.9 & 8.0\\ \hline
+Polish & pl & 1,303,297 & 60.7 & 59.0 & 92.2 & 22.4 & 85.3 & 19.0 & 40.3 & 9.1 & 76.6 & 16.4 & 56.2 & 12.8 & 30.4 & 7.8\\ \hline
+Dutch & nl & 1,944,129 & 60.6 & 58.7 & 91.5 & 20.7 & 94.8 & 24.4 & 44.7 & 10.0 & 86.3 & 16.5 & 35.2 & 8.5 & 36.9 & 9.0\\ \hline
+Malay & ms & 320,631 & 60.6 & 59.5 & 90.8 & 26.4 & 96.9 & 35.6 & 29.2 & 7.3 & 74.4 & 15.1 & 58.1 & 13.9 & 37.9 & 9.1\\ \hline
+Indonesian & id & 440,952 & 60.0 & 59.0 & 92.7 & 34.7 & 97.4 & 30.2 & 30.7 & 7.6 & 75.4 & 15.2 & 55.3 & 12.6 & 33.2 & 8.9\\ \hline
+Norwegian Bokmål & nb & 495,395 & 58.7 & 57.5 & 95.0 & 30.7 & 85.6 & 21.6 & 46.3 & 10.4 & 77.6 & 17.0 & 32.6 & 8.0 & 41.2 & 9.7\\ \hline
+Danish & da & 240,436 & 58.5 & 57.6 & 95.7 & 29.8 & 86.3 & 21.7 & 48.6 & 10.8 & 75.6 & 15.3 & 30.0 & 7.5 & 42.8 & 10.0\\ \hline
+Persian & fa & 643,750 & 58.2 & 56.6 & 88.1 & 24.5 & 95.3 & 23.9 & 41.6 & 9.6 & 73.2 & 15.0 & 55.8 & 12.6 & 15.3 & 4.7\\ \hline
+Portuguese & pt & 1,007,323 & 57.6 & 56.7 & 94.7 & 27.0 & 96.9 & 18.6 & 37.2 & 8.7 & 62.0 & 13.6 & 45.2 & 10.9 & 41.9 & 9.8\\ \hline
+French & fr & 2,046,793 & 57.5 & 55.2 & 93.9 & 19.9 & 96.3 & 21.8 & 28.8 & 7.2 & 84.0 & 17.7 & 36.4 & 8.8 & 35.3 & 8.7\\ \hline
+Slovenian & sl & 162,453 & 57.3 & 55.4 & 87.8 & 18.1 & 95.0 & 20.1 & 24.7 & 6.2 & 80.5 & 16.8 & 51.4 & 12.8 & 27.3 & 7.6\\ \hline
+Hungarian & hu & 437,984 & 56.3 & 54.8 & 92.9 & 20.8 & 96.9 & 23.0 & 31.9 & 7.6 & 77.0 & 14.5 & 35.3 & 9.1 & 35.2 & 8.7\\ \hline
+Catalan & ca & 591,783 & 56.2 & 54.2 & 94.9 & 21.1 & 96.0 & 25.6 & 35.1 & 8.4 & 83.3 & 16.1 & 29.1 & 7.8 & 30.2 & 7.8\\ \hline
+Korean & ko & 429,369 & 54.3 & 53.2 & 91.1 & 24.8 & 94.4 & 35.1 & 34.5 & 8.2 & 70.9 & 13.8 & 31.5 & 7.8 & 36.7 & 10.7\\ \hline
+Turkish & tr & 316,969 & 54.0 & 53.2 & 89.9 & 29.8 & 94.2 & 32.5 & 15.4 & 4.3 & 72.1 & 14.9 & 45.3 & 13.2 & 36.7 & 10.7\\ \hline
+Hindi & hi & 127,044 & 53.8 & 53.0 & 88.2 & 20.3 & 94.8 & 24.4 & 21.7 & 5.7 & 58.8 & 13.1 & 60.9 & 14.6 & 24.3 & 6.4\\ \hline
+Vietnamese & vi & 1,190,187 & 53.3 & 53.0 & 75.8 & 18.6 & 96.9 & 30.1 & 38.3 & 9.0 & 69.9 & 16.0 & 32.8 & 8.7 & 35.8 & 10.0\\ \hline
+Azerbaijani & az & 138,538 & 53.2 & 54.3 & 91.2 & 32.7 & 96.5 & 33.9 & 31.9 & 7.6 & 48.2 & 14.6 & 53.0 & 14.9 & 30.8 & 8.9\\ \hline
+Hebrew & he & 231,868 & 53.1 & 51.0 & 88.3 & 26.0 & 90.8 & 18.0 & 25.8 & 6.6 & 67.2 & 13.4 & 54.2 & 12.5 & 14.4 & 4.2\\ \hline
+Romanian & ro & 388,896 & 52.8 & 51.3 & 88.9 & 23.6 & 92.0 & 19.2 & 11.5 & 3.3 & 75.4 & 15.3 & 35.5 & 9.2 & 45.8 & 12.6\\ \hline
+Arabic & ar & 619,692 & 50.7 & 50.4 & 84.4 & 19.8 & 96.0 & 28.3 & 28.4 & 7.1 & 58.9 & 13.2 & 47.9 & 12.5 & 17.2 & 4.9\\ \hline
+Kannada & kn & 23,844 & 50.7 & 48.9 & 86.4 & 26.8 & 89.3 & 21.0 & 11.8 & 3.4 & 58.3 & 12.3 & 58.6 & 15.9 & 24.7 & 6.6\\ \hline
+Filipino & tl & 80,992 & 49.6 & 48.5 & 74.7 & 22.1 & 91.7 & 24.1 & 2.9 & 0.9 & 61.8 & 15.7 & 51.9 & 15.8 & 42.2 & 9.9\\ \hline
+Telugu & te & 69,354 & 49.3 & 46.6 & 85.2 & 20.4 & 89.9 & 22.1 & 5.7 & 1.8 & 58.0 & 13.0 & 61.0 & 15.5 & 20.6 & 5.9\\ \hline
+Urdu & ur & 140,939 & 49.2 & 49.3 & 68.5 & 16.4 & 88.4 & 18.4 & 38.5 & 9.0 & 39.4 & 10.6 & 57.7 & 14.9 & 25.1 & 6.6\\ \hline
+German & de & 2,227,483 & 48.9 & 47.1 & 94.0 & 19.4 & 84.0 & 20.4 & 22.7 & 5.8 & 63.5 & 13.8 & 29.3 & 7.6 & 33.3 & 8.3\\ \hline
+Afrikaans & af & 62,963 & 48.5 & 45.5 & 91.5 & 22.3 & 93.4 & 23.7 & 9.7 & 2.8 & 75.2 & 15.2 & 30.0 & 8.0 & 25.4 & 6.7\\ \hline
+Finnish & fi & 445,606 & 48.5 & 47.3 & 91.8 & 22.3 & 91.9 & 18.1 & 25.1 & 6.3 & 65.8 & 14.1 & 23.7 & 6.7 & 29.4 & 7.6\\ \hline
+Burmese & my & 39,823 & 46.8 & 45.4 & 87.0 & 22.7 & 92.2 & 22.5 & 19.2 & 5.0 & 57.4 & 12.9 & 40.7 & 10.2 & 16.1 & 4.6\\ \hline
+Albanian & sq & 74,871 & 46.7 & 44.3 & 91.4 & 23.9 & 92.2 & 22.4 & 5.2 & 1.6 & 80.5 & 18.3 & 13.4 & 4.1 & 37.5 & 9.1\\ \hline
+Tamil & ta & 118,119 & 46.1 & 44.3 & 89.1 & 24.6 & 88.2 & 18.3 & 22.4 & 5.7 & 72.8 & 16.4 & 15.5 & 4.6 & 23.8 & 6.3\\ \hline
+Latvian & lv & 88,189 & 43.9 & 44.3 & 89.1 & 26.0 & 91.6 & 19.7 & 26.3 & 6.5 & 49.6 & 13.3 & 20.2 & 5.6 & 29.0 & 8.4\\ \hline
+Greek & el & 153,855 & 42.6 & 41.8 & 94.0 & 22.6 & 89.4 & 24.8 & 15.0 & 4.2 & 37.3 & 9.6 & 28.9 & 8.6 & 35.7 & 8.8\\ \hline
+Armenian & hy & 246,571 & 42.2 & 42.7 & 92.2 & 23.4 & 82.3 & 19.6 & 25.9 & 6.5 & 33.8 & 8.2 & 20.9 & 5.6 & 42.2 & 9.8\\ \hline
+Malayalam & ml & 59,305 & 39.9 & 39.4 & 78.4 & 25.3 & 92.4 & 21.4 & 8.4 & 2.5 & 30.2 & 7.7 & 49.9 & 12.8 & 15.8 & 4.4\\ \hline
+Bangla & bn & 61,294 & 39.5 & 39.5 & 88.3 & 23.4 & 86.7 & 18.6 & 14.1 & 4.0 & 47.8 & 10.8 & 22.7 & 6.7 & 17.3 & 4.9\\ \hline
+Thai & th & 127,010 & 37.9 & 34.9 & 91.7 & 31.9 & 86.9 & 26.9 & 7.2 & 2.2 & 60.1 & 12.5 & 9.4 & 2.7 & 15.4 & 5.7\\ \hline
+Javanese & jv & 54,964 & 33.9 & 33.1 & 87.3 & 21.7 & 89.7 & 39.6 & 7.1 & 2.2 & 20.0 & 5.5 & 22.4 & 7.8 & 28.1 & 8.2\\ \hline
+Mongolian & mn & 18,353 & 30.8 & 30.9 & 87.3 & 21.7 & 90.2 & 26.5 & 7.3 & 2.2 & 18.3 & 6.0 & 12.2 & 4.3 & 25.0 & 7.8\\ \hline
+Georgian & ka & 124,694 & 30.3 & 29.0 & 87.8 & 22.8 & 91.0 & 20.7 & 11.8 & 3.4 & 16.2 & 5.3 & 20.9 & 5.9 & 5.2 & 1.7\\ \hline
+Icelandic & is & 45,873 & 25.9 & 26.5 & 62.9 & 18.8 & 86.5 & 20.8 & 12.4 & 3.5 & 11.0 & 3.7 & 10.1 & 3.2 & 22.7 & 6.2\\ \hline
+Swahili & sw & 45,806 & 25.7 & 24.8 & 71.6 & 25.3 & 86.5 & 33.9 & 1.8 & 0.6 & 22.3 & 6.4 & 3.8 & 1.3 & 20.1 & 6.4\\ \hline
+Welsh & cy & 101,472 & 25.3 & 23.4 & 74.6 & 35.3 & 86.9 & 31.4 & 5.7 & 1.7 & 9.8 & 3.1 & 4.5 & 1.4 & 27.2 & 8.7\\ \hline
+Khmer & km & 6,741 & 9.1 & 3.6 & 1.6 & 1.6 & 99.7 & 61.0 & 0.2 & 0.1 & 0.2 & 0.1 & 0.0 & 0.0 & 1.0 & 0.4\\ \hline
+Amharic & am & 14,375 & 9.1 & 3.5 & 0.0 & 0.0 & 100.0 & 100.0 & 0.2 & 0.2 & 0.0 & 0.0 & 0.0 & 0.0 & 2.2 & 1.5\\ \hline
+\end{tabular}
+}
+\end{table*}
+% two chinese languages - specify what?
+The Pearson correlation of the smoothed Wikipedia size with the total accuracy is 0.609 (p-value 1.66e-6), whereas the Spearman correlation is 0.817 (p-value is 1.47e-13). If we do not perform smoothing, the Pearson correlation is 0.517(p-value 8.81e-5), whereas the Spearman correlation remains the same.
+
+\iffalse # TODO
+We also have performed the same experiments with the baseline Russian-only large model, which also was trained only on the 6-class \texttt{YAQTopics} subset in this setting. Surprisingly, even for that model we still have a noticeable knowledge transfer from Russian to the English language. Also, the correlation between the smoothed Wikipedia size and the number of articles does not evaporate, even though it becomes lower\footnote{Spearman correlation: 0.452, p-value 8.5e-4. Pearson correlation: 0.521, p-value 8.74e-5}. We provide the scores for the top-10 languages in the Tab \ref{crosslingual2}.
+
+
+\begin{table*}
+\centering
+\caption{Accuracy(f1) for the baseline model(\textit{sbert\_large\_nlu\_ru}) trained on the "Q" version of \texttt{YAQTopics}, with the one question corresponding to exactly one answer. "Code" means ISO 639-1 language code, and "N" means the number of Wikipedia articles on that language on 11-10-2018. Total score for majority baseline: accuracy 22.9, f1 6.2}
+\scalebox{0.8}{
+\label{crosslingual2}
+\begin{tabular}{|c|c|c||c|c|c|c|c|c|c|c|c|c|c|c|c|c|} \hline
+{\textbf{Language}}  & \textbf{Code} & \textbf{N}  &  \multicolumn{2}{c|}{\textbf{Total}} &  \multicolumn{2}{c|}{\textbf{music}} &  \multicolumn{2}{c|}{\textbf{cooking}} &  \multicolumn{2}{c|}{\textbf{news}} &  \multicolumn{2}{c|}{\textbf{transport}} &  \multicolumn{2}{c|}{\textbf{weather}} &  \multicolumn{2}{c|}{\textbf{social}} \\ \hline
+& & & Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 \\ \hline \hline
+Russian & ru & 1,501,878 & 79.8 & 72.4 & 96.0 & 91.6 & 93.4 & 84.3 & 92.0 & 88.0 & 95.6 & 93.8 & 96.8 & 95.4 & 85.7 & 52.2\\ \hline
+English & en & 5,731,625 & 52.4 & 48.2 & 76.2 & 67.0 & 80.5 & 60.6 & 88.2 & 81.7 & 87.7 & 78.1 & 86.7 & 75.7 & 85.6 & 52.8\\ \hline
+Slovenian & sl &162,453 & 23.3 & 20.0 & 61.0 & 50.8 & 59.2 & 46.8 & 85.7 & 72.3 & 78.5 & 50.8 & 77.1 & 43.5 & 85.1 & 47.9\\ \hline
+German & de & 2,227,483 & 21.1 & 18.2 & 44.7 & 41.4 & 76.8 & 52.3 & 77.7 & 52.6 & 79.7 & 58.6 & 77.1 & 43.6 & 86.1 & 54.4\\ \hline
+Polish & pl & 1,303,297 & 19.8 & 17.5 & 67.1 & 51.8 & 54.4 & 45.1 & 81.1 & 61.6 & 74.6 & 50.3 & 77.0 & 43.5 & 85.4 & 50.1\\ \hline
+Spanish & es & 1,480,965 & 19.7 & 16.9 & 58.6 & 50.6 & 58.4 & 46.2 & 79.6 & 51.9 & 79.3 & 50.7 & 76.9 & 43.5 & 86.6 & 57.1\\ \hline
+Catalan & ca & 591,783 & 19.3 & 16.8 & 43.2 & 40.0 & 70.7 & 49.4 & 81.7 & 56.7 & 80.1 & 53.3 & 77.0 & 43.6 & 85.9 & 54.2\\ \hline
+Mongolian & mn & 18,353 & 18.8 & 15.4 & 57.0 & 48.2 & 55.3 & 45.0 & 80.6 & 45.6 & 81.3 & 57.6 & 77.6 & 45.8 & 85.8 & 52.3\\ \hline
+Portuguese & pt & 1,007,323 & 18.7 & 13.8 & 49.5 & 45.5 & 66.0 & 48.5 & 79.9 & 50.2 & 79.6 & 51.5 & 77.1 & 43.8 & 85.3 & 49.3\\ \hline
+French & fr & 2,046,793 & 18.1 & 14.7 & 34.8 & 33.7 & 78.4 & 49.9 & 80.9 & 55.7 & 79.4 & 51.2 & 77.0 & 43.5 & 85.7 & 53.4\\ \hline
+\end{tabular}
+}
+\end{table*}
+\fi
+\section{Discussion} 
+As one can see, the \texttt{YAQTopics} dataset overall suits fairly well for the conversational topic classification. In the case of question classification, even lightweight models trained on the \texttt{YAQTopics} subset obtain an accuracy of 76.0 and an f1 macro of 72.1 on the 6-class \texttt{MASSIVE} subset.
+
+ Surprisingly, the concatenation of the summarized answers does not change these results in a significant way. And answer-only classification yields much lower scores on \texttt{MASSIVE} than the question-only classification even if we control for the sample size, making it identical for the question-only dataset and the answer-only dataset. Moreover, even using answers in addition to questions (as separate samples) also deteriorates the scores by several percent. That can prove the limited usability of summarized answers for the conversational utterance classification, which leads to the conclusion that using a question-only version of \texttt{YAQTopics} for the conversational topics classification is fully legitimate.
+
+In the case of evaluation of multilingual BERT(trained on the questions and answers) on all languages included in the \texttt{MASSIVE} dataset, the accuracy by language closely correlates with the size of Wikipedia for the same language (Spearman correlation 0.817 with p-value 1.47e-13, Pearson correlation 0.517 with p-value 8.81e-5), if we approximate this size by the number of Wikipedia articles. If we perform the exponential weighting of the Wikipedia sizes with the factor 0.7, as in~\cite{bert}, the Pearson correlation grows to 0.609(p-value 1.66e-6).
+
+ Such correlation was obtained even though in different languages every Wikipedia article, on average, has a different number of tokens or sentences; we suggest that if we explicitly had the number of training samples for every language that the original multilingual model received, the correlation would have been even higher; but the authors of original BERT article provided neither the original training sample nor its size. 
+
+This leads to the conclusion that the main factor determining the quality of knowledge transfer between different languages in the multilingual model is, by far, the size of the pretraining sample for this language. We can suppose that for the case of languages that are very linguistically close (e.g Russian and Belarussian) such closeness also impacts knowledge transfer, but examining the importance of this factor requires additional research. 
+
+
+%TODO. REEXAMINE THIS SECTION AFTER OBTAINING FULL RESULTS. 
+\section{Conclusion} 
+\input{RuTopics/Abstract.tex}
