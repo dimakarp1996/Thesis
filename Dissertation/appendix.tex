@@ -1,4 +1,154 @@
 \chapter{Приложение}\label{appendix}
+\section{Размеры наборов данных, на которых тестировался перенос знаний в многозадачных моделях для диалоговых задач}
+\label{tr-ag-sizes}
+\begin{table}[t]
+\label{emo_sizes}
+%\centering
+\caption{Размеры наборов данных для классификации эмоций. Английские и русские данные}
+\begin{tabular}{|c||c|c|c|c|c|c|} \hline
+{тип данных} & {тренировочные} & {валидациооные} & {тестовые} & {тренировочные} & {валидационные} & {тестовые} \\ \hline
+{класс} & \multicolumn{3}{c|}{EN} & \multicolumn{3}{c|}{RU} \\ \hline \hline
+%\textbf{Total} & 39555 & 4946 & 4968 & 6557 & 864 & 1862 \\ \hline
+\textbf{joy}& 15216 & 1941 & 1863 & 1346 & 162 & 341 \\ \hline
+  \textbf{neutral}& 12823 & 1592 & 1606 & 2682 & 361 & 734 \\ \hline
+  \textbf{anger}& 4293 & 555 & 572 & 339 & 45 & 121 \\ \hline
+  \textbf{surprise}& 3858 & 459 & 488 & 491 & 77 & 165 \\ \hline
+  \textbf{sadness}& 2326 & 266 & 283 & 1207 & 158 & 368 \\ \hline
+  \textbf{fear}& 541 & 72 & 80 & 492 & 61 & 133 \\ \hline
+  \textbf{disgust}& 498 & 61 & 76 & 0 & 0 & 0 \\ \hline
+\end{tabular}
+\end{table}
+
+
+\begin{table}[t]
+%\centering
+\caption{Размеры наборов данных для классификации токсичности. Английские и русские данные}
+\label{toxic_sizes}
+\begin{tabular}{|c||c|c|c|c|c|c|} \hline
+{тип данных} & {тренировочные} & {валидациооные} & {тестовые} & {тренировочные} & {валидационные} & {тестовые} \\ \hline
+{класс} & \multicolumn{3}{c|}{EN} & \multicolumn{3}{c|}{RU} \\ \hline \hline
+%\textbf{Total}& 127656 &93342&31915 &23010 & 63978&46835 \\ \hline 
+\textbf{not\_toxic}& 114722 &75452&28624 &18669 & 57735&37659 \\ \hline 
+\textbf{toxic}& 12934 &17890 &3291 & 4341 & 6243&9176 \\ \hline 
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+%\centering
+\caption{Размеры наборов данных для классификации тональности. Английские и русские данные}
+\label{sentiment_sizes_tr-ag}
+\begin{tabular}{|c||c|c|c|c|c|c|} \hline
+{тип данных} & {тренировочные} & {валидациооные} & {тестовые} & {тренировочные} & {валидационные} & {тестовые} \\ \hline
+{класс} & \multicolumn{3}{c|}{EN} & \multicolumn{3}{c|}{RU} \\ \hline \hline
+\hline
+%{Total} & 80488  & 3600& 3600 & 82610 & 3695 & 3695 \\ \hline
+  \textbf{positive}& 21391 & 1200 & 1200 & 27570 & 1220 & 1210\\ \hline
+  \textbf{neutral}&45076 & 1200& 1200& 27531 & 1234 & 1235 \\ \hline
+  \textbf{negative}& 14021 & 1200 & 1200 & 27509 & 1241 & 1250\\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}
+%\centering
+\caption{Размеры наборов данных для тематической классификации. Английские и русские данные}
+\label{topic_sizes_tr-ag}
+\begin{tabular}{|c||c|c|c|c|c|c|} \hline
+{тип данных} & {тренировочные} & {валидациооные} & {тестовые} & {тренировочные} & {валидационные} & {тестовые} \\ \hline
+{класс} & \multicolumn{3}{c|}{EN} & \multicolumn{3}{c|}{RU} \\ \hline \hline
+%{Total}& 11514 & 2033 & 2974 & 11514 & 2033 & 2974\\ \hline
+  \textbf{calendar}& 1688 & 280 & 402 & 1688 & 280 & 402\\ \hline
+  \textbf{play}& 1377 & 260 & 387 & 1377 & 260 & 387\\ \hline
+  \textbf{qa}& 1183 & 214 & 288 & 1183 & 214 & 288\\ \hline
+  \textbf{email}& 953 & 157 & 271 & 953 & 157 & 271\\ \hline
+  \textbf{iot}& 769 & 118 & 220 & 769 & 118 & 220\\ \hline
+  \textbf{general}& 652 & 122 & 189 & 652 & 122 & 189\\ \hline
+  \textbf{weather}& 573 & 126 & 156 & 573 & 126 & 156\\ \hline
+  \textbf{transport}& 571 & 110 & 124 & 571 & 110 & 124\\ \hline
+  \textbf{lists}& 539 & 112 & 142 & 539 & 112 & 142\\ \hline
+  \textbf{news}& 503 & 82 & 124 & 503 & 82 & 124\\ \hline
+  \textbf{recommendation}& 433 & 69 & 94 & 433 & 69 & 94\\ \hline
+  \textbf{datetime}& 402 & 73 & 103 & 402 & 73 & 103\\ \hline
+  \textbf{social}& 391 & 68 & 106 & 391 & 68 & 106\\ \hline
+  \textbf{alarm}& 390 & 64 & 96 & 390 & 64 & 96\\ \hline
+  \textbf{music}& 332 & 56 & 81 & 332 & 56 & 81\\ \hline
+  \textbf{audio}& 290 & 35 & 62 & 290 & 35 & 62\\ \hline
+  \textbf{takeaway}& 257 & 44 & 57 & 257 & 44 & 57\\ \hline
+  \textbf{cooking}& 211 & 43 & 72 & 211 & 43 & 72\\ \hline
+
+\end{tabular}
+\end{table}
+
+\begin{table}[]
+\caption{Размеры наборов данных для классификации интентов. Английские и русские данные}
+\label{intent_sizes_tr-ag}
+\scalebox{0.8}{
+\begin{tabular}{|c||c|c|c|c|c|c|} \hline
+{тип данных} & {тренировочные} & {валидациооные} & {тестовые} & {тренировочные} & {валидационные} & {тестовые} \\ \hline
+{класс} & \multicolumn{3}{c|}{EN} & \multicolumn{3}{c|}{RU} \\ \hline \hline
+%{Total}& 11514 & 2033 & 2974 & 11514 & 2033 & 2974\\ \hline
+  \textbf{calendar\_set}& 810 & 131 & 209 & 810 & 131 & 209\\ \hline
+  \textbf{play\_music}& 639 & 123 & 176 & 639 & 123 & 176\\ \hline
+  \textbf{weather\_query}& 573 & 126 & 156 & 573 & 126 & 156\\ \hline
+  \textbf{calendar\_query}& 566 & 102 & 126 & 566 & 102 & 126\\ \hline
+  \textbf{general\_quirky}& 555 & 105 & 169 & 555 & 105 & 169\\ \hline
+  \textbf{qa\_factoid}& 544 & 90 & 141 & 544 & 90 & 141\\ \hline
+  \textbf{news\_query}& 503 & 82 & 124 & 503 & 82 & 124\\ \hline
+  \textbf{email\_query}& 418 & 73 & 119 & 418 & 73 & 119\\ \hline
+  \textbf{email\_sendemail}& 354 & 63 & 114 & 354 & 63 & 114\\ \hline
+  \textbf{datetime\_query}& 350 & 64 & 88 & 350 & 64 & 88\\ \hline
+  \textbf{calendar\_remove}& 312 & 47 & 67 & 312 & 47 & 67\\ \hline
+  \textbf{play\_radio}& 283 & 46 & 72 & 283 & 46 & 72\\ \hline
+  \textbf{social\_post}& 283 & 50 & 81 & 283 & 50 & 81\\ \hline
+  \textbf{qa\_definition}& 267 & 55 & 57 & 267 & 55 & 57\\ \hline
+  \textbf{transport\_query}& 227 & 36 & 51 & 227 & 36 & 51\\ \hline
+  \textbf{cooking\_recipe}& 207 & 41 & 72 & 207 & 41 & 72\\ \hline
+  \textbf{lists\_query}& 198 & 50 & 51 & 198 & 50 & 51\\ \hline
+  \textbf{play\_podcasts}& 193 & 34 & 63 & 193 & 34 & 63\\ \hline
+  \textbf{recommendation\_events}& 190 & 26 & 43 & 190 & 26 & 43\\ \hline
+  \textbf{alarm\_set}& 182 & 31 & 41 & 182 & 31 & 41\\ \hline
+  \textbf{lists\_createoradd}& 177 & 25 & 39 & 177 & 25 & 39\\ \hline
+  \textbf{recommendation\_locations}& 173 & 31 & 31 & 173 & 31 & 31\\ \hline
+  \textbf{lists\_remove}& 164 & 37 & 52 & 164 & 37 & 52\\ \hline
+  \textbf{music\_query}& 154 & 30 & 35 & 154 & 30 & 35\\ \hline
+  \textbf{iot\_hue\_lightoff}& 153 & 17 & 43 & 153 & 17 & 43\\ \hline
+  \textbf{qa\_stock}& 152 & 24 & 26 & 152 & 24 & 26\\ \hline
+  \textbf{play\_audiobook}& 150 & 35 & 41 & 150 & 35 & 41\\ \hline
+  \textbf{qa\_currency}& 142 & 32 & 39 & 142 & 32 & 39\\ \hline
+  \textbf{takeaway\_order}& 135 & 20 & 22 & 135 & 20 & 22\\ \hline
+  \textbf{alarm\_query}& 130 & 19 & 34 & 130 & 19 & 34\\ \hline
+  \textbf{transport\_ticket}& 127 & 25 & 35 & 127 & 25 & 35\\ \hline
+  \textbf{email\_querycontact}& 127 & 16 & 26 & 127 & 16 & 26\\ \hline
+  \textbf{iot\_hue\_lightchange}& 125 & 22 & 36 & 125 & 22 & 36\\ \hline
+  \textbf{iot\_coffee}& 124 & 14 & 36 & 124 & 14 & 36\\ \hline
+  \textbf{takeaway\_query}& 122 & 24 & 35 & 122 & 24 & 35\\ \hline
+  \textbf{transport\_traffic}& 117 & 22 & 15 & 117 & 22 & 15\\ \hline
+  \textbf{music\_likeness}& 113 & 16 & 36 & 113 & 16 & 36\\ \hline
+  \textbf{play\_game}& 112 & 22 & 35 & 112 & 22 & 35\\ \hline
+  \textbf{audio\_volume\_mute}& 110 & 15 & 32 & 110 & 15 & 32\\ \hline
+  \textbf{audio\_volume\_up}& 110 & 12 & 13 & 110 & 12 & 13\\ \hline
+  \textbf{social\_query}& 108 & 18 & 25 & 108 & 18 & 25\\ \hline
+  \textbf{transport\_taxi}& 100 & 27 & 23 & 100 & 27 & 23\\ \hline
+  \textbf{iot\_cleaning}& 93 & 19 & 26 & 93 & 19 & 26\\ \hline
+  \textbf{alarm\_remove}& 78 & 14 & 21 & 78 & 14 & 21\\ \hline
+  \textbf{qa\_maths}& 78 & 13 & 25 & 78 & 13 & 25\\ \hline
+  \textbf{iot\_hue\_lightdim}& 76 & 17 & 21 & 76 & 17 & 21\\ \hline
+  \textbf{iot\_hue\_lightup}& 76 & 12 & 27 & 76 & 12 & 27\\ \hline
+  \textbf{general\_joke}& 72 & 15 & 19 & 72 & 15 & 19\\ \hline
+  \textbf{recommendation\_movies}& 70 & 12 & 20 & 70 & 12 & 20\\ \hline
+  \textbf{email\_addcontact}& 54 & 5 & 12 & 54 & 5 & 12\\ \hline
+  \textbf{datetime\_convert}& 52 & 9 & 15 & 52 & 9 & 15\\ \hline
+  \textbf{iot\_wemo\_off}& 52 & 5 & 18 & 52 & 5 & 18\\ \hline
+  \textbf{audio\_volume\_down}& 52 & 8 & 11 & 52 & 8 & 11\\ \hline
+  \textbf{music\_settings}& 51 & 8 & 6 & 51 & 8 & 6\\ \hline
+  \textbf{iot\_wemo\_on}& 48 & 7 & 10 & 48 & 7 & 10\\ \hline
+  \textbf{general\_greet}& 25 & 2 & 1 & 25 & 2 & 1\\ \hline
+  \textbf{iot\_hue\_lighton}& 22 & 5 & 3 & 22 & 5 & 3\\ \hline
+  \textbf{audio\_volume\_other}& 18 & 0 & 6 & 18 & 0 & 6\\ \hline
+  \textbf{music\_dislikeness}& 14 & 2 & 4 & 14 & 2 & 4\\ \hline
+  \textbf{cooking\_query}& 4 & 2 & 0 & 4 & 2 & 0\\ \hline 
+\end{tabular}
+}
+
 \section{Pаспределение числа тренировочных примеров по классам в серии экспериментов с моделью PAL-BERT в DREAM, до и после дополнительной псевдоразметки} \label{appendix:n-samples}
 
 
