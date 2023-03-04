@@ -219,20 +219,21 @@ Multiple\_GoalsIntent & 40 & 109 \\
 \end{table}
 
 \begin{table}[]
-\caption{Классификация токсичности} ИЗМЕНИТЬ
+\caption{Классификация токсичности}
 \label{appendix:factoid_tr-ag}
 \begin{tabular}{|c||c|c|c|}
 \hline
 класс & тренировочных примеров & валидационных примеров & тестовых примеров
 \hline
 \hline
-valid.csv
-defaultdict(<class 'int'>, {'not_toxic': 18722, 'toxic': 712, 'insult': 426, 'identity_hate': 40, 'obscene': 61, 'threat': 18, 'sexual_explicit': 17, 'severe_toxic': 4})
-train.csv
-defaultdict(<class 'int'>, {'not_toxic': 149734, 'identity_hate': 360, 'insult': 3518, 'toxic': 5572, 'obscene': 544, 'threat': 131, 'sexual_explicit': 107, 'severe_toxic': 28})
-test.csv
-defaultdict(<class 'int'>, {'not_toxic': 15353, 'toxic': 612, 'severe_toxic': 7, 'insult': 357, 'obscene': 49, 'identity_hate': 35, 'threat': 11, 'sexual_explicit': 7})
-
+not\_toxic & 149734 & 18722 & 15353 \\ \hline
+toxic & 5572 & 712 & 612\\ \hline
+insult & 3518 & 426 & 357 \\ \hline
+obscene & 544 & 61 & 49 \\ \hline
+itentity\_hate & 360 & 40 & 35 \\ \hline
+threat & 131 & 18 & 11 \\ \hline
+sexual\_explicit & 107 & 17 & 7\\ \hline
+severe\_toxic & 28 & 4 & 7\\ \hline
 \end{tabular}
 \end{table}
 
@@ -247,8 +248,7 @@ defaultdict(<class 'int'>, {'not_toxic': 15353, 'toxic': 612, 'severe_toxic': 7,
 класс & тренировочных примеров & валидационных примеров & тестовых примеров
 \hline
 \hline
-factoid & 2007 & 224 & 224\\
-\hline
+factoid & 2007 & 224 & 224\\ \hline
 conversational & 1606 & 179 & 179\\ \hline
 \end{tabular}
 \end{table}
