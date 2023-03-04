@@ -2,7 +2,7 @@
 % TODO - ЧТОБЫ ВЕЗДЕ НАЗЫВАЛИСЬ АГНОСТИЧНЫМИ, А НЕ ИНВАРИАНТНЫМИ!!!!
 Многозадачные нейросетевые модели, описанные в предыдущем разделе \ref{ch:pseudolabel}, позволяют добиться существенной экономии вычислительных ресурсов. Тем не менее, к числу их неустранимых недостатков относится негибкость. Они поддерживают только один тип голов (multilabel), они требуют наличия меток для каждой задачи у каждого примера. 
 
-В связи с этим была поставлена цель поиска и исследования более эффективных архитектур. В частности, было необходимо предложить многозадачную нейросетевую архитектуру, лишенную описанных выше недостатков архитектуры из \ref{ch:pseudolabel}. Помимо этого, необходимо было исследовать перенос знаний в предложенной нейросетевой архитектуре: как перенос знаний между задачами, так и перенос знаний между языками при использовании многозадачных моделях.
+В связи с этим была поставлена цель поиска и исследования более эффективных архитектур. В частности, было необходимо предложить многозадачную нейросетевую архитектуру, лишенную описанных выше недостатков архитектуры из \ref{ch:pseudolabel}. Помимо этого, необходимо было исследовать перенос знаний в предложенной нейросетевой архитектуре: как перенос знаний между задачами, так и перенос знаний между языками при использовании многозадачных моделей. При этом задачи для исследования было необходимо выбрать исходя из потребностей реальных диалоговых платформ, например, платформы DREAM\ref{ch:dream}. 
 
 Архитектура, исследование которой проводилось, описана в следующем разделе. Попытки улучшения данной архитектуры описаны отдельно. 
 
@@ -14,7 +14,7 @@
 
     \item[*] Как и в оригинальной статье~\cite{bert}, возвращаются финальные скрытые состояния для всех токенов и выход пулингового слоя BERT. 
 
-    \item[*] К выходу пулера применяется дропаут, по умолчанию равный 0.2\footnote{Как варьирование dropout, так и варьирование attention dropout не привело к улучшению характеристик модели.}. Для задач выбора из нескольких вариантов ответа или классификации каждого токена в предложении, выход преобразуется аналогично соответствующим задачам. We flatten the output if it is the sequence labeling task or the multiple-choice task
+    \item[*] К выходу пулера применяется дропаут, по умолчанию равный 0.2\footnote{Как варьирование dropout, так и варьирование attention dropout не привело к улучшению характеристик модели.}. Для задач выбора из нескольких вариантов ответа или классификации каждого токена в предложении, выход преобразуется аналогично соответствующим задачам. 
 
     \item[*]После этого этапа, мы применяем задаче-специфичный линейный слой с размерностью выхода \texttt{n}. Для всех задач, кроме регрессии или выбора из нескольких вариантов ответа\footnote{Для задачи выбора из нескольких вариантов ответа, каждой метке изначально относится несколько примеров. Т.е с таким числом классов после преобразования формы число реальных и предсказанных меток соответствует друг другу.}, \texttt{n} равняется числу классов для задачи. Во всех других случаях \texttt{n} равняется 1.
  
@@ -28,7 +28,7 @@
 
 При этом данная модель является трансформер-агностичной, что позволяет быстро подставлять в нее разные типы базовых моделей. Это выгодно отличает данную модель от иерархических многозадачных моделей, таких, как \cite{PAL:19} и \cite{TaskEmbedded2021}. 
 
-Отдельно выделяю то, что данная модель успешно интегрирована в библиотеку DeepPavlov\cite{deeppavlov}. 
+Отдельно выделяю то, что данная модель успешно интегрирована в библиотеку DeepPavlov\cite{Burtsev2018DeepPavlovAO}.
 
 \subsection{Какие эксперименты не сработали}\label{ch:tr-ag:failed_attempts} 
 Автор диссертационной работы пробовал большое количество различных вариантов улучшения архитектуры многозадачной трансформер-агностичной модели по сравнению с описанными в разделе \ref{ch:tr-ag:architecture}. 
@@ -54,34 +54,6 @@
 
 Еще одно преимущество многозадачной трансформер-агностичной модели, которое в рамках этой работы еще не было раскрыто до конца, заключается в том, что она поддерживает больший спектр задач. В частности, она (в реализации на момент написания диссертационной работы) поддерживает такие задачи, как распознавание именованных сущностей или выбор из нескольких вариантов ответа, которые невозможно реализовать в рамках модели с одним линейным слоем. 
 
-
-
-At the same time, the performance of the simple transformer-agnostic model is still not fully explored. It is especially true for dialog-specific datasets. To bridge this gap, we aim to examine the performance of transformer-agnostic multi-task models on various kinds of datasets for the tasks applicable in dialog systems.
-\section{Our setting}
-
-
-Our MTL model is based on \texttt{AutoModel}\footnote{The list of supported models: \url{https://huggingface.co/transformers/v3.0.2/model_doc/auto.html\#automodel}} class from HuggingFace, which allows using different transformer-based architectures as a backbone. For our experiments, we utilized BERT-based models because they allow effective transfer learning~\cite{10.1007/978-3-031-19032-2_46, ksquad}, however, exactly the same approach can be applied to any Transformer-based model.
-
-\begin{enumerate}
-
-    \item In the same way as in the original article~\cite{bert}, we return the final hidden states for all tokens and the output of the BERT pooling layer.
-
-    \item We apply the dropout (equal to 0.2) to the pooler output. We flatten the output if it is the sequence labeling task or the multiple-choice task.
-
-    \item After this stage, we apply the linear layer with \texttt{n} output dimension. \texttt{n} equals the number of classes for all tasks but regression and multiple-choice, where \texttt{n} is 1. (In the multiple-choice task, we get several samples per 1 label, so after reshaping the number of real and predicted labels matches). 
-
-    \item Then we apply a loss function: the categorical cross-entropy loss for the single-label classification task or the binary cross-entropy loss for the multi-label classification task. In this paper, we consider only single-label classification.
-
-\end{enumerate}
-
-The multi-task model in our setting requires almost no additional parameters and computational overhead, apart from the linear layers, so its simplicity singles it out. Also, the flexibility of this model allows using it with different kinds of backbones, which positively distinguishes it from~\cite{PAL:19}.
-
-For the distilBERT-like models, our multi-task model takes only ~0.1\% more parameters than the single-task models. This computational overhead varies around this number, depending on the number of tasks, the number of classes, and the backbone model. 
-\ifinterspeechfinal
-The multi-task transformer-agnostic model is integrated into DeepPavlov~\cite{Burtsev2018DeepPavlovAO}. This model is also successfully used in the Dream dialogue platform~\cite{baymurzina2021dream}. 
-\else
-We have integrated the multi-task transformer-agnostic model into our open-source library and our dialogue platform\footnote{We will provide links in the camera-ready version.}.
-\fi
 
 \section{Datasets}
 
@@ -405,16 +377,6 @@ The multi-task transformer-agnostic architecture we propose yields just a minor 
 Adding English data to the Russian dataset can improve the metrics by up to several percent for the singletask and multi-task training. Also, starting from some data sizes, multi-task architecture starts overcoming the singletask one.
 
 
-\section{Conclusion}
+\section{Выводы (название как в pseudolabel сделать)}
 
 
-УБРАТЬ ЭТО- КАК ОПИШУ ХОТЯ БЫ ВСЕ ПОПЫТКИ:
-Тут будет пересказ статьи про трансформер-инвариантные модели. 
-Статья может быть написана на основе экспериментов по применению этих моделей в DREAM-2. Эти эксперименты описаны здесь \url{https://docs.google.com/document/d/1o7jt2jJ-hyPNYlYzUgnpwkc033DvGWRIuv3FTWI6-Ig/edit}
-Полный отчет по этим экспериментам здесь \url{https://docs.google.com/document/d/1d7dlEGOD0Qr6GitVe9QH3UbX39BpYX0ay9rzIP1OZpo/edit}
-
-Еще одна статья может быть написана на основе экспериментов по использованию этих моделей для решения задач multilabel классификации на singlelabel данных. Эти эксперименты описаны здесь
-\url{https://docs.google.com/document/d/1bVpWWe-pvu3c8da08DJVkjjafXqG6GasoLuygfHh1XY/edit}
-и здесь 
-\url{https://docs.google.com/document/d/1imm32KmDXgD-YLW9nf7RNPJOlM32-1Fgaz3xeRVdvvo/edit}
-Версии статей добавил как на 1 марта
