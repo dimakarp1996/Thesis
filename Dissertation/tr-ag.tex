@@ -1,15 +1,5 @@
 \chapter{Трансформер-инвариантные модели}\label{ch:tr-ag}
-УБРАТЬ ЭТО- КАК ОПИШУ ХОТЯ БЫ ВСЕ ПОПЫТКИ
-Тут будет пересказ статьи про трансформер-инвариантные модели. 
-Статья может быть написана на основе экспериментов по применению этих моделей в DREAM-2. Эти эксперименты описаны здесь \url{https://docs.google.com/document/d/1o7jt2jJ-hyPNYlYzUgnpwkc033DvGWRIuv3FTWI6-Ig/edit}
-Полный отчет по этим экспериментам здесь \url{https://docs.google.com/document/d/1d7dlEGOD0Qr6GitVe9QH3UbX39BpYX0ay9rzIP1OZpo/edit}
 
-Еще одна статья может быть написана на основе экспериментов по использованию этих моделей для решения задач multilabel классификации на singlelabel данных. Эти эксперименты описаны здесь
-\url{https://docs.google.com/document/d/1bVpWWe-pvu3c8da08DJVkjjafXqG6GasoLuygfHh1XY/edit}
-и здесь 
-\url{https://docs.google.com/document/d/1imm32KmDXgD-YLW9nf7RNPJOlM32-1Fgaz3xeRVdvvo/edit}
-Версии статей добавил как на 1 марта
-\iffalse
 \section{Introduction}
 Nowadays, the technology of conversational AI systems is on the rise. The interest in virtual assistants prompts the development of conversational NLP models alongside traditional NLP models. The text classification task is one of the most crucial NLP tasks for virtual assistants.
 
@@ -399,5 +389,26 @@ Adding English data to the Russian dataset can improve the metrics by up to seve
 \section{Conclusion}
 
 
+УБРАТЬ ЭТО- КАК ОПИШУ ХОТЯ БЫ ВСЕ ПОПЫТКИ:
+Тут будет пересказ статьи про трансформер-инвариантные модели. 
+Статья может быть написана на основе экспериментов по применению этих моделей в DREAM-2. Эти эксперименты описаны здесь \url{https://docs.google.com/document/d/1o7jt2jJ-hyPNYlYzUgnpwkc033DvGWRIuv3FTWI6-Ig/edit}
+Полный отчет по этим экспериментам здесь \url{https://docs.google.com/document/d/1d7dlEGOD0Qr6GitVe9QH3UbX39BpYX0ay9rzIP1OZpo/edit}
 
-Все эти эксперименты проводились с августа 2022 года.
+Еще одна статья может быть написана на основе экспериментов по использованию этих моделей для решения задач multilabel классификации на singlelabel данных. Эти эксперименты описаны здесь
+\url{https://docs.google.com/document/d/1bVpWWe-pvu3c8da08DJVkjjafXqG6GasoLuygfHh1XY/edit}
+и здесь 
+\url{https://docs.google.com/document/d/1imm32KmDXgD-YLW9nf7RNPJOlM32-1Fgaz3xeRVdvvo/edit}
+Версии статей добавил как на 1 марта
+
+1)Модификация CLS-выхода модели BERT, который классифицируется multitask головами - GHOSTBERT, Task Embedded Attention, XCA, ClassAttention. Проверял на MRPC+RTE и потом на всех классификационных задачах GLUE, прироста на валидации не увидел.
+2)Не модифицируя multitask BERT (просто тело и линейные слои), сравниваю его на русском SUPERGLUE с обычным BERT. Имеется отставание от обычного BERT по большинству задач.
+3)Эксперименты с дообучением на другом языке. А именно, если модель, учившуюся на русском SUPERGLUE, дообучить ещё и на английском SUPERGLUE(или наоборот), приведёт ли это к улучшению? Не привело. В разных экспериментах я либо объединял данные на русском и английском языке, либо прописывал их как разные задачи, ни то, ни то не сработало.
+4)Эксперименты с выбором задач. Учил на подмножествах однотипных задач из SuperGLUE одного типа multitask модель и сравнивал с singletask моделью. Добился следующего положительного результата - на некоторых комбинациях датасетов multitask модель несколько превосходит singletask. Но учитывая маленькие размеры датасетов, устойчивость результатов под вопросом.
+5)При выборе задач пробовал варьировать dropout и attention dropout. Не привело к улучшению.
+6)Вместо обычного CLS токена пробовал использовать его LSTM представление, пробовал и его конкатенировать с CLS токеном. Не привело к улучшению
+7)Пробовал использовать task specific trainable tokens - при препроцессинге каждого примера либо ко фразе добавлять свой токен на каждой задачи, либо добавлять task specific Токены для каждой из задач. И учиться классифицировать не по простому CLS, а либо по конкатенации CLS и task specific, либо просто по task specific. На GLUE и SUPERGLUE идея не привела к улучшению
+8)Использование stochastic answer network слоя в архитектуре MT-DNN, с одной SAN и task-specific компонентами на несколько задач GLUE вместо нескольких SAN. Эксперимент не сработал
+9)Исследование сэмплирования. На сабсете GLUE, пробовал такую идею, как для каждой задачи переходить в Converged режим(в котором функция потерь делится на 4), если на ней нет улучшения, и выходить из этого режима , если после этого на ней есть ухудшение. Эксперимент не дал улучшения
+10)Продолжение исследования сэмплирования. Обучать модель 10 эпох, но при этом на 5 эпохах учить модель на всем датасете, а на следующих 5 фильтровать по дисперсии метрик на предыдущих эпохах и учить только на некой доле самых сложных примеров (с самой высокой дисперсией). Эксперимент тоже не дал улучшения
+
+
