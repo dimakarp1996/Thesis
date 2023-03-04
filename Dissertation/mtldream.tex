@@ -333,13 +333,20 @@ factoid classification & 0.789(0.809) & 0.794(0.817) & \textbf{0.834(0.831)} & 0
 }
 \end{table}
 \subsection{Экономия памяти GPU, CPU и быстродействия} 
-Использование многозадачной трансформер-агностичной модели в диалоговой системе DREAM позволило достичь существенной экономии всех видов вычислительных ресурсов. Так
-If we treated absolutely all models as singletask, 6 models that are being replaced by the current combined classifier in DREAM(emo,toxic,sentiment and 3 cobot models) would have taken ~3500*6 ~ 21000 Mb of the GPU memory. Midas classifier would have taken ~3500 Mb of the GPU memory, as it takes in current dev.  We don’t count topic classifier model as it is unclear what kind of singletask topic classifiers we would have used. If we would have used distilbert-like topic classifier, it would have taken ~2418 Mb of the GPU memory. In this case, replacements of all singletask models would have taken ~27000 Mb of the GPU memory.  Compared to this setting, our Multitask gives ~91% GPU memory economy. 
-This economy is caused by the replacement of many BERTs by one BERT, and also by the transformer-agnosticity that helped to quickly add distilbert-base-uncased instead of the BERT-base-uncased.
-CPU memory use for the multitask model: 2909 Mb. If treating absolutely all models as singletask, the economy estimate is 2594*8 + 2594*0.6 = 22308 Mb. Compared to this seitting, our Multitask gives ~87% CPU memory economy.
-Таким образом, даже по сравнению с предыдушей
-По сравнению с классификаторами в версии диалоговой платформы DREAM до внедрения многозадачной трансформер-агностичной модели (т.е основанной на модели PAL-BERT) многозадачная трансформер-агностичная модель дала экономию видеопамяти в 75 процентов, экономию оперативной памяти в 57 процентов и экономию времени на классификацию в 80-85 процентов. 
-Такая большая экономия времени на классификацию связана с эффектом от трансформер-агностичности. Если при использовании PAL-BERT для каждой задачи было необходимо получать предсказания многозадачной модели "с нуля", даже если Роль сыграло и то, что для задачи классификации интентов MIDAS больше не требовался отдельный классификатор. 
-Compared to the previous dev ( where multitask 6in1 bert-base is already used), our multitask gives ~75% GPU memory economy, ~57% CPU economy and ~80-85% postannotation inference time economy. (Inference time economy is due to the fact that current multitask is much faster than Midas thanks to the transformer-agnosticity, and we no longer need to use them both). And due to the caching of features that was allowed by transformer agnosticity
+\label{economy}
+Использование многозадачной трансформер-агностичной модели в диалоговой системе DREAM позволило достичь существенной экономии всех видов вычислительных ресурсов для классификации.
+\subsubsection{Экономия рассчетных показателей} 
+\label{economy_predicted} 
+ Если бы в DREAM не использовалось многозадачное обучение и модели для каждой из девяти рассмотренных задач были реализованы на основании  distilbert-base-uncased, то на них пришлось бы выделить не ~2420 Мб видеопамяти и ~2909 Мб оперативной памяти, а ~21762 Мб видеопамяти и ~14000 Мб оперативной памяти. По сравнению с таким раскладом, экономия видеопамяти в платформе DREAM составила ~90\%, а экономия оперативной памяти ~79\%. Данная экономия представляет собой выигрыш от многозадачности. 
+
+Если бы модели для каждой из девяти задач были реализованы на основании bert-base-uncased, на них пришлось бы выделить ~31500 Мб видеопамяти и ~23346 Мб оперативной памяти. По сравнению с таким раскладом, экономия видеопамяти в платформе DREAM составила ~92\%, а экономия оперативной памяти ~88\%. Данное увеличение экономии представляет собой дополнительный выигрыш от трансформер-агностичности, которая помогла быстро подставить дистиллированный трансформер вместо обычного. 
+
+Причем, как будет показано в следующем подразделе \ref{economy_real}, вклад трансформер-агностичности в улучшение показателей модели в реальности был гораздо более существенным, чем можно было бы подумать исходя только из этих цифр. 
+
+\subsubsection{Экономия по сравнению с многозадачным PAL-BERT}
+\label{economy_real} 
+По сравнению с классификаторами в версии диалоговой платформы DREAM до внедрения многозадачной трансформер-агностичной модели (т.е основанной на модели PAL-BERT) многозадачная трансформер-агностичная модель дала экономию видеопамяти в 75 процентов, экономию оперативной памяти в 57 процентов и экономию времени на классификацию в 80-85 процентов.
+ 
+Такая большая экономия времени на классификацию в основном связана с эффектом от трансформер-агностичности\footnote{Хотя, конечно, роль сыграло и то, что для задачи классификации интентов MIDAS больше не требовался отдельный классификатор.}. Если при использовании PAL-BERT для каждой задачи было необходимо получать предсказания многозадачной модели "с нуля", даже если они принимают одну и ту же фразу на вход, то при использовании многозадачной трансформер-агностичной модели появилась возможность один раз получить выход базового трансформера для этой фразы и дальше для всех других задчач, принимающих ее на вход, работать с этим выходом только линейными слоями, которые на порядки быстрее. 
 
 TODO UPDATE THE TABLES WITH DATA SIZES IN APPENDIX OLD->NEW
