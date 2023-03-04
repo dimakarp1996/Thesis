@@ -1,5 +1,5 @@
 \chapter{Трансформер-инвариантные модели}\label{ch:tr-ag}
-
+УБРАТЬ ЭТО- КАК ОПИШУ ХОТЯ БЫ ВСЕ ПОПЫТКИ
 Тут будет пересказ статьи про трансформер-инвариантные модели. 
 Статья может быть написана на основе экспериментов по применению этих моделей в DREAM-2. Эти эксперименты описаны здесь \url{https://docs.google.com/document/d/1o7jt2jJ-hyPNYlYzUgnpwkc033DvGWRIuv3FTWI6-Ig/edit}
 Полный отчет по этим экспериментам здесь \url{https://docs.google.com/document/d/1d7dlEGOD0Qr6GitVe9QH3UbX39BpYX0ay9rzIP1OZpo/edit}
@@ -77,14 +77,43 @@ We have integrated the multi-task transformer-agnostic model into our open-sourc
 
 \section{Datasets}
 
-We explored the performance of the multi-task model from the subset of spoken language datasets necessary for dialog systems~\cite{wochat, lrec}. We trained models on datasets for five problems, i.e emotion classification, toxicity classification, sentiment classification, intent classification, and topic classification. The dataset information is summarized in Table~\ref{tab:task_sizes}.
 
-For the emotion classification, we used the \texttt{go\_emotions}~\cite{emotions} dataset. This dataset consists of short comments from Reddit, such as \textit{LOL. Super cute!} or \textit{Yikes. I admire your patience}. We have grouped all emotion classes from this dataset into seven Ekman types, i.e \textit{anger}, \textit{fear}, \textit{disgust}, \textit{joy}, \textit{surprise}, \textit{sadness}, and \textit{neutral}. After such grouping, we selected only single-label examples. We leave exploring multi-task learning with the multilabel data for future research.
+We explored the performance of the multi-task mode from the subset of datasets necessary for the dialog systems~\cite{wochat,lrec}. We trained models on datasets for five problems, i.e emotion classification, toxicity classification, sentiment classification, intent classification, and topic classification. Due to the scope of our work, we prepared a Russian-language dataset and an English-language dataset for every task. We note that for the Russian-language dataset and the English-language dataset, the indexes of the same classes used by the models were also the same. The sizes of all datasets by class and split can be found in Appendix. 
 
+\subsection{Emotion classification }
+
+As an English language dataset, we used dataset \texttt{go\_emotions}~\cite{emotions} for the emotion classification. We used Ekman-grouped emotions, grouping them into seven types, i.e \textit{anger}, \textit{fear}, \textit{disgust}, \textit{joy}, \textit{surprise}, \textit{sadness}, and \textit{neutral}. After such grouping, we selected only single-label examples. There were 39.5k such training examples. The train/test/validation split of this dataset was approximately 80/10/10.
+
+
+For the emotion classification, we used the \texttt{go\_emotions}~\cite{emotions} dataset. This dataset consists of short comments from Reddit, such as \textit{LOL. Super cute!} or \textit{Yikes. I admire your patience}. We have grouped all emotion classes from this dataset into seven Ekman types, i.e \textit{anger}, \textit{fear}, \textit{disgust}, \textit{joy}, \textit{surprise}, \textit{sadness}, and \textit{neutral}. After such grouping, we selected only single-label examples. We leave exploring multi-task learning with the multilabel data for future research. - ВСТАВИТЬ ИЗ ТОГО РАЗДЕЛА ЧТО НЕ ВЫШЛО
+
+As a Russian language dataset, we used for this task dataset \texttt{CEDR}~\cite{ru_emotions}\footnote{We retrieved this dataset from the URL \url{https://huggingface.co/datasets/cedr}}. This dataset has 5 classes - \textit{anger}, \textit{fear}, \textit{joy}, \textit{surprise}, and \textit{sadness} - but the samples from this dataset can belong to more than 1 class or (unlike \texttt{go\_emotions}) belong to no class. 
+
+From this dataset, we selected only examples that belong to 1 class or that have no class, labeling no-class examples as \textit{neutral}. The class nomenclature of this dataset was almost the same as for the English dataset, except for the \textit{disgust} class. Nonetheless, as \textit{disgust} examples comprised less than 1.5\% of the English training samples, it didn't impact knowledge transfer much.
+
+The work~\cite{ru_emotions} provided only the train-test split of the \texttt{CEDR} dataset, which is 80/20. We singled out 12.5\% of the training examples from CEDR as the validation set. 
+
+\subsection{Sentiment classification}
+
+As an English language dataset, we used dataset \texttt{DynaSent}(r1)~\cite{sentiment} for the sentiment classification. We used only examples from the first found of the collection, to match the Russian data by difficulty. This single-label dataset with 80.5k training samples has three classes - positive, negative, and neutral. One can contend that classes from the \texttt{go\_emotions} dataset can be grouped by sentiment, as proposed by the work~\cite{emotions}, but also by emotions. However, our experiments show that augmentation of the sentiment dataset with such samples decreases the metrics rather than increasing them. That shows that these datasets are sufficiently different to be used separately, as sentiment-grouping of the emotion dataset is too rough. This dataset has 3.6k validation samples and the same number of test samples. 
+
+As a Russian language dataset, we used the dataset \texttt{RuReviews}~\cite{ru_sentiment} of the product reviews from the large Russian e-commerce website, from the "Women’s Clothes and Accessories" category. Even though this dataset is domain-specific, we chose it because it is open source and it has a relatively large size. As the train/validation/test split of this dataset was not provided, we used the same split that exists for the \texttt{DynaSent}(r1) dataset. 
 For the sentiment classification, we utilized \texttt{DynaSent}(r1)~\cite{sentiment} dataset. It contains naturally occurring sentences. i.e. \textit{Need a cheap spatula?} There are three classes in this balanced multi-class dataset -- \textit{positive},  \textit{negative}, and \textit{neural}. % One can contend that classes from the \texttt{go\_emotions} dataset can be grouped by sentiment, as proposed in~\cite{emotions}, but also by emotions. However, our experiments show that augmentation of the sentiment dataset with such samples decreases the metrics rather than increasing them. That shows that these datasets are sufficiently different for separate use, as sentiment-grouping of the emotion dataset is too rough. 
 
+
+\subsection{Toxicity classification}
+
+For the English language, we used the \texttt{Wiki Talk} dataset~\cite{toxic} for the toxicity classification. This Wikipedia comment dataset had two classes: toxic and not toxic. This dataset has ~127k training samples, ~31k validation samples, and ~62k testing samples.\footnote{We used the cleaned version of this dataset provided by HuggingFace at \url{https://huggingface.co/datasets/OxAISH-AL-LLM/wiki\_toxic}}. Nevertheless, we also performed some additional data cleaning, such as removing quotes. 
+
+For the Russian languages, we used the two-class dataset \texttt{RuToxic}~\cite{ru_toxic} of toxic comments from the largest Russian anonymous imageboard Dvach\footnote{Link to the imageboard: \url{http://2ch.hk}}. This dataset originally had ~162k training samples. As the authors didn't provide the original split in their repository\footnote{Russian toxicity dataset was retrieved from \url{https://github.com/s-nlp/rudetoxifier}}, we split this dataset in the same proportions as the split proportions of the Wiki Talk dataset.
 We used the \texttt{Wiki Talk}~\cite{toxic} dataset for the toxicity classification. This Wikipedia comment dataset had two classes: \textit{toxic} and \textit{not toxic}. Unsurprisingly, the dataset contains vulgar slang. However, about 90\% of examples from this dataset are not toxic, i.e \textit{"Hi! so umm i guess yer incharge here hehehe. so wassup?"} We used the preprocessed version of this dataset provided by HuggingFace\footnote{\url{https://huggingface.co/datasets/OxAISH-AL-LLM/wiki_toxic}}.
 
+
+\subsection{Intent classification and topic classification}
+
+We used dataset \texttt{MASSIVE}~\cite{massive} for the intent classification for the Russian and English languages. All examples in this dataset were labeled simultaneously for 51 languages, including the English and Russian languages. This dataset has 11514 train samples, 2033 validation samples, and 2974 test samples. Every sample belongs to one of 60 intent classes. 
+
+We used the same dataset in the same way for topic classification as well, as this dataset is labeled by intent and by topic. Every sample from this dataset belongs to one of the 18 topic classes.
 
 We also used the multi-class \texttt{SLURP}~\cite{slurp} dataset for the intent classification and topic classification. The \texttt{SLURP} dataset contains the spoken utterances, which aim for the voice assistant, e.g. \textit{play rock playlist} or \textit{show me news from c. n. n.}.
 % Every sample is single-label and belongs to one intent and one topic.
@@ -99,24 +128,21 @@ We used average accuracy for all tasks as an early stop metric. The training had
 The training was usually completed in fewer than 10-15 epochs and never exceeded 25 epochs.% , even though the maximal number of epochs was equal to 100. 
 We have set the batch size to 160 to speed up the computations. For all the multi-task experiments, we used plain sampling (the probability of sampling an example from the dataset was proportional to the dataset size). 
 % Additionally, we explored the impact of using different sampling methods for multi-task training. We report only the results from the experiments when sampling was plain (the probability of sampling an example from the dataset was proportional to the dataset size). Annealed sampling~\cite{PAL:19} and uniform sampling did not make any improvement over plain sampling in our preliminary experiments.
-\ifinterspeechfinal
-\footnote{The results for every restart can be found at \url{https://github.com/dimakarp1996/InterSpeech2023/AllRuns.pdf}}.
-\fi
-\begin{table}
- \caption{Classification tasks with corresponding datasets for the conversational multi-task learning model}
- \label{tab:task_sizes}
-\centering
-\resizebox{0.5\textwidth}{!}{%
-\begin{tabular}{c|c|c|c|c|c}
-\hline
-{Task}& {Dataset} & {Classes} & {Train} & {Valid} & {Test} \\ \hline
-{Emotions}& go\_emotions\footnote{Singlelabel, Ekman-grouped.}~\cite{emotions} & 7 & 39,432 & 4,946 & 4,968\\ \hline
-{Sentiment} & DynaSent(r1)~\cite{sentiment} & 3 & 80,488 & 3,600 & 3,600\\ \hline
-{Toxic} &Wiki Talk~\cite{toxic} & 2 & 127,656 & 93,342 & 31,915\\ \hline
-{Intents} & SLURP~\cite{slurp} & 60 & 11,514 & 2,033 & 2,974 \\ \hline
-{Topics} & SLURP & 18 & 11,514 & 2,033 & 2,974 \\ \hline
-\end{tabular}}
-\end{table}
+Мы приводим результаты для каждого запуска в Аппендиксе. TODO = ВСТАВИТЬ ИХ ТУДА
+
+
+For all the experiments described in this article, the optimizer was AdamW~\cite{adam} with betas (0.9, 0.99), and the learning rate was 2e-5. 
+We used average accuracies for all tasks as an early stop metric. The training had validation patience 3, and the learning rate was dropped by 2 times if the early stopping metric did not improve for 2 epochs. 
+
+The training was usually completed in fewer than 10-15 epochs and never exceeded 25 epochs, even though the maximal number of epochs was set to 100.
+
+We set the batch size to 160. We had also tried batch size 32, and the metrics for batch size 160 were just insignificantly better. However, the article ~\cite{tuning_neural_networks} claims that this difference can be eliminated by better finetuning. Anyway, we finally chose batch size 160 because the computations with batch size 160 were performed several times faster.
+
+In the preliminary multi-task experiments, apart from the plain sampling (a sampling mode where the example sampling probability is proportional to the task size), we also tried annealed sampling~\cite{PAL:19} and uniform sampling (the same sampling probability for all tasks). We performed such experiments for Russian and English distilbert-like models, for Russian and English tasks. The results for these sampling modes did not bring out a noticeable improvement, thus we used only plain sampling.
+
+We averaged all the experiment results by three runs. %\footnote{The results for every run can be found at \url{https://github.com/dimakarp1996/Dialogue2023/AllRuns.pdf}. We include also the source code at \url{https://github.com/dimakarp1996/Dialogue2023/source_code.zip}}.
+
+
 \subsection{Single-task vs Multi-task: full data}
 
 We performed experiments on three different BERT-based backbones: \textit{distilbert-base-cased}~\cite{alina}, \textit{bert-base-cased}, and \textit{bert-large-cased}~\cite{bert}. While \textit{distilbert-base-cased} takes 40\% less memory than \textit{bert-base-cased}, \textit{bert-large-cased} takes 3.1 times as much memory as \textit{bert-base-cased}. These three backbones cover a large variety of possible cases of using neural classifiers for dialog models. %Is it ok or maybe we need to use the short names somewhere?
@@ -144,210 +170,7 @@ Table~\ref{tab:mtl_glue} presents the results of these experiment series. For ev
  & M  & 83.6/78.7 & 69.0/61.8 & 79.0/78.9 & 91.3/80.9 & 87.3/80.9 & \textbf{91.3/90.8} & 11200 \\ \hline
  \end{tabular}
  }
- %HOW CAN I MAKE THIS TABLE SMALLER?
-\end{table*}
-\begin{table*}
-\caption{Accuracy / F1 macro. Batch size 160, plain sampling. Mode M stands for multi-task, mode S stands for single-task, and Share stands for the share of training data used. Backbone distilbert-base-cased. Averaged by five runs.}
-\label{tab:mtl_dialog_part}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{c|c|c|c|c|c|c|c|c}
-\hline
- \multirow{2}{*}{Mode} &  \multirow{2}{*}{Share} &  \multirow{2}{*}{Average} & Emotions & Sentiment & Toxic & Intents & Topics & Batches \\
-& & & 39.4k & 80.5k & 127.6k & 11.5k & 11.5k & seen \\
-\hline 
-S & 15\% & 78.5/70.9 & 65.8/50.6 & 69.3/68.8 & 92.2/81.2 & 78.7/68.8 & 86.3/85.1 & 2173 \\ \hline
-M & 15\% & 77.4/70.6 & 64.0/55.0 & 68.3/67.7 & 91.6/80.0 & 76.9/64.6 & 86.4/85.4 & 4741 \\ \hline
-S & 10\% & 77.1/68.4 & 64.6/45.0 & 68.3/67.8 & 92.2/81.0 & 75.5/64.7 & 84.8/83.3 & 1579 \\ \hline
-M & 10\% & 75.9/69.1 & 62.6/53.6 & 66.6/65.8 & 91.5/79.7 & 74.3/63.2 & 84.6/83.3 & 4295 \\ \hline
-S & 9\% & 76.7/67.4 & 64.6/43.9 & 68.2/67.7 & 91.8/80.4 & 74.4/62.7 & 84.2/82.4 & 1457 \\ \hline
-M & 9\% & 75.4/67.8 & 62.1/52.4 & 66.5/65.7 & 91.4/79.5 & 72.4/58.5 & 84.4/83.0 & 3695 \\ \hline
-%S & 8\% & 73.8/64.6 & 63.7/43.5 & 67.6/67.0 & 92.0/80.5 & 62.0/49.7 & 83.9/82.1 & 1381 \\ \hline
-%M & 8\% & 74.9/67.2 & 61.7/51.4 & 66.7/66.0 & 91.5/79.5 & 71.1/57.3 & 83.6/81.7 & 3511 \\ \hline
-%S & 7.5\% & 73.5/64.0 & 63.8/42.5 & 67.4/66.9 & 91.6/80.1 & 61.3/48.6 & 83.6/81.7 & 1293 \\ \hline
-%M & 7.5\% & 74.6/66.9 & 61.0/50.2 & 67.0/66.4 & 91.5/79.5 & 70.3/56.9 & 83.2/81.4 & 2995 \\ \hline
-S & 7\% & 73.5/64.0 & 63.3/42.1 & 67.9/67.4 & 91.8/80.1 & 61.4/49.4 & 83.3/81.1 & 1251 \\ \hline
-M & 7\% & 74.2/66.4 & 61.1/50.4 & 65.8/65.1 & 91.0/78.9 & 70.0/56.3 & 83.1/81.3 & 2882 \\ \hline
-S & 5\% & 69.1/59.0 & 62.5/38.9 & 66.9/66.3 & 91.8/79.9 & 42.7/30.8 & 81.6/78.8 & 901 \\ \hline
-M & 5\% & 71.7/62.4 & 60.5/48.6 & 64.4/63.4 & 90.8/78.5 & 62.4/44.4 & 80.2/77.3 & 2381 \\ \hline
-S & 3\% & 59.6/49.0 & 60.6/37.7 & 65.2/64.5 & 91.8/79.3 & 26.5/16.9 & 54.0/46.5 & 584 \\ \hline
-M & 3\% & 68.8/58.1 & 58.6/42.7 & 62.5/61.3 & 91.0/78.3 & 55.5/37.1 & 76.4/71.0 & 1566 \\ \hline
-S & 2\% & 44.9/31.5 & 48.7/21.7 & 39.6/26.5 & 91.8/79.0 & 2.6/0.2 & 41.4/30.1 & 274 \\ \hline
-M & 2\% & 64.8/52.1 & 57.6/38.4 & 61.4/60.1 & 90.8/78.0 & 44.2/23.5 & 69.9/60.4 & 923 \\ \hline
-\end{tabular}
-}
-\end{table*}
-\begin{table*}
-\caption{Metrics of the DeepPavlov's MTL model for the GLUE benchmark. M.Corr stands for Matthew's correlation, P/S corr stands for Pearson/Spearman correlation, Acc stands for accuracy, and m/mm means "matched/mismatched". Mode S stands for single-task, and mode M stands for multi-task. Results show that multi-task models either approach the metrics of analogous single-task models or even exceed them.}
-\label{tab:mtl_glue}
-\centering
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{c|c|c|c|c|c|c|c|c|c|c|c|c}
-\hline
-\multirow{3}{*}{Model} & \multirow{3}{*}{Mode}  & Average & CoLA & SST-2 & MRPC &STS-B &QQP&MNLI & QNLI & RTE & AX & Batches\\
-       &        & train size  & 8.6k & 67.3k & 2.5k & 5.7k & 363.8k & 392.7k & 104.7k & 2.5k & as MNLI & seen \\ 
-       &        & metric  & M.Corr & Acc & F1/Acc & P/S Corr & F1/Acc & Acc(m/mm) & Acc & Acc & M.Corr &  \\ \hline
-Human & - & 87.1 & 66.4 & 97.8 & 86.3/80.8 & 92.7/92.6 & 59.5/80.4 & 92.0/92.8 & 91.2 & 93.6 & - & -\\ \hline
-%\textit{\multirow{2}{*}{distilbert-base-cased}} & S & 73.1 & \textbf{42.4} & \textbf{92.1} & 85.6/\textbf{80.3} & 78.8/76.8 & \textbf{69.5/88.5} & \textbf{81.3/80.8} & \textbf{87.5} & 49.8 & 29.9 & 70846 \\ 
-\textit{\multirow{2}{*}{distilbert-base-cased}} & S & 73.3 & \textbf{42.4} & \textbf{92.1} & 85.6/\textbf{80.3} & 78.8/76.8 & \textbf{69.5/88.5} & \textbf{81.3/80.8} & \textbf{87.5} & 52.1 & 29.9 & 70861 \\ 
- & M & \textbf{74.5} & 36.0 & 91.0 & \textbf{85.7}/79.9 & \textbf{82.6/81.6} & 68.4/87.4 & 80.4/80.3 & 86.0 & \textbf{69.5} & \textbf{30.1} & 88905 \\  \hline
-\textit{\multirow{2}{*}{bert-base-cased}} & S & 77.3 & \textbf{53.7} & \textbf{93.2} & \textbf{87.7/82.8} & 83.8/82.2 & \textbf{70.3/88.9} & \textbf{83.8/83.1} & \textbf{90.6} & 62.1 & 32.1 & 42722\\ 
- & M & \textbf{77.8} & 45.8 & 92.9 & 86.8/82.2 & \textbf{85.3/84.7} & 70.2/88.6 & 83.5/82.6 & 90.1 & \textbf{74.5} & \textbf{32.8} & 112613\\  \hline
-\textit{\multirow{2}{*}{bert-large-cased}} & S & \textbf{79.5} & \textbf{59.2} & \textbf{94.9} & 85.0/80.6 & \textbf{85.8/84.5} & 70.5/89.1 & \textbf{86.7/85.6} & 92.2 & 70.1 & \textbf{39.4} & 37290 \\ 
- & M & \textbf{79.5} & 50.8 & 94.1 & \textbf{87.3/82.8} & 83.8/83.9 & \textbf{71.0/89.2} & 85.9/85.0 & \textbf{92.4} & \textbf{78.5} & 38.5 & 53343 \\  \hline
-\end{tabular}
-}
-\end{table*}
-\subsection{Single-task vs Multi-task: impact of reducing training data}
-We also report the impact of reducing training data. Specifically, we have trained the model with the same hyperparameters as in the previous setting, but we have kept only a small share of training data while leaving test and validation data intact. In every such experiment, any percentage of training data contained all training data from lower percentages.%maybe express in the other way?
-In this case, the multi-task metrics exceed single-task ones only on small-scale data (like 2-5\% of the whole dataset), and this advantage evaporates even on 9\% of the dataset. 
-We did this exploration only for \textit{distilbert-base-cased} to speed up the calculations. Also, for every training data share in this experiment, we have made five restarts for different random seeds and have averaged the metrics. 
-
-We present the detailed results of this experiment in Table~\ref{tab:mtl_dialog_part} and Figure \ref{fig:mtl_dialog_part}. One can see that generally, the multi-task knowledge transfer works better for tasks with a lower number of samples.
-
-\input{EnMTL/Plot.tex}
-
-\section{Discussion} 
-
-Based on the metrics on the diverse set of dialog-related tasks, the proposed multi-task transformer-agnostic model almost matches the single-label model. 
-For all explored BERT-based backbones the drop in average accuracy is between 0.8\%-0.9\% on the dialogue tasks.
-
-For the GLUE tasks, the multi-task models even exceed the single-task ones by average accuracy. This applies to GLUE tasks with not large enough training sets (AX, STS-B, and especially RTE) which benefit from knowledge transfer from large-scale tasks (MNLI, QQP).
-%Distilbert-like models almost match the bert-like ones by their overall performance, for single-task and multi-task settings.
-The training of the multi-task neural network, however, took more training steps than the training of the corresponding single-task models with the same early stopping criteria. The reason is that the training did not stop until the metrics on relatively small-data tasks stopped improving. 
-% Therefore, examples from relatively high-size tasks, metrics for which had already reached their saturation points, were seen more frequently than they would have been seen if the model was single-task and trained for any of these tasks. If we train on the data subsets, this effect is more pronounced, probably because the gap between the saturation points from smaller-data tasks and larger-data tasks widens.
-From all the tasks, the dropdown is the lowest on the topic classification tasks, which suggests that this task is more prone to knowledge transfer.
-
-For the small-scale data, we can see that if we train on small shares of training data (2-5\%), multi-task models overcome single-task models, for 2\% and 3\% -- by a huge margin. However, even on 9\%, for all dialog tasks, this advantage eliminates.
-
-The multi-task small-scale advantage in accuracy strongly depends on the data size. For the toxicity classification (127k samples), single-task models excel multi-task ones even at 2\% data. For the sentiment and emotion classification (79.2k and 39.3k), the advantage starts at 3\%, for topic classification (11.5k) at 5\%, and for intent classification (11.5k) at 9\%. 
-
-Therefore, the smaller the auxiliary dataset (on the scale of ~200-2000 samples), the larger the advantage of multi-task models. This advantage shows that the knowledge transfer effect is the most noticeable for small-scale datasets.
-
-Also, the difference between metrics of the topic classification and intent classification makes us suppose that the advantage of multi-task training depends not just on the number of samples, but on the number of samples per class. Testing this hypothesis, however, might require additional investigation. 
-
-We also leave exploring whether these conclusions hold for the different task types, for example, sequence tagging and question answering, as a subject of future research. Testing these 
-conclusions on other languages or on other transformer-based models (for example, decoder-base ones)  is also a possible future field of study.
-
-\section{Conclusion}
-
-The proposed transformer-agnostic multi-task models yield results matching or approaching the single-task models on most tasks. If we truncate the tasks to the low-size number (200-2000 samples), multi-task models start exceeding the single-task ones. This effect might depend on the number of samples per class.
-\fi
-\iffalse
-\section{Introduction}
-Nowadays, the technology of conversational AI systems is on the rise. The interest in virtual assistants prompts the development of conversational NLP models alongside traditional NLP models. The text classification task is one of the most crucial NLP tasks for virtual assistants.
-
-Transformer-based models, such as BERT, are widely used for text classification. The original article~\cite{bert} proposed the use of a separate BERT model for each task in the case of multi-task benchmarks. In such a way, if several classification tasks need to be solved in parallel, several prediction models should be employed, which increases the demand for computational resources. This problem leads to the idea of training one single model that can yield results for these tasks simultaneously. 
-
-Multi-task learning (MTL) as part of transfer learning allows training one single model simultaneously for multiple related tasks so that the knowledge acquired in one task enhances the performance on another task.
-
-Different real-world conditions may put various demands on the quality of neural models and their use of computational resources. Such conditions necessitate the use of transformer-agnostic models. The \texttt{transformers}~\cite{huggingface_transformers} library allows using different transformer-based models including the distilled ones to save computational resources and speed up the inference time~\cite{alina}. 
-
-% Developers can use models from this library in different dialogue systems and platforms for dialogue system development. Among such platforms, one can pay attention to~\cite{baymurzina2021dream} and \cite{rasa}.
-\iffalse
-Our contribution is the implementation of transformer-agnostic multi-task models in DeepPavlov and researching the multi-task knowledge transfer in these models while training them for multiple dialog-related tasks.
-\else
-Our contribution is the implementation of transformer-agnostic multi-task models in our open-source library and researching the multi-task knowledge transfer in these models while training them for multiple dialog-related tasks.
-\fi
-\section{Related work}
-
-Researchers have been studying multi-task learning (MTL) for a long time~\cite{caruana1997multitask}. Since the rise of neural networks, researchers have proposed a wide range of approaches to MTL, including adversarial networks~\cite{wang-etal-2018-personalized} and using cross-lingual word embeddings~\cite{buryat}. However, these methods did not develop further, as nowadays NLP is based on transformer-based models. Nevertheless, as transformer architectures come out quite often, this review mostly focuses on agnostic architectures, which work with all kinds of transformers, rather than transformer-specific architectures.
-
-In some kinds~\cite{pseudolabeling} of multi-task transformer-agnostic architectures, every sample needs to be labeled or pseudo-labeled for all considered tasks. Even though this approach is successfully used in some dialog systems\cite{dream1_trudy}, it lacks flexibility.
-
-One of the most frequently used transformer-agnostic architectures is ~\cite{MTDNN:19} that obtained the state-of-the-art results on SNLI~\cite{snli}, SciTail~\cite{khot2018scitail}, and GLUE~\cite{GLUE:19}. However, this architecture increases computational demands due to the specific stochastic attention layers for text classification.
-
-The article \cite{PAL:19} proposed different transformer-agnostic ways to work with BERT output in a multi-task setting\footnote{Projective attention layers, presented in the same article as the superior result, are not transformer-agnostic.}. One such way is supplementing the model with an extra BERT layer for each task increases the number of required parameters for GLUE by 67\%, which is computationally heavy. 
-
-Other transformer-agnostic ways proposed in the same work include low-rank task-specific transformation with task-specific self-attention on top of the model (or without it). In our experiments on GLUE, these approaches worked no better than the plain use of transformer output in the linear classifier (while training \textit{bert-base-uncased}).
-
- Also, utilizing self-attention with a task-embedded module from~\cite{TaskEmbedded2021} instead of plain self-attention in the low-rank transformation did not yield improvements over the plain dense task-specific layers above BERT in our experiments. The task-embedded architecture presented in the same article is still not transformer-agnostic.
-
-Another work~\cite{GhostBert2021} suggested a novel way to extract additional features from the BERT output -- using cheap convolutional ghost modules. Despite this approach being transformer-agnostic, utilizing attention with a ghost module in the low-rank transformation did not yield improvements over the plain dense task-specific layers above BERT in our experiments. This also holds for~\cite{el-nouby2021xcit} architecture from computer vision.
-
-%Article~\cite{Summarization2021} suggests that, when training a task agnostic multi-task model, the biLSTM layer is better than the dense layer for summarization. However, the summarization task is out of the scope of our research. 
-
-Different types of attention, such as ~\cite{reformer}, can reduce computational complexity. However, we did not consider adding them on top of the transformer as they were not meant to increase accuracy. The only exception is~\cite{routing_transformers}, but even that work beats the state-of-the-art only on long sequence tasks.%Different types of attention, such as the ones described in~\cite{reformer,routing_transformers,linformer, performer,scaling-transformers}
-The article~\cite{MultitaskEnsemble:19} proposed an approach to improve the accuracy of any multi-task model via ensembling. We suppose that this approach can work well in parallel with our work. However, we did not test it because it is very computationally demanding.
-
-%Another field of study is the impact of different sampling approaches on multi-task training. Among the proposed policies, we can pay attention to the works~\cite{TaskSamplingPolicy,12in1, GradTS, PAL:19,CA-MTL}. 
-
-At the same time, the performance of the simple transformer-agnostic model is still not fully explored. It is especially true for dialog-specific datasets. Also, the body of work lacks articles on the Russian language multi-task learning in general, and specifically on the dialog tasks. The multilingual knowledge transfer in the multi-task models for such tasks also remains unexplored. Our work is aimed to bridge this gap. 
-
-\section{Our setting}
-
-
-Our MTL model is based on \texttt{AutoModel} class from HuggingFace\footnote{The list of supported models: \url{https:/huggingface.co/transformers/v3.0.2/model\_doc/auto.html}}, which allows using different transformer-based architectures as a backbone. For our experiments, we utilized BERT-based models because they allow effective transfer learning~\cite{10.1007/978-3-031-19032-2_46,ksquad}, however, exactly the same approach can be applied to any Transformer-based model.
-
-\begin{enumerate}
-
-    \item In the same way as in the original article~\cite{bert}, we return the final hidden states for all tokens and the output of the BERT pooling layer.
-
-    \item We apply the dropout (equal to 0.2) to the pooler output. We flatten the output if it is the sequence labeling task or the multiple-choice task.
-
-    \item After this stage, we apply the linear layer with \texttt{n} output dimension. \texttt{n} equals the number of classes for all tasks but regression and multiple-choice, where \texttt{n} is 1. (In the multiple-choice task, we get several samples per 1 label, so after reshaping the number of real and predicted labels matches). 
-
-    \item Then we apply a loss function: the categorical cross-entropy loss for the single-label classification task or the binary cross-entropy loss for the multi-label classification task. In this paper, we consider only single-label classification.
-
-\end{enumerate}
-
-The multi-task model in our setting requires almost no additional parameters and computational overhead, apart from the linear layers, so its simplicity singles it out. Also, the flexibility of this model allows using it with different kinds of backbones, which positively distinguishes it from~\cite{PAL:19}.
-
-For the distilBERT-like models, our multi-task model takes only ~0.1\% more parameters than the single-task models. This computational overhead varies around this number, depending on the number of tasks, the number of classes, and the backbone model. 
-\iffalse
-The multi-task transformer-agnostic model is integrated into DeepPavlov~\cite{Burtsev2018DeepPavlovAO}. This model is also successfully used in the Dream dialogue platform~\cite{baymurzina2021dream}. 
-\else
-We have integrated the multi-task transformer-agnostic model into our open-source library and our dialogue platform\footnote{We will provide links in the camera-ready version.}.
-\fi
-
-\section{Datasets}
-
-We explored the performance of the multi-task mode from the subset of datasets necessary for the dialog systems~\cite{wochat,lrec}. We trained models on datasets for five problems, i.e emotion classification, toxicity classification, sentiment classification, intent classification, and topic classification. Due to the scope of our work, we prepared a Russian-language dataset and an English-language dataset for every task. We note that for the Russian-language dataset and the English-language dataset, the indexes of the same classes used by the models were also the same. The sizes of all datasets by class and split can be found in Appendix. 
-
-\subsection{Emotion classification }
-
-As an English language dataset, we used dataset \texttt{go\_emotions}~\cite{emotions} for the emotion classification. We used Ekman-grouped emotions, grouping them into seven types, i.e \textit{anger}, \textit{fear}, \textit{disgust}, \textit{joy}, \textit{surprise}, \textit{sadness}, and \textit{neutral}. After such grouping, we selected only single-label examples. There were 39.5k such training examples. The train/test/validation split of this dataset was approximately 80/10/10.
-
-As a Russian language dataset, we used for this task dataset \texttt{CEDR}~\cite{ru_emotions}\footnote{We retrieved this dataset from the URL \url{https://huggingface.co/datasets/cedr}}. This dataset has 5 classes - \textit{anger}, \textit{fear}, \textit{joy}, \textit{surprise}, and \textit{sadness} - but the samples from this dataset can belong to more than 1 class or (unlike \texttt{go\_emotions}) belong to no class. 
-
-From this dataset, we selected only examples that belong to 1 class or that have no class, labeling no-class examples as \textit{neutral}. The class nomenclature of this dataset was almost the same as for the English dataset, except for the \textit{disgust} class. Nonetheless, as \textit{disgust} examples comprised less than 1.5\% of the English training samples, it didn't impact knowledge transfer much.
-
-The work~\cite{ru_emotions} provided only the train-test split of the \texttt{CEDR} dataset, which is 80/20. We singled out 12.5\% of the training examples from CEDR as the validation set. 
-
-\subsection{Sentiment classification}
-
-As an English language dataset, we used dataset \texttt{DynaSent}(r1)~\cite{sentiment} for the sentiment classification. We used only examples from the first found of the collection, to match the Russian data by difficulty. This single-label dataset with 80.5k training samples has three classes - positive, negative, and neutral. One can contend that classes from the \texttt{go\_emotions} dataset can be grouped by sentiment, as proposed by the work~\cite{emotions}, but also by emotions. However, our experiments show that augmentation of the sentiment dataset with such samples decreases the metrics rather than increasing them. That shows that these datasets are sufficiently different to be used separately, as sentiment-grouping of the emotion dataset is too rough. This dataset has 3.6k validation samples and the same number of test samples. 
-
-As a Russian language dataset, we used the dataset \texttt{RuReviews}~\cite{ru_sentiment} of the product reviews from the large Russian e-commerce website, from the "Women’s Clothes and Accessories" category. Even though this dataset is domain-specific, we chose it because it is open source and it has a relatively large size. As the train/validation/test split of this dataset was not provided, we used the same split that exists for the \texttt{DynaSent}(r1) dataset. 
-
-\subsection{Toxicity classification}
-
-For the English language, we used the \texttt{Wiki Talk} dataset~\cite{toxic} for the toxicity classification. This Wikipedia comment dataset had two classes: toxic and not toxic. This dataset has ~127k training samples, ~31k validation samples, and ~62k testing samples.\footnote{We used the cleaned version of this dataset provided by HuggingFace at \url{https://huggingface.co/datasets/OxAISH-AL-LLM/wiki\_toxic}}. Nevertheless, we also performed some additional data cleaning, such as removing quotes. 
-
-For the Russian languages, we used the two-class dataset \texttt{RuToxic}~\cite{ru_toxic} of toxic comments from the largest Russian anonymous imageboard Dvach\footnote{Link to the imageboard: \url{http://2ch.hk}}. This dataset originally had ~162k training samples. As the authors didn't provide the original split in their repository\footnote{Russian toxicity dataset was retrieved from \url{https://github.com/s-nlp/rudetoxifier}}, we split this dataset in the same proportions as the split proportions of the Wiki Talk dataset.
-
-\subsection{Intent classification and topic classification}
-
-We used dataset \texttt{MASSIVE}~\cite{massive} for the intent classification for the Russian and English languages. All examples in this dataset were labeled simultaneously for 51 languages, including the English and Russian languages. This dataset has 11514 train samples, 2033 validation samples, and 2974 test samples. Every sample belongs to one of 60 intent classes. 
-
-We used the same dataset in the same way for topic classification as well, as this dataset is labeled by intent and by topic. Every sample from this dataset belongs to one of the 18 topic classes.
-
-\section{Description of the experiments} 
-
-For all the experiments described in this article, the optimizer was AdamW~\cite{adam} with betas (0.9, 0.99), and the learning rate was 2e-5. 
-We used average accuracies for all tasks as an early stop metric. The training had validation patience 3, and the learning rate was dropped by 2 times if the early stopping metric did not improve for 2 epochs. 
-
-The training was usually completed in fewer than 10-15 epochs and never exceeded 25 epochs, even though the maximal number of epochs was set to 100.
-
-We set the batch size to 160. We had also tried batch size 32, and the metrics for batch size 160 were just insignificantly better. However, the article ~\cite{tuning_neural_networks} claims that this difference can be eliminated by better finetuning. Anyway, we finally chose batch size 160 because the computations with batch size 160 were performed several times faster.
-
-In the preliminary multi-task experiments, apart from the plain sampling (a sampling mode where the example sampling probability is proportional to the task size), we also tried annealed sampling~\cite{PAL:19} and uniform sampling (the same sampling probability for all tasks). We performed such experiments for Russian and English distilbert-like models, for Russian and English tasks. The results for these sampling modes did not bring out a noticeable improvement, thus we used only plain sampling.
-
-We averaged all the experiment results by three runs. %\footnote{The results for every run can be found at \url{https://github.com/dimakarp1996/Dialogue2023/AllRuns.pdf}. We include also the source code at \url{https://github.com/dimakarp1996/Dialogue2023/source_code.zip}}.
-
-\subsection{Singletask VS Multi-task - backbones from different languages}
-
-In the first stage of experiments, we compared the performance of our multi-task models with the performance of analogous singletask models with the same hyperparameters. 
-
+ 
 For the English-language tasks, we made the experiments for the backbones \textit{distilbert-base,-cased}~\cite{distilbert} and \textit{bert-base-cased}~\cite{bert}. %large is not reported here
 
 For the Russian-language tasks, we made experiments for the backbones \textit{DeepPavlov/distilrubert-base-cased-conversational}~\cite{distilrubert} and \textit{DeepPavlov/rubert-base-cased-conversational}~\cite{rubert}. As distilled BERTs takes 40\% less memory than BERTs and are 60\% faster, these experiments cover a variety of different model uses for different computational budgets and quality demands. 
@@ -460,7 +283,93 @@ We also note that in the settings where 100\% share of the English data was used
 %  \caption{Singletask and multi-task f1 macro, while using some share of Russian training data alone or augmenting them with the full English data in "merged by task" mode.}\label{fig:thresholds_f1_macro}
 %\end{figure}
 
-\section{Discussion}
+ 
+ 
+ %HOW CAN I MAKE THIS TABLE SMALLER?
+\end{table*}
+\begin{table*}
+\caption{Accuracy / F1 macro. Batch size 160, plain sampling. Mode M stands for multi-task, mode S stands for single-task, and Share stands for the share of training data used. Backbone distilbert-base-cased. Averaged by five runs.}
+\label{tab:mtl_dialog_part}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{c|c|c|c|c|c|c|c|c}
+\hline
+ \multirow{2}{*}{Mode} &  \multirow{2}{*}{Share} &  \multirow{2}{*}{Average} & Emotions & Sentiment & Toxic & Intents & Topics & Batches \\
+& & & 39.4k & 80.5k & 127.6k & 11.5k & 11.5k & seen \\
+\hline 
+S & 15\% & 78.5/70.9 & 65.8/50.6 & 69.3/68.8 & 92.2/81.2 & 78.7/68.8 & 86.3/85.1 & 2173 \\ \hline
+M & 15\% & 77.4/70.6 & 64.0/55.0 & 68.3/67.7 & 91.6/80.0 & 76.9/64.6 & 86.4/85.4 & 4741 \\ \hline
+S & 10\% & 77.1/68.4 & 64.6/45.0 & 68.3/67.8 & 92.2/81.0 & 75.5/64.7 & 84.8/83.3 & 1579 \\ \hline
+M & 10\% & 75.9/69.1 & 62.6/53.6 & 66.6/65.8 & 91.5/79.7 & 74.3/63.2 & 84.6/83.3 & 4295 \\ \hline
+S & 9\% & 76.7/67.4 & 64.6/43.9 & 68.2/67.7 & 91.8/80.4 & 74.4/62.7 & 84.2/82.4 & 1457 \\ \hline
+M & 9\% & 75.4/67.8 & 62.1/52.4 & 66.5/65.7 & 91.4/79.5 & 72.4/58.5 & 84.4/83.0 & 3695 \\ \hline
+%S & 8\% & 73.8/64.6 & 63.7/43.5 & 67.6/67.0 & 92.0/80.5 & 62.0/49.7 & 83.9/82.1 & 1381 \\ \hline
+%M & 8\% & 74.9/67.2 & 61.7/51.4 & 66.7/66.0 & 91.5/79.5 & 71.1/57.3 & 83.6/81.7 & 3511 \\ \hline
+%S & 7.5\% & 73.5/64.0 & 63.8/42.5 & 67.4/66.9 & 91.6/80.1 & 61.3/48.6 & 83.6/81.7 & 1293 \\ \hline
+%M & 7.5\% & 74.6/66.9 & 61.0/50.2 & 67.0/66.4 & 91.5/79.5 & 70.3/56.9 & 83.2/81.4 & 2995 \\ \hline
+S & 7\% & 73.5/64.0 & 63.3/42.1 & 67.9/67.4 & 91.8/80.1 & 61.4/49.4 & 83.3/81.1 & 1251 \\ \hline
+M & 7\% & 74.2/66.4 & 61.1/50.4 & 65.8/65.1 & 91.0/78.9 & 70.0/56.3 & 83.1/81.3 & 2882 \\ \hline
+S & 5\% & 69.1/59.0 & 62.5/38.9 & 66.9/66.3 & 91.8/79.9 & 42.7/30.8 & 81.6/78.8 & 901 \\ \hline
+M & 5\% & 71.7/62.4 & 60.5/48.6 & 64.4/63.4 & 90.8/78.5 & 62.4/44.4 & 80.2/77.3 & 2381 \\ \hline
+S & 3\% & 59.6/49.0 & 60.6/37.7 & 65.2/64.5 & 91.8/79.3 & 26.5/16.9 & 54.0/46.5 & 584 \\ \hline
+M & 3\% & 68.8/58.1 & 58.6/42.7 & 62.5/61.3 & 91.0/78.3 & 55.5/37.1 & 76.4/71.0 & 1566 \\ \hline
+S & 2\% & 44.9/31.5 & 48.7/21.7 & 39.6/26.5 & 91.8/79.0 & 2.6/0.2 & 41.4/30.1 & 274 \\ \hline
+M & 2\% & 64.8/52.1 & 57.6/38.4 & 61.4/60.1 & 90.8/78.0 & 44.2/23.5 & 69.9/60.4 & 923 \\ \hline
+\end{tabular}
+}
+\end{table*}
+\begin{table*}
+\caption{Metrics of the DeepPavlov's MTL model for the GLUE benchmark. M.Corr stands for Matthew's correlation, P/S corr stands for Pearson/Spearman correlation, Acc stands for accuracy, and m/mm means "matched/mismatched". Mode S stands for single-task, and mode M stands for multi-task. Results show that multi-task models either approach the metrics of analogous single-task models or even exceed them.}
+\label{tab:mtl_glue}
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{c|c|c|c|c|c|c|c|c|c|c|c|c}
+\hline
+\multirow{3}{*}{Model} & \multirow{3}{*}{Mode}  & Average & CoLA & SST-2 & MRPC &STS-B &QQP&MNLI & QNLI & RTE & AX & Batches\\
+       &        & train size  & 8.6k & 67.3k & 2.5k & 5.7k & 363.8k & 392.7k & 104.7k & 2.5k & as MNLI & seen \\ 
+       &        & metric  & M.Corr & Acc & F1/Acc & P/S Corr & F1/Acc & Acc(m/mm) & Acc & Acc & M.Corr &  \\ \hline
+Human & - & 87.1 & 66.4 & 97.8 & 86.3/80.8 & 92.7/92.6 & 59.5/80.4 & 92.0/92.8 & 91.2 & 93.6 & - & -\\ \hline
+%\textit{\multirow{2}{*}{distilbert-base-cased}} & S & 73.1 & \textbf{42.4} & \textbf{92.1} & 85.6/\textbf{80.3} & 78.8/76.8 & \textbf{69.5/88.5} & \textbf{81.3/80.8} & \textbf{87.5} & 49.8 & 29.9 & 70846 \\ 
+\textit{\multirow{2}{*}{distilbert-base-cased}} & S & 73.3 & \textbf{42.4} & \textbf{92.1} & 85.6/\textbf{80.3} & 78.8/76.8 & \textbf{69.5/88.5} & \textbf{81.3/80.8} & \textbf{87.5} & 52.1 & 29.9 & 70861 \\ 
+ & M & \textbf{74.5} & 36.0 & 91.0 & \textbf{85.7}/79.9 & \textbf{82.6/81.6} & 68.4/87.4 & 80.4/80.3 & 86.0 & \textbf{69.5} & \textbf{30.1} & 88905 \\  \hline
+\textit{\multirow{2}{*}{bert-base-cased}} & S & 77.3 & \textbf{53.7} & \textbf{93.2} & \textbf{87.7/82.8} & 83.8/82.2 & \textbf{70.3/88.9} & \textbf{83.8/83.1} & \textbf{90.6} & 62.1 & 32.1 & 42722\\ 
+ & M & \textbf{77.8} & 45.8 & 92.9 & 86.8/82.2 & \textbf{85.3/84.7} & 70.2/88.6 & 83.5/82.6 & 90.1 & \textbf{74.5} & \textbf{32.8} & 112613\\  \hline
+\textit{\multirow{2}{*}{bert-large-cased}} & S & \textbf{79.5} & \textbf{59.2} & \textbf{94.9} & 85.0/80.6 & \textbf{85.8/84.5} & 70.5/89.1 & \textbf{86.7/85.6} & 92.2 & 70.1 & \textbf{39.4} & 37290 \\ 
+ & M & \textbf{79.5} & 50.8 & 94.1 & \textbf{87.3/82.8} & 83.8/83.9 & \textbf{71.0/89.2} & 85.9/85.0 & \textbf{92.4} & \textbf{78.5} & 38.5 & 53343 \\  \hline
+\end{tabular}
+}
+\end{table*}
+\subsection{Single-task vs Multi-task: impact of reducing training data}
+We also report the impact of reducing training data. Specifically, we have trained the model with the same hyperparameters as in the previous setting, but we have kept only a small share of training data while leaving test and validation data intact. In every such experiment, any percentage of training data contained all training data from lower percentages.%maybe express in the other way?
+In this case, the multi-task metrics exceed single-task ones only on small-scale data (like 2-5\% of the whole dataset), and this advantage evaporates even on 9\% of the dataset. 
+We did this exploration only for \textit{distilbert-base-cased} to speed up the calculations. Also, for every training data share in this experiment, we have made five restarts for different random seeds and have averaged the metrics. 
+
+We present the detailed results of this experiment in Table~\ref{tab:mtl_dialog_part} and Figure \ref{fig:mtl_dialog_part}. One can see that generally, the multi-task knowledge transfer works better for tasks with a lower number of samples.
+
+\input{EnMTL/Plot.tex}
+
+\section{Discussion} 
+
+Based on the metrics on the diverse set of dialog-related tasks, the proposed multi-task transformer-agnostic model almost matches the single-label model. 
+For all explored BERT-based backbones the drop in average accuracy is between 0.8\%-0.9\% on the dialogue tasks.
+
+For the GLUE tasks, the multi-task models even exceed the single-task ones by average accuracy. This applies to GLUE tasks with not large enough training sets (AX, STS-B, and especially RTE) which benefit from knowledge transfer from large-scale tasks (MNLI, QQP).
+%Distilbert-like models almost match the bert-like ones by their overall performance, for single-task and multi-task settings.
+The training of the multi-task neural network, however, took more training steps than the training of the corresponding single-task models with the same early stopping criteria. The reason is that the training did not stop until the metrics on relatively small-data tasks stopped improving. 
+% Therefore, examples from relatively high-size tasks, metrics for which had already reached their saturation points, were seen more frequently than they would have been seen if the model was single-task and trained for any of these tasks. If we train on the data subsets, this effect is more pronounced, probably because the gap between the saturation points from smaller-data tasks and larger-data tasks widens.
+From all the tasks, the dropdown is the lowest on the topic classification tasks, which suggests that this task is more prone to knowledge transfer.
+
+For the small-scale data, we can see that if we train on small shares of training data (2-5\%), multi-task models overcome single-task models, for 2\% and 3\% -- by a huge margin. However, even on 9\%, for all dialog tasks, this advantage eliminates.
+
+The multi-task small-scale advantage in accuracy strongly depends on the data size. For the toxicity classification (127k samples), single-task models excel multi-task ones even at 2\% data. For the sentiment and emotion classification (79.2k and 39.3k), the advantage starts at 3\%, for topic classification (11.5k) at 5\%, and for intent classification (11.5k) at 9\%. 
+
+Therefore, the smaller the auxiliary dataset (on the scale of ~200-2000 samples), the larger the advantage of multi-task models. This advantage shows that the knowledge transfer effect is the most noticeable for small-scale datasets.
+
+Also, the difference between metrics of the topic classification and intent classification makes us suppose that the advantage of multi-task training depends not just on the number of samples, but on the number of samples per class. Testing this hypothesis, however, might require additional investigation. 
+
+We also leave exploring whether these conclusions hold for the different task types, for example, sequence tagging and question answering, as a subject of future research. Testing these 
+conclusions on other languages or on other transformer-based models (for example, decoder-base ones)  is also a possible future field of study.
+
+.
 Multi-task transformer-agnostic models almost match the singletask models by metrics on the dialog tasks. The accuracy gap between the multi-task and singletask monolingual models is about 0.8-0.9\% for the English language and about 0.3-0.6\% for the Russian language. For the multilingual models, the gap remains within the same limit, except for the multilingual BERT trained on Russian data, where the gap evaporates completely.
 
 % We also report that the training of the multi-task neural network for English data took 21-24\% more training steps than the training of the singletask models with the same criteria of early stopping. The reason is that the model did not stop until the metrics on relatively low-size tasks stop improving, therefore examples from relatively high-size tasks that already were trained) were seen more times than they would have been seen if the model was singletask and trained for any of these tasks. Убрать вообще batches seen, раз не видно паттерна?
@@ -477,26 +386,18 @@ And in this case, we can also perform the validation on the English validation d
 
 And also, the lower share of training data we have, the larger the accuracy gain for adding the English data to the training sample.
 
+
 \section{Conclusion}
 
+The proposed transformer-agnostic multi-task models yield results matching or approaching the single-task models on most tasks. If we truncate the tasks to the low-size number (200-2000 samples), multi-task models start exceeding the single-task ones. This effect might depend on the number of samples per class.
+\fi
 The multi-task transformer-agnostic architecture we propose yields just a minor decrease in accuracy and F1 macro on the dialog tasks compared to the singletask architecture. 
 
 Adding English data to the Russian dataset can improve the metrics by up to several percent for the singletask and multi-task training. Also, starting from some data sizes, multi-task architecture starts overcoming the singletask one.
 
-%\begin{table}
-%\caption{Accuracy/ f1 macro on the Russian data for multi-task Russian distilbert-base-cased, trained on the Russian data. Impact of choice of batch size and sampling.}
-%\begin{tabular}{|c|c||c|c|c|c|c|c|}
-%\hline
-%Sampling & \begin{tabular}[c]{@{}l@{}}Batch \\size\end{tabular} & Average     & \begin{tabular}[c]{@{}l@{}}Emotions \\6.5 K\end{tabular} & \begin{tabular}[c]{@{}l@{}}Sentiment\\82.6 K\end{tabular} & \begin{tabular}[c]{@{}l@{}}Toxic\\93.3 k\end{tabular} & \begin{tabular}[c]{@{}l@{}}Intents\\11.5k\end{tabular} & \begin{tabular}[c]{@{}l@{}}Topics\\11.5 k\end{tabular}  \\
-%\hline \hline
-%plain    & 160        & 86.4/83.1 & 81.4/75.0 & 77.2/77.2 & 96.9/95.0 & 86.1/79.1 & 90.4/89.4 \\ \hline
-%anneal   & 160        & 86.5/83.5 & 82.1/75.7 & 77.7/77.8 & 97.0/95.4 & 85.4/79.6 & 89.9/89.3 \\ \hline
-%uniform  & 160        & 85.8/82.9 & 80.2/74.5 & 75.7/75.8 & 96.9/95.1 & 85.8/79.4 & 90.6/89.7 \\ \hline
-%plain    & 32         & 86.7/83.8 & 81.5/74.5 & 77.0/77.1 & 97.1/95.4 & 86.8/82.1 & 91.0/90.2  \\ \hline % 9 epochs
-%anneal   & 32         & 86.4/84.1 & 81.2/74.7 & 76.2/76.5 & 97.0/95.3 & 86.9/83.9 & 90.9/90.0   \\ \hline
-%uniform  & 32         & 86.1/83.3 & 80.5/73.8 & 76.1/76.2 & 96.9/95.2 & 86.4/81.8 & 90.4/89.7 \\\hline
-%\end{tabular}
-%\end{table}
-\fi
+
+\section{Conclusion}
+
+
 
 Все эти эксперименты проводились с августа 2022 года.
