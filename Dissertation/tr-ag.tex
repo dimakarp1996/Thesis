@@ -22,25 +22,27 @@
 
 \end{itemize}
 
+Обращу отдельное внимание на то, что в каждом тренировочном батче для данной нейросетевой многозадачной модели должны содержаться примеры только из одной задачи. В противном случае эффективный размер батча для каждой из задач оказывался меньше задаваемого изначально, что приводило к ухудшению метрик модели. 
+
 Такая многозадачная модель почти не требует дополнительных параметров, и, как следствие, дополнительных вычислительных ресурсов(кроме линейных слоев, которые требуют на порядки меньше ресурсов, чем тело архитектуры Трансформер). Так, для моделей типа distilBERT, предложенная многозадачная модель требует всего лишь примерно на  0.1\% больше видеопамяти, чем любая из соответствующих ей однозадачных моделей. В зависимости от числа задач, числа классов и "тела" многозадачной модели, количество дополнительных параметров варьируется вокруг этого числа. 
 
 При этом данная модель является трансформер-агностичной, что позволяет быстро подставлять в нее разные типы базовых моделей. Это выгодно отличает данную модель от иерархических многозадачных моделей, таких, как \cite{PAL:19} и \cite{TaskEmbedded2021}. 
-. 
+
+Отдельно выделяю то, что данная модель успешно интегрирована в библиотеку DeepPavlov\cite{deeppavlov}. 
+
 \subsection{Какие эксперименты не сработали}\label{ch:tr-ag:failed_attempts} 
-Автор диссертационной работы пробовал большое количество различных вариантов улучшения архитектуры многозадачной трансформер-агностичной модели по сравнению с описанными в разделе \ref{ch:tr-ag:architecture} 
-Помимо этого, проводились эксперименты с дистилляцией более крупных моделей типа BERT в более мелкие, путем добавления функции 
-1)Модификация CLS-выхода модели BERT, который классифицируется multitask головами - GHOSTBERT, Task Embedded Attention, XCA, ClassAttention. Проверял на MRPC+RTE и потом на всех классификационных задачах GLUE, прироста на валидации не увидел.
-2)Не модифицируя multitask BERT (просто тело и линейные слои), сравниваю его на русском SUPERGLUE с обычным BERT. Имеется отставание от обычного BERT по большинству задач.
-3)Эксперименты с дообучением на другом языке. А именно, если модель, учившуюся на русском SUPERGLUE, дообучить ещё и на английском SUPERGLUE(или наоборот), приведёт ли это к улучшению? Не привело. В разных экспериментах я либо объединял данные на русском и английском языке, либо прописывал их как разные задачи, ни то, ни то не сработало.
-4)Эксперименты с выбором задач. Учил на подмножествах однотипных задач из SuperGLUE одного типа multitask модель и сравнивал с singletask моделью. Добился следующего положительного результата - на некоторых комбинациях датасетов multitask модель несколько превосходит singletask. Но учитывая маленькие размеры датасетов, устойчивость результатов под вопросом.
-5)При выборе задач пробовал варьировать dropout и attention dropout. Не привело к улучшению.
-6)Вместо обычного CLS токена пробовал использовать его LSTM представление, пробовал и его конкатенировать с CLS токеном. Не привело к улучшению
-7)Пробовал использовать task specific trainable tokens - при препроцессинге каждого примера либо ко фразе добавлять свой токен на каждой задачи, либо добавлять task specific Токены для каждой из задач. И учиться классифицировать не по простому CLS, а либо по конкатенации CLS и task specific, либо просто по task specific. На GLUE и SUPERGLUE идея не привела к улучшению
-8)Использование stochastic answer network слоя в архитектуре MT-DNN, с одной SAN и task-specific компонентами на несколько задач GLUE вместо нескольких SAN. Эксперимент не сработал
-9)Исследование сэмплирования. На сабсете GLUE, пробовал такую идею, как для каждой задачи переходить в Converged режим(в котором функция потерь делится на 4), если на ней нет улучшения, и выходить из этого режима , если после этого на ней есть ухудшение. Эксперимент не дал улучшения
-10)Продолжение исследования сэмплирования. Обучать модель 10 эпох, но при этом на 5 эпохах учить модель на всем датасете, а на следующих 5 фильтровать по дисперсии метрик на предыдущих эпохах и учить только на некой доле самых сложных примеров (с самой высокой дисперсией). Эксперимент тоже не дал улучшения
+Автор диссертационной работы пробовал большое количество различных вариантов улучшения архитектуры многозадачной трансформер-агностичной модели по сравнению с описанными в разделе \ref{ch:tr-ag:architecture}. 
+\begin{itemize} 
+ \item[*] Первой серией идей была модификация выхода CLS-выхода модели BERT, который классифицируется задаче-специфичными головами. Для данной задачи проверялось использование задаче-специфичных слоев, описанных в \cite{GhostBERT2021, TaskEmbedded2021, el-nouby2021xcit}. Кроме данных слоев, проверялось также использование LSTM-представления CLS токена или конкатенация этого представления с самим CLS токеном. При проверке на валидационном наборе данных GLUE, прироста средней точности по сравнению с описаннрй выше архитектурой данные эксперименты не дали. 
+\item[*] Второй серией идей являлось использование задаче-специфичных тренируемых токенов. А именно, идеи заключались в том, чтобыприсваивать каждой из задач какой-нибудь неиспользуемый токен из словаря BERT (каждой задаче - свой токен). И добавлять этот токен сразу же после CLS к каждой из задач. После чего проводить классификацию не просто по CLS токену, а либо по конкатенации CLS и задаче-специфичного токена, либо же просто по задаче-специфичному токену. На наборе данных GLUE эти идеи не привели к улучшению метрик.
 
+\ю Для случая, когда к каждому примеру добавляется не один задаче-специфичный токен, а сразу все задаче-специфичные токены по очереди (то есть для трехзадачной классификации, условно, каждый пример имеет вид \textit{[CLS] [TOKEN FOR TASK1] [TOKEN FOR TASK2] [TOKEN FOR TASK3] [TOKENIZED_EXAMPLE]}, улучшения при проведении классификации как в предыдущем пункте также не последовало. 
 
+Вероятно, провал этих экспериментов связан с тем, что если CLS-токен был хорошо предобучен на оригинальном BERT для проведения классификации, то задаче-специфичные токены предобучены не были, а какая-то дополнительная полезная информация, зависящая от задачи, через них так и не передавалась(ну или наоборот, она слишком хорошо передавалась через [CLS]. 
+
+\item][*] Хотя исследование разных методов сэмплирования задач при многозадачном обучении не является фокусом данной диссертационной работы, автор также проводил эксперименты и с разными методами сэмплирования. Так, вариант перехода для каждой задачи в режим сходимости (с делением функции потерь для этой задачи на 4),если на ней нет заметного улучшения, и выхода из этого режима, если на этой задаче появляется заметное ухудшение, не сработал. Эксперимент, в котором после некого числа эпох (достаточно большого, чтобы измерить дисперсию модели), модель обучалась только на некой доле самых сложных примеров с самой высокой дисперсией, тоже не сработал\footnote{Справедливости ради, существуют и эффективные способы улучшения сэмплирования, дававшие заметный прирост метрик - например, \cite{GradTS}. Данный подход вполне можно объединить с предлагаемым в моей диссертации.}. 
+
+В числе неудачных экспериментов также можно упомянуть эксперименты по дистилляции более крупных моделей BERT в более мелкие, которые проводились путем добавления в функцию потерь нового члена, "приближающего" веса более крупной модели к соответствующим весам более мелкой (по метрике mean squared error). Эта идея не сработала. Автор предполагает, что это было связано с тем, что данный способ является слишком грубым для того, чтобы приблизиться к адекватной аппроксимации сложных нейросетевых функций, которые используются в модели BERT. В связи ч этим, в дальнейшем идеи с приближением весов не проверялись. 
 \subsection{Преимущество трансформер-агностичной многозадачной модели над многозадачной моделью с одним линейным слоем} 
 \label{ch:tr-ag:advantages}
 
@@ -53,48 +55,6 @@
 Еще одно преимущество многозадачной трансформер-агностичной модели, которое в рамках этой работы еще не было раскрыто до конца, заключается в том, что она поддерживает больший спектр задач. В частности, она (в реализации на момент написания диссертационной работы) поддерживает такие задачи, как распознавание именованных сущностей или выбор из нескольких вариантов ответа, которые невозможно реализовать в рамках модели с одним линейным слоем. 
 
 
-
-
-
-
-
-\section{Introduction}
-Nowadays, the technology of conversational AI systems is on the rise. The interest in virtual assistants prompts the development of conversational NLP models alongside traditional NLP models. The text classification task is one of the most crucial NLP tasks for virtual assistants.
-
-Transformer-based models, such as BERT, are widely used for text classification. The original article~\cite{bert} proposed the use of a separate BERT model for each task in the case of multi-task benchmarks. In such a way, if several classification tasks need to be solved in parallel, several prediction models should be employed, which increases the demand for computational resources. This problem leads to the idea of training one single model that can yield results for these tasks simultaneously. 
-
-Multi-task learning (MTL) as part of transfer learning allows training one single model simultaneously for multiple related tasks so that the knowledge acquired in one task enhances the performance on another task.
-
-Different real-world conditions may put various demands on the quality of neural models and their use of computational resources. Such conditions necessitate the use of transformer-agnostic models. The \texttt{transformers}~\cite{huggingface_transformers} library allows using different transformer-based models including the distilled ones to save computational resources and speed up the inference time~\cite{alina}. 
-
-% Developers can use models from this library in different dialogue systems and platforms for dialogue system development. Among such platforms, one can pay attention to~\cite{baymurzina2021dream} and \cite{rasa}.
-\ifinterspeechfinal
-Our contribution is the implementation of transformer-agnostic multi-task models in DeepPavlov and researching the multi-task knowledge transfer in these models while training them for multiple dialog-related tasks.
-\else
-Our contribution is the implementation of transformer-agnostic multi-task models in our open-source library and researching the multi-task knowledge transfer in these models while training them for multiple dialog-related tasks.
-\fi
-\section{Related work}
-
-Researchers have been studying multi-task learning (MTL) for a long time~\cite{caruana1997multi-task}. Since the rise of neural networks, researchers have proposed a wide range of approaches to MTL, including adversarial networks~\cite{wang-etal-2018-personalized} and using cross-lingual word embeddings~\cite{buryat} . However, these methods did not develop further, as nowadays NLP is based on transformer-based models. Nevertheless, as transformer architectures come out quite often, this review mostly focuses on agnostic architectures, which work with all kinds of transformers, rather than transformer-specific architectures.
-
-In some kinds~\cite{pseudolabeling} of multitask transformer-agnostic architectures, every sample needs to be labeled or pseudo-labeled for all considered tasks. However, this procedure lacks flexibility.
-
-One of the most frequently used transformer-agnostic architectures is ~\cite{MTDNN:19} that obtained the state-of-the-art results on SNLI~\cite{snli}, SciTail~\cite{khot2018scitail}, and GLUE~\cite{GLUE:19}. However, this architecture increases computational demands due to the specific stochastic attention layers for text classification.
-
-The article \cite{PAL:19} proposed different transformer-agnostic ways to work with BERT output in a multi-task setting\footnote{Projective attention layers, presented in the same article as the superior result, are not transformer-agnostic.}. One such way is supplementing the model with an extra BERT layer for each task increases the number of required parameters for GLUE by 67\%, which is computationally heavy. 
-
-Other transformer-agnostic ways proposed in the same work include low-rank task-specific transformation with task-specific self-attention on top of the model (or without it). In our experiments on GLUE, these approaches worked no better than the plain use of transformer output in the linear classifier (while training \textit{bert-base-uncased}).
-
- Also, utilizing self-attention with a task-embedded module from~\cite{TaskEmbedded2021} instead of plain self-attention in the low-rank transformation did not yield improvements over the plain dense task-specific layers above BERT in our experiments. The task-embedded architecture presented in the same article is still not transformer-agnostic.
-
-Another work~\cite{GhostBert2021} suggested a novel way to extract additional features from the BERT output -- using cheap convolutional ghost modules. Despite this approach being transformer-agnostic, utilizing attention with a ghost module in the low-rank transformation did not yield improvements over the plain dense task-specific layers above BERT in our experiments. This also holds for~\cite{el-nouby2021xcit} architecture from computer vision.
-
-%Article~\cite{Summarization2021} suggests that, when training a task agnostic multi-task model, the biLSTM layer is better than the dense layer for summarization. However, the summarization task is out of the scope of our research. 
-
-Different types of attention, such as ~\cite{reformer}, can reduce computational complexity. However, we did not consider adding them on top of the transformer as they were not meant to increase accuracy. The only exception is~\cite{routing_transformers}, but even that work beats the state-of-the-art only on long sequence tasks.%Different types of attention, such as the ones described in~\cite{reformer,routing_transformers,linformer, performer,scaling-transformers}
-The article~\cite{Multi-taskEnsemble:19} proposed an approach to improve the accuracy of any multi-task model via ensembling. We suppose that this approach can work well in parallel with our work. However, we did not test it because it is very computationally demanding.
-
-%Another field of study is the impact of different sampling approaches on multi-task training. Among the proposed policies, we can pay attention to the works~\cite{TaskSamplingPolicy,12in1, GradTS, PAL:19,CA-MTL}. 
 
 At the same time, the performance of the simple transformer-agnostic model is still not fully explored. It is especially true for dialog-specific datasets. To bridge this gap, we aim to examine the performance of transformer-agnostic multi-task models on various kinds of datasets for the tasks applicable in dialog systems.
 \section{Our setting}
