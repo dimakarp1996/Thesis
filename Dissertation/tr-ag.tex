@@ -1,25 +1,45 @@
 \chapter{Трансформер-агностичные модели}\label{ch:tr-ag}
 % TODO - ЧТОБЫ ВЕЗДЕ НАЗЫВАЛИСЬ АГНОСТИЧНЫМИ, А НЕ ИНВАРИАНТНЫМИ!!!!
+Многозадачные нейросетевые модели, описанные в предыдущем разделе \ref{ch:pseudolabel}, позволяют добиться существенной экономии вычислительных ресурсов. Тем не менее, к числу их неустранимых недостатков относится негибкость. Они поддерживают только один тип голов (multilabel), они требуют наличия меток для каждой задачи у каждого примера. 
+
+В связи с этим была поставлена цель поиска и исследования более эффективных архитектур. В частности, было необходимо предложить многозадачную нейросетевую архитектуру, лишенную описанных выше недостатков архитектуры из \ref{ch:pseudolabel}. Помимо этого, необходимо было исследовать перенос знаний в предложенной нейросетевой архитектуре: как перенос знаний между задачами, так и перенос знаний между языками при использовании многозадачных моделях.
+
+Архитектура, исследование которой проводилось, описана в следующем разделе. Попытки улучшения данной архитектуры описаны отдельно. 
 
 \subsection{Архитектура трансформер-агностичной многозадачной модели}\label{ch:tr-ag:architecture} 
+Предложенная многозадачная трансформер-агностичная модель основана на классе \texttt{AutoModel} из HuggingFace, который разрешает использовать разнве модели, основанные на архитектуре Трансформер\footnote{Список поддерживаемых моделей: \url{https://huggingface.co/transformers/v3.0.2/model_doc/auto.html\#automodel}}. Для наших экспериментов, мы использовали модели, основанные на архитектуре типа BERT, но абсолютно тот же подход может применяться и к другим нейросетевым моделям на базе архитектуры Трансформер. 
 
-Our MTL model is based on \texttt{AutoModel}\footnote{The list of supported models: \url{https://huggingface.co/transformers/v3.0.2/model_doc/auto.html\#automodel}} class from HuggingFace, which allows using different transformer-based architectures as a backbone. For our experiments, we utilized BERT-based models because they allow effective transfer learning~\cite{10.1007/978-3-031-19032-2_46, ksquad}, however, exactly the same approach can be applied to any Transformer-based model.
+Этот подход заключается в следующем:
+\begin{itemize}
 
-\begin{enumerate}
+    \item[*] Как и в оригинальной статье~\cite{bert}, возвращаются финальные скрытые состояния для всех токенов и выход пулингового слоя BERT. 
 
-    \item In the same way as in the original article~\cite{bert}, we return the final hidden states for all tokens and the output of the BERT pooling layer.
+    \item[*] К выходу пулера применяется дропаут, по умолчанию равный 0.2\footnote{Как варьирование dropout, так и варьирование attention dropout не привело к улучшению характеристик модели.}. Для задач выбора из нескольких вариантов ответа или классификации каждого токена в предложении, выход преобразуется аналогично соответствующим задачам. We flatten the output if it is the sequence labeling task or the multiple-choice task
 
-    \item We apply the dropout (equal to 0.2) to the pooler output. We flatten the output if it is the sequence labeling task or the multiple-choice task.
+    \item[*]После этого этапа, мы применяем задаче-специфичный линейный слой с размерностью выхода \texttt{n}. Для всех задач, кроме регрессии или выбора из нескольких вариантов ответа\footnote{Для задачи выбора из нескольких вариантов ответа, каждой метке изначально относится несколько примеров. Т.е с таким числом классов после преобразования формы число реальных и предсказанных меток соответствует друг другу.}, \texttt{n} равняется числу классов для задачи. Во всех других случаях \texttt{n} равняется 1.
+ 
+    \item[*]В конце применяется функция потерь. Если для каждого примера из задачи ожидается только одна метка, применяется категорическая кросс-энтропия, в остальных случаях - бинарная кросс-энтропия. 
 
-    \item After this stage, we apply the linear layer with \texttt{n} output dimension. \texttt{n} equals the number of classes for all tasks but regression and multiple-choice, where \texttt{n} is 1. (In the multiple-choice task, we get several samples per 1 label, so after reshaping the number of real and predicted labels matches). 
+\end{itemize}
 
-    \item Then we apply a loss function: the categorical cross-entropy loss for the single-label classification task or the binary cross-entropy loss for the multi-label classification task. In this paper, we consider only single-label classification.
+Такая многозадачная модель почти не требует дополнительных параметров, и, как следствие, дополнительных вычислительных ресурсов(кроме линейных слоев, которые требуют на порядки меньше ресурсов, чем тело архитектуры Трансформер). Так, для моделей типа distilBERT, предложенная многозадачная модель требует всего лишь примерно на  0.1\% больше видеопамяти, чем любая из соответствующих ей однозадачных моделей. В зависимости от числа задач, числа классов и "тела" многозадачной модели, количество дополнительных параметров варьируется вокруг этого числа. 
 
-\end{enumerate}
+При этом данная модель является трансформер-агностичной, что позволяет быстро подставлять в нее разные типы базовых моделей. Это выгодно отличает данную модель от иерархических многозадачных моделей, таких, как \cite{PAL:19} и \cite{TaskEmbedded2021}. 
+. 
+\subsection{Какие эксперименты не сработали}\label{ch:tr-ag:failed_attempts} 
+Автор диссертационной работы пробовал большое количество различных вариантов улучшения архитектуры многозадачной трансформер-агностичной модели по сравнению с описанными в разделе \ref{ch:tr-ag:architecture} 
+Помимо этого, проводились эксперименты с дистилляцией более крупных моделей типа BERT в более мелкие, путем добавления функции 
+1)Модификация CLS-выхода модели BERT, который классифицируется multitask головами - GHOSTBERT, Task Embedded Attention, XCA, ClassAttention. Проверял на MRPC+RTE и потом на всех классификационных задачах GLUE, прироста на валидации не увидел.
+2)Не модифицируя multitask BERT (просто тело и линейные слои), сравниваю его на русском SUPERGLUE с обычным BERT. Имеется отставание от обычного BERT по большинству задач.
+3)Эксперименты с дообучением на другом языке. А именно, если модель, учившуюся на русском SUPERGLUE, дообучить ещё и на английском SUPERGLUE(или наоборот), приведёт ли это к улучшению? Не привело. В разных экспериментах я либо объединял данные на русском и английском языке, либо прописывал их как разные задачи, ни то, ни то не сработало.
+4)Эксперименты с выбором задач. Учил на подмножествах однотипных задач из SuperGLUE одного типа multitask модель и сравнивал с singletask моделью. Добился следующего положительного результата - на некоторых комбинациях датасетов multitask модель несколько превосходит singletask. Но учитывая маленькие размеры датасетов, устойчивость результатов под вопросом.
+5)При выборе задач пробовал варьировать dropout и attention dropout. Не привело к улучшению.
+6)Вместо обычного CLS токена пробовал использовать его LSTM представление, пробовал и его конкатенировать с CLS токеном. Не привело к улучшению
+7)Пробовал использовать task specific trainable tokens - при препроцессинге каждого примера либо ко фразе добавлять свой токен на каждой задачи, либо добавлять task specific Токены для каждой из задач. И учиться классифицировать не по простому CLS, а либо по конкатенации CLS и task specific, либо просто по task specific. На GLUE и SUPERGLUE идея не привела к улучшению
+8)Использование stochastic answer network слоя в архитектуре MT-DNN, с одной SAN и task-specific компонентами на несколько задач GLUE вместо нескольких SAN. Эксперимент не сработал
+9)Исследование сэмплирования. На сабсете GLUE, пробовал такую идею, как для каждой задачи переходить в Converged режим(в котором функция потерь делится на 4), если на ней нет улучшения, и выходить из этого режима , если после этого на ней есть ухудшение. Эксперимент не дал улучшения
+10)Продолжение исследования сэмплирования. Обучать модель 10 эпох, но при этом на 5 эпохах учить модель на всем датасете, а на следующих 5 фильтровать по дисперсии метрик на предыдущих эпохах и учить только на некой доле самых сложных примеров (с самой высокой дисперсией). Эксперимент тоже не дал улучшения
 
-The multi-task model in our setting requires almost no additional parameters and computational overhead, apart from the linear layers, so its simplicity singles it out. Also, the flexibility of this model allows using it with different kinds of backbones, which positively distinguishes it from~\cite{PAL:19}.
-
-For the distilBERT-like models, our multi-task model takes only ~0.1\% more parameters than the single-task models. This computational overhead varies around this number, depending on the number of tasks, the number of classes, and the backbone model. 
 
 \subsection{Преимущество трансформер-агностичной многозадачной модели над многозадачной моделью с одним линейным слоем} 
 \label{ch:tr-ag:advantages}
@@ -32,18 +52,6 @@ For the distilBERT-like models, our multi-task model takes only ~0.1\% more para
 
 Еще одно преимущество многозадачной трансформер-агностичной модели, которое в рамках этой работы еще не было раскрыто до конца, заключается в том, что она поддерживает больший спектр задач. В частности, она (в реализации на момент написания диссертационной работы) поддерживает такие задачи, как распознавание именованных сущностей или выбор из нескольких вариантов ответа, которые невозможно реализовать в рамках модели с одним линейным слоем. 
 
-\subsection{Какие эксперименты не сработали}\label{ch:tr-ag:failed_attempts} 
-Автор диссертационной работы пробовал большое количество различных вариантов улучшения архитектуры многозадачной трансформер-агностичной модели по сравнению с описанными в разделе \ref{ch:tr-ag:architecture} 
-1)Модификация CLS-выхода модели BERT, который классифицируется multitask головами - GHOSTBERT, Task Embedded Attention, XCA, ClassAttention. Проверял на MRPC+RTE и потом на всех классификационных задачах GLUE, прироста на валидации не увидел.
-2)Не модифицируя multitask BERT (просто тело и линейные слои), сравниваю его на русском SUPERGLUE с обычным BERT. Имеется отставание от обычного BERT по большинству задач.
-3)Эксперименты с дообучением на другом языке. А именно, если модель, учившуюся на русском SUPERGLUE, дообучить ещё и на английском SUPERGLUE(или наоборот), приведёт ли это к улучшению? Не привело. В разных экспериментах я либо объединял данные на русском и английском языке, либо прописывал их как разные задачи, ни то, ни то не сработало.
-4)Эксперименты с выбором задач. Учил на подмножествах однотипных задач из SuperGLUE одного типа multitask модель и сравнивал с singletask моделью. Добился следующего положительного результата - на некоторых комбинациях датасетов multitask модель несколько превосходит singletask. Но учитывая маленькие размеры датасетов, устойчивость результатов под вопросом.
-5)При выборе задач пробовал варьировать dropout и attention dropout. Не привело к улучшению.
-6)Вместо обычного CLS токена пробовал использовать его LSTM представление, пробовал и его конкатенировать с CLS токеном. Не привело к улучшению
-7)Пробовал использовать task specific trainable tokens - при препроцессинге каждого примера либо ко фразе добавлять свой токен на каждой задачи, либо добавлять task specific Токены для каждой из задач. И учиться классифицировать не по простому CLS, а либо по конкатенации CLS и task specific, либо просто по task specific. На GLUE и SUPERGLUE идея не привела к улучшению
-8)Использование stochastic answer network слоя в архитектуре MT-DNN, с одной SAN и task-specific компонентами на несколько задач GLUE вместо нескольких SAN. Эксперимент не сработал
-9)Исследование сэмплирования. На сабсете GLUE, пробовал такую идею, как для каждой задачи переходить в Converged режим(в котором функция потерь делится на 4), если на ней нет улучшения, и выходить из этого режима , если после этого на ней есть ухудшение. Эксперимент не дал улучшения
-10)Продолжение исследования сэмплирования. Обучать модель 10 эпох, но при этом на 5 эпохах учить модель на всем датасете, а на следующих 5 фильтровать по дисперсии метрик на предыдущих эпохах и учить только на некой доле самых сложных примеров (с самой высокой дисперсией). Эксперимент тоже не дал улучшения
 
 
 
@@ -160,8 +168,9 @@ We also used the multi-class \texttt{SLURP}~\cite{slurp} dataset for the intent 
 
 To demonstrate the MTL model performance on other domains and datasets, we have also benchmarked our model on the GLUE tasks~\cite{GLUE:19}.
 %For every task and every task split, the total number of labels for every class is included in Appendix. 
-\section {Experiment description}
+\section {Настройки экспериментов}
 
+Для всех 
 For all the experiments described in this article, the optimizer was AdamW~\cite{adam} with betas (0.9, 0.99), and the learning rate was 2e-5.%Ask Vasily for an article that proves that we should not tune the learning rate
 We used average accuracy for all tasks as an early stop metric. The training had a validation patience of 3, and the learning rate was halved if the early stopping metric did not improve for 2 epochs. 
 
