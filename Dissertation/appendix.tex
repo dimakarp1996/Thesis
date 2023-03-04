@@ -184,162 +184,192 @@ Multiple\_GoalsIntent & 40 & 109 \\
 \end{table}
 
 \section{Распределение числа примеров по классам в серии экспериментов с трансформер-агностичными моделями в DREAM}
-ВСТАВИТЬ ТАБЛИЦЫ
+\label{dream-tr-ag-sizes}
+
+\begin{table}[]
+\caption{Классификация эмоций}
+\label{appendix:emo_tr-ag}
+\begin{tabular}{|c||c|c|c|}
+\hline
+класс & тренировочных примеров & валидационных примеров & тестовых примеров
+\hline
+\hline
+{joy              } &               15172 &               1863 &                1941 \\ \hline
+{neutral          } &               12776 &               1606 &                1592 \\ \hline
+{anger            } &                4277 &                572 &                 555 \\ \hline
+{surprise         } &                3847 &                488 &                 459 \\ \hline
+{sadness          } &                2321 &                283 &                 266 \\ \hline
+{disgust          } &                 498 &                 76 &                  61 \\ \hline
+{fear             } &                 541 &                 80 &                  72 \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[]
+\caption{Классификация тональности}
+\label{appendix:factoid_tr-ag}
+\begin{tabular}{|c||c|c|c|}
+\hline
+класс & тренировочных примеров & валидационных примеров & тестовых примеров
+\hline
+\hline
+{neutral}& 47524 & 1200 & 1440 \\ \hline 
+{positive}& 27429 & 1440 & 1440 \\ \hline 
+{negative}& 18600 & 1440 & 1440 \\ \hline 
+\end{tabular}
+\end{table}
+
+\begin{table}[]
+\caption{Классификация токсичности} ИЗМЕНИТЬ
+\label{appendix:factoid_tr-ag}
+\begin{tabular}{|c||c|c|c|}
+\hline
+класс & тренировочных примеров & валидационных примеров & тестовых примеров
+\hline
+\hline
+valid.csv
+defaultdict(<class 'int'>, {'not_toxic': 18722, 'toxic': 712, 'insult': 426, 'identity_hate': 40, 'obscene': 61, 'threat': 18, 'sexual_explicit': 17, 'severe_toxic': 4})
+train.csv
+defaultdict(<class 'int'>, {'not_toxic': 149734, 'identity_hate': 360, 'insult': 3518, 'toxic': 5572, 'obscene': 544, 'threat': 131, 'sexual_explicit': 107, 'severe_toxic': 28})
+test.csv
+defaultdict(<class 'int'>, {'not_toxic': 15353, 'toxic': 612, 'severe_toxic': 7, 'insult': 357, 'obscene': 49, 'identity_hate': 35, 'threat': 11, 'sexual_explicit': 7})
+
+\end{tabular}
+\end{table}
 
 
 
-\section{Проверка модели на наборе данных}
-SINGLELABEL EXAMPLES
-CRITICAL EXAMPLES FROM TEST_DIALOG
-Phrase: do you like porn - PROBLEM!!!!
-0.True label:Sex&Profanity (It does not exist in dataset, but it is necessary!!)
-1.Original DeepPavlov model:Psychology
-2.Current multitask model(single-label topics): Music
-3.Multilabel multitask model(multi-label topics): [('Celebrities&Events', 0.70348006), ('Home&Design', 0.59652215), ('Psychology', 0.56743)]
-Phrase: my name is dilyara - PROBLEM!!!!
-0.True label: Family&Relationships (Closest from all labels existing in dataset)
-1.Original DeepPavlov model:Movies&Tv
-2.Current multitask model(single-label topics): Depression
-3.Multilabel multitask model(multi-label topics): []
-Phrase: i am in seattle right now- PROBLEM!!!!
-0.True label: Travel
-1.Original DeepPavlov model:Sports
-2.Current multitask model(single-label topics): MassTransit
-3.Multilabel multitask model(multi-label topics): [('Disasters', 0.71667683)]
-Phrase: what do you think about chris evans?- PROBLEM!!!!
-0.True label: Celebrities&Events
-1.Original DeepPavlov model:Music
-2.Current multitask model(single-label topics): Sports
-3.Multilabel multitask model(multi-label topics): [('Sports', 0.9790425), ('PersonalTransport', 0.7682963)]
-Phrase: tell me the weather in Boston city- PROBLEM!!!!
-0.True label:Weather_Time(It does not exist in dataset, but it is necessary!)
-1.Original DeepPavlov model:Disasters
-2.Current multitask model(single-label topics): Disasters
-3.Multilabel multitask model(multi-label topics): [('Health&Medicine', 0.91805243), ('MassTransit', 0.76488113), ('Disasters', 0.7259254)]
-Phrase: tell me about music
-0.True label:Music
-1.Original DeepPavlov model:Music
-2.Current multitask model(single-label topics): Music
-3.Multilabel multitask model(multi-label topics): [('MassTransit', 0.8430999), ('ArtificialIntelligence', 0.7067908), ('Psychology', 0.64519566)
-Phrase: are you better than siri
-0.True label:Science&Technology
-1.Original DeepPavlov model:Science&Technology
-2.Current multitask model(single-label topics): Science_and_Technology
-3.Multilabel multitask model(multi-label topics): []
-Phrase: i want to commit suicide
-0.True label:Depression
-1.Original DeepPavlov model:Depression
-2.Current multitask model(single-label topics): Depression
-3.Multilabel multitask model(multi-label topics): [('Depression', 0.7638091)]
-Phrase: let's have a conversation about pets
-0.True label: Animals&Pets - PROBLEM!!!!
-1.Original DeepPavlov model:News
-2.Current multitask model(single-label topics): Animals&Pets
-3.Multilabel multitask model(multi-label topics): [('MassTransit', 0.9737631), ('Psychology', 0.6676427), ('Sports', 0.6129431)]
-Phrase: can we talk about food - PROBLEM!!!!
-0.True label: Food
-1.Original DeepPavlov model:Food
-2.Current multitask model(single-label topics): Food
-3.Multilabel multitask model(multi-label topics): [('Home&Design', 0.74741876), ('ArtificialIntelligence', 0.5918448), ('Animals&Pets', 0.57063)]
-OTHER CRITICAL EXAMPLES, WHICH ARE SIMILAR TO EXAMPLES FROM TEST_DIALOG
-Phrase: have you been to Alaska- PROBLEM!!!!
-0.True label - Travel
-1.Original DeepPavlov model:Science&Technology 
-2.Current multitask model(single-label topics): Travel
-3.Multilabel multitask model(multi-label topics): [('Health&Medicine', 0.6595304), ('Disasters', 0.62206763), ('MassTransit', 0.51566494)]
-Phrase: please talk about movies
-0.True label - Movies_TV
-1.Original DeepPavlov model:Movies&Tv
-2.Current multitask model(single-label topics): Movies_TV
-3.Multilabel multitask model(multi-label topics): [('Movies_TV', 0.9960515), ('PersonalTransport', 0.6289764)]
-Phrase: please talk about books - PROBLEM!!!!
-0.True label - Books&Literature
-1.Original DeepPavlov model:Religion
-2.Current multitask model(single-label topics): Books&Literature
-3.Multilabel multitask model(multi-label topics): [('Psychology', 0.9393409), ('MassTransit', 0.90256804), ('Science_and_Technology', 0.73622745)]
-Phrase: talk about games- PROBLEM!!!!
-0.True label - Videogames
-1.Original DeepPavlov model:Sports
-2.Current multitask model(single-label topics): Videogames
-3.Multilabel multitask model(multi-label topics): [('Videogames', 0.99719965), ('Leisure', 0.6766184)]
-Phrase: where are you from- PROBLEM!!!!
-0.True label - Family&Relationships (Closest from all labels existing in dataset)
-1.Original DeepPavlov model:Disasters
-2.Current multitask model(single-label topics): Music
-3.Multilabel multitask model(multi-label topics): []
-Phrase: what is your favourite food
-0.True label - Food
-1.Original DeepPavlov model:Food
-2.Current multitask model(single-label topics): Food
-3.Multilabel multitask model(multi-label topics): [('Food', 0.9769383), ('Leisure', 0.8646069)]
-Phrase: what music do you like
-0.True label - Music
-1.Original DeepPavlov model:Music
-2.Current multitask model(single-label topics): Music
-3.Multilabel multitask model(multi-label topics): [('Music', 0.99813026), ('Celebrities&Events', 0.6034566)]
-Phrase: let's chat about video game minecraft
-0.True label - Videogames
-1.Original DeepPavlov model:Videogames
-2.Current multitask model(single-label topics): Videogames
-3.Multilabel multitask model(multi-label topics): [('Videogames', 0.9819764), ('Movies_TV', 0.8579248), ('Garden', 0.54672825)]
-A HARD EXAMPLE
-Phrase: I love eating animals - PROBLEM!!!!
-1.Original DeepPavlov model:Food
-2.Current multitask model(single-label topics): Animals&Pets
-3.Multilabel multitask model(multi-label topics): [('Animals&Pets', 0.99028605), ('Science_and_Technology', 0.72811055)]
-MULTILABEL EXAMPLES
-Phrase: I love reading but I also enjoy movies
-0.True labels - Books&Literature, Movies_TV
-1.Original DeepPavlov model:Books&Literature
-2.Current multitask model(single-label topics): Books&Literature
-3.Multilabel multitask model(multi-label topics): [('Books&Literature', 0.91005474), ('Movies_TV', 0.5031446)]
-Phrase: porn and religion (problem - label sex_profanity dont'exist in a dataset)
-0.True labels - Religion,Sex_Profanity
-1.Original DeepPavlov model:Religion
-2.Current multitask model(single-label topics): Religion
-3.Multilabel multitask model(multi-label topics): [('Religion', 0.9249734)]
-Phrase: books and games
-0.True labels - Books&Literature, Videogames
-1.Original DeepPavlov model:Religion
-2.Current multitask model(single-label topics): Books&Literature
-3.Multilabel multitask model(multi-label topics): [('Videogames', 0.90740865), ('Books&Literature', 0.6998605)]
-Phrase: I love eating and animals - PROBLEM!!!!
-0.True labels - Food, Animals&Pets
-1.Original DeepPavlov model:Movies&Tv
-2.Current multitask model(single-label topics): Animals&Pets
-3.Multilabel multitask model(multi-label topics): [('Animals&Pets', 0.9883128), ('Science_and_Technology', 0.5036472)]
-Phrase: My Mother is 30 years old and she loves music - PROBLEM!!!!
-0.True labels - Music, Family&Relationships
-1.Original DeepPavlov model:Music
-2.Current multitask model(single-label topics): Music
-3.Multilabel multitask model(multi-label topics): [('Music', 0.99159664)]
-Phrase: I am depressed because I don't have a job
-0.True labels - Job,Depression
-1.Original DeepPavlov model:Job
-2.Current multitask model(single-label topics): Depression
-3.Multilabel multitask model(multi-label topics): []
-Phrase: I have been at the art gallery in Rome, where the weather was sunny
-0.True labels - Art, Travel, Weather_Time - PROBLEMS!!!!
-1.Original DeepPavlov model:Travel,Arts&Hobbies,Weather&Time
-2.Current multitask model(single-label topics): Disasters
-3.Multilabel multitask model(multi-label topics): [('Disasters', 0.52701145)]
-Phrase: I study at school and I have got A grade in my Math class - PROBLEM!!!!
-0.True labels: Education,Math
-1.Original DeepPavlov model:Science&Technology
-2.Current multitask model(single-label topics): Education
-3.Multilabel multitask model(multi-label topics): [('Education', 0.5735995)]
-Phrase: I have bought New shoes and Android smartphone in my leisure time, when I was at the gadget store. - PROBLEM!!!!
-0.True labels:Clothes, Gadgets
-1.Original DeepPavlov model:Science&Technology
-2.Current multitask model(single-label topics): Clothes
-3.Multilabel multitask model(multi-label topics): [('Clothes', 0.6520526)]
-Phrase: I have met a celebrity that have been to space. It is a film star Johny Depp. - PROBLEM!!!!
-0.True labels - Celebrities, Movies_TV
-1.Original DeepPavlov model:Space
-2.Current multitask model(single-label topics): Movies_TV
-3.Multilabel multitask model(multi-label topics): [('Movies_TV', 0.7043735)]
-Phrase: I am depressed because I have cancer and I have no money to visit a doctor - PROBLEM!!!!
-0.True labels - Depression, Health&Medicine
-1.Original DeepPavlov model:Depression
-2.Current multitask model(single-label topics): Depression
-3.Multilabel multitask model(multi-label topics): [('Education', 0.7360731)]
+
+\begin{table}[]
+\caption{Классификация фактоидности. Валидационная выборка соответствовала тестовой.}
+\label{appendix:factoid_tr-ag}
+\begin{tabular}{|c||c|c|c|}
+\hline
+класс & тренировочных примеров & валидационных примеров & тестовых примеров
+\hline
+\hline
+factoid & 2007 & 224 & 224\\
+\hline
+conversational & 1606 & 179 & 179\\ \hline
+\end{tabular}
+\end{table}
+
+
+\begin{table}[]
+\caption{Тематическая классификация DeepPavlov Topics}
+\label{appendix:dpt_tr-ag}
+\begin{tabular}{|c||c|c|c|}
+\hline
+класс & тренировочных примеров & валидационных примеров & тестовых примеров
+\hline
+\hline
+%number of samples & 1806797 & 225849 & 225849 \\ \hline 
+Movies&Tv & 80000 & 10000 & 10000 \\ \hline 
+Space & 80000 & 10000 & 10000 \\ \hline 
+Animals&Pets & 80000 & 10000 & 10000 \\ \hline 
+Gadgets & 80000 & 10000 & 10000 \\ \hline 
+Books&Literature & 80000 & 10000 & 10000 \\ \hline 
+Toys&Games & 80000 & 10000 & 10000 \\ \hline 
+Garden & 80000 & 10000 & 10000 \\ \hline 
+Clothes & 80000 & 10000 & 10000 \\ \hline 
+Art&Hobbies & 80000 & 10000 & 10000 \\ \hline 
+Music & 80000 & 10000 & 9999 \\ \hline 
+Leisure & 80000 & 10000 & 10000 \\ \hline 
+Home&Design & 80000 & 10000 & 10000 \\ \hline 
+Videogames & 80000 & 10000 & 10000 \\ \hline 
+Food & 80000 & 9999 & 10000 \\ \hline 
+Beauty & 80000 & 10000 & 10000 \\ \hline 
+PersonalTransport & 80000 & 10000 & 10000 \\ \hline 
+Religion & 79999 & 10000 & 10000 \\ \hline 
+Depression & 66429 & 8304 & 8303 \\ \hline 
+Travel & 59515 & 7440 & 7439 \\ \hline 
+Health&Medicine & 49014 & 6127 & 6127 \\ \hline 
+Science&Technology & 41595 & 5199 & 5200 \\ \hline 
+News & 38490 & 4811 & 4812 \\ \hline 
+Job & 36342 & 4543 & 4543 \\ \hline 
+Disasters & 32922 & 4115 & 4115 \\ \hline 
+Politics & 16726 & 2090 & 2091 \\ \hline 
+Celebrities&Events & 16498 & 2063 & 2062 \\ \hline 
+Psychology & 16369 & 2046 & 2046 \\ \hline 
+ArtificialIntelligence & 13670 & 1709 & 1709 \\ \hline 
+Family&Relationships & 13550 & 1693 & 1694 \\ \hline 
+Finance & 13444 & 1681 & 1680 \\ \hline 
+Education & 13338 & 1667 & 1667 \\ \hline 
+MassTransit & 9978 & 1247 & 1247 \\ \hline 
+Sports & 8918 & 1115 & 1115 \\ \hline 
+\end{tabular}
+\end{table}
+
+\begin{table}[]
+\caption{Классификация cobot topics. Класс Phatic был удален из обучающей выборки.}
+\label{appendix:ct_tr-ag}
+\begin{tabular}{|c||c|c|c|}
+\hline
+класс & тренировочных примеров & валидационных примеров & тестовых примеров
+\hline
+\hline
+Other          & 32520 & 6952 & 6876 \\ \hline
+Movies\_TV     & 24960 & 5306 & 5416 \\ \hline
+Music          & 25082 & 5417 & 5594 \\ \hline
+SciTech        & 17529 & 3780 & 3793 \\ \hline
+Literature     & 9830  & 2120 & 2155 \\ \hline
+Travel\_Geo    & 12894 & 2702 & 2626 \\ \hline
+Celebrities    & 12112 & 2571 & 2564 \\ \hline
+Games          & 9484  & 2000 & 2018 \\ \hline
+Pets\_Animals  & 13110 & 2819 & 2829 \\ \hline
+Sports         & 8526  & 1880 & 1866 \\ \hline
+Psychology     & 8388  & 1743 & 1760 \\ \hline
+Religion       & 7227  & 1566 & 1644 \\ \hline
+Weather\_Time  & 7120  & 1542 & 1503 \\ \hline
+Food\_Drink    & 10208 & 2222 & 2271 \\ \hline
+Politics       & 5548  & 1183 & 1134 \\ \hline
+Sex\_Profanity & 5214  & 1187 & 1123 \\ \hline
+Art\_Event     & 2972  & 627  & 631  \\ \hline
+Math           & 1631  & 379  & 349  \\ \hline
+News           & 1242  & 259  & 298  \\ \hline
+Entertainment  & 722   & 167  & 155  \\ \hline
+Fashion        & 500   & 86   & 113  \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[]
+\caption{Классификация cobot dialogact topics. Класс Other был удален из обучающей выборки.}
+\label{appendix:dct_tr-ag}
+\begin{tabular}{|c||c|c|c|}
+\hline
+класс & тренировочных примеров & валидационных примеров & тестовых примеров
+\hline
+\hline
+Phatic                   & 27777 & 5879 & 5944 \\ \hline
+Entertainment\_Movies    & 28414 & 6042 & 6037 \\ \hline
+Entertainment\_Books     & 12597 & 2642 & 2734 \\ \hline
+Entertainment\_General   & 10348 & 2229 & 2198 \\ \hline
+Interactive              & 56    & 7    & 13   \\ \hline
+Entertainment\_Music     & 11500 & 2454 & 2481 \\ \hline
+Science\_and\_Technology & 23764 & 5136 & 5106 \\ \hline
+Sports                   & 9234  & 1978 & 1946 \\ \hline
+Politics                 & 1908  & 400  & 386  \\ \hline
+Inappropriate\_Content   & 1861  & 372  & 395  \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[]
+\caption{Классификация cobot dialogact intents}
+\label{appendix:dci_tr-ag}
+\begin{tabular}{|c||c|c|c|}
+\hline
+класс & тренировочных примеров & валидационных примеров & тестовых примеров
+\hline
+\hline
+Information\_DeliveryIntent & 111687 & 23781 & 23732 \\ \hline
+General\_ChatIntent         & 107840 & 23029 & 22735 \\ \hline
+Information\_RequestIntent  & 50865  & 10844 & 10937 \\ \hline
+User\_InstructionIntent     & 13438  & 2889  & 2904  \\ \hline
+InteractiveIntent           & 44     & 7     & 13    \\ \hline
+Opinion\_ExpressionIntent   & 5636   & 1177  & 1142  \\ \hline
+OtherIntent                 & 16982  & 3683  & 3641  \\ \hline
+ClarificationIntent         & 6637   & 1451  & 1434  \\ \hline
+Topic\_SwitchIntent         & 3131   & 700   & 684   \\ \hline
+Opinion\_RequestIntent      & 2119   & 498   & 507   \\ \hline
+Multiple\_GoalsIntent       & 47     & 7     & 3     \\ \hline
+\end{tabular}
+\end{table}
