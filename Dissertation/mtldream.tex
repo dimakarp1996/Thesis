@@ -261,39 +261,54 @@ factoid classification & 0.789(0.809) & 0.794(0.817) & \textbf{0.834(0.831)} & 0
 
 Итоговая многозадачная модель обучалась одновременно для \textbf{девяти} задач. Ниже будет подробно описана каждая из этих задач вместе с обучающим набором данных для этой задачи. 
 \begin{itemize} 
-\item[*]Классификация тональности
+\item[*]\textbf{Классификация тональности}. Для данной задачи использовался набор данных DynaBench(r1+r2)\cite{dynabench}, содержащий \~ 94 тысячи тренировочных примеров. Этот набор данных превосходит по своему размеру более чем в 11 раз используемый ранее набор данных SST\cite{sst}, что помогло уменьшить переобучение модели. Каждый пример принадлежал к одному из трех классов, как и в исходных данных. 
 
+\item[*]\textbf{Классификация фактоидности}. Для данной задачи использовался набор данных YAHOO\cite{yahoo}, аналогичный используемому ранее. В связи с отсутствием оригинальной тестовой выборки, валидационная выборка была разбита напополам, и половина валидационной выборки считалась тестовой. 
+****
+\item[*]\textbf{Классификация интентов MIDAS}. Мы обучали эту модель на наборе данных MIDAS, как и в разделе TODO ВСТАВИТЬ ССЫЛКУ НА РАЗДЕЛ. Как и в этом разделе, мы использовали только семантические классы из набора данных MIDAS, и только данные, имеющие только одну метку. 
 
+Мы использовали данный набор данных  в двух режимах. В первом режиме данных MIDAS использовались с историей (добавление предыдущих фраз к реплике осуществлялось с использованием токена [SEP], как и для задачи \textbf{cobot dialogact topics} при использовании предыдущих многозадачных моделей).
 
-In DREAM, new multitask “9 in 1” model was trained on the following datasets:
-Sentiment classification - on DynaBench (94k samples). Note: in previous multitask models SST was used(8k samples) what led to the overfit. Head is single-label.
-Factoid classification - on YAHOO dataset(3.6k samples) as before. Headl is single-label.
-Emotion classification - on go_emotion dataset(42k samples). Head is single-label, as using multilabel head yielded worse results.(So we used only singlelabel samples.) Note - in previous multitask models custom dataset was used, which also led to overfitting
-Midas classification - on Midas dataset(~9k samples). Head is singlelabel, only semantic classes were used as if in the DREAM now. Note - it is the first time we add this head to the multitask DREAM model!
-Topic classification - on Dilya’s dataset (1.8m samples). Head is single-label, as using multilabel head proved to be inconsistent. Note - this model still is insufficient for passing tests, so we still need Cobot replacement classifiers. Also, class names for this classifier and for Cobot replacement classifiers are different, so special functions for every such topic were added to support this difference.
-Toxic classification - on Kaggle dataset(170k samples). Note - to make the classifier single-label, non_toxic class was added to this dataset, as if in the previous multitask models.
+Так как после того, как все данные в задачах \textbf{cobot} стали использоваться без диалоговой истории, диалоговая история использовалась только для задачи классификации интентов MIDAS, была предпринята попытка обойтись во втором режиме без истории вообще. При обучении модели в данном режиме, качество модели почти не пострадало, а для задачи MIDAS было даже небольшое улучшение(см. Таблицу \ref{tab:tr-ag-dream}). При этом без поддержки истории, можно было использовать в 2 раза меньшую максимальную длину реплики, а также на каждом шаге только один раз прогонять базовую модель перед применением задаче-специфичных линейных слоев(а не два раза - для версии примера с историей и для версии примера без нее). Это позволило дополнительно уменьшить время предсказания на 25 процентов. 
+
+\item[*]\textbf{Классификация эмоций}.Для классификации эмоций мы использовали набор данных \texttt{go\_emotions}\cite{go_emotions}, с объединением всех 28 классов из этого набора до 7 базовых типов эмоций по Экману (ярость, грусть, удовольствие, нейтральная, удивление, отвращение, страх). Данный набор базовых типов соответствовал используемому ранее в диалоговой платформе DREAM, с поправкой на то, что вместо эмоции "отвращение" использовалась эмоция "любовь", но ни для одной из этих двух эмоций не имелось сценарной метрики. Замена использовавшегося ранее набора данных для классификации эмоций на \texttt{go\_emotions} помогла уменьшить уровень переобучения модели. 
+%multilabel = многометочный? 
+ Набор данных go\_emotions содержал 42 тысячи тренировочных примеров, из которых 39.5 тысячи имели одну метку, оставшиеся - более, чем одну. 
+
+Добавление примеров, имевших больше чем 1 метку, в данные (и соответственно, обработка выхода базовой модели, как для multilabel задач) ухудшало результаты для singlelabel примеров. Это ухудшение носило стойкий характер - оно сохранялось и для моделей, обученных только на go\_emotions, причём подбор границы для multilabel классификации по валидационному набору данных не помог убрать это ухудшение. Даже если для каждого из классов go\_emotions считать отдельной задачей определение вероятности того, принадлежит ли пример к тому или иному классу, это всё равно не помогало уменьшить ухудшение: как при объединении меток эмоций с оригинальных 28 до 7, так и без такого объединения. 
+В связи с этим автор диссертационной работы использовал для данной задачи исключительно примеры, имеющие только одну метку. И задача считалась singlelabel. 
+%TODO - никаких "мы использовали" нигде
+ \item[*]\textbf{Классификация токсичности}. Для задачи классификации токсичности использовался тот же набор данных \cite{toxic_kaggle}, что и в предыдущем разделе. Данный набор имел 1.62 миллиона тренировочных примера. Данные преобразовывались к singlelabel формату, как и в предыдущем разделе. 
+\item[*]\textbf{Тематическая классификация}. Для задачи тематической классификации использовался набор данных \texttt{DeepPavlov Topics}\cite{dp_topics}, содержащий 1.8 миллионов тренировочных примеров. Каждый из примеров относится к одному из 33 классов. Соответственно, задача считалась singlelabel - попытки считать эту задачу multilabel приводили только к ухудшению качества модели. 
+К сожалению, реализации тематической классификации исключительно на основании этого набора данных всё еще не хватало для того, чтобы многозадачная модель проходила тесты. Это было связано с двумя вещами. Во-первых, набор данных \texttt{DeepPavlov Topics} не покрывает некоторые классы, присутствующие в классификаторах\texttt{Cobot Topics} и \texttt{Cobot DialogAct Topics} ( Weather\_Time, Sex\_Profanity, Inappropriate\_Content). Во-вторых, даже по тем классам, которые соотносились с классами \texttt{Cobot Topics} и \texttt{Cobot DialogAct Topics}, основная часть примеров в \texttt{DeepPavlov Topics} были существенно длиннее, чем в этих двух наборов данных. А сами примеры были взяты из текстов, а не из диалоговой речи. В связи с этим, в многозадачной трансформер-агностичной модели в диалоговой платформе DREAM одна голова, обученная на \texttt{DeepPavlov Topics}, отвечает за задачу тематической классификации в рамках номенклатуры этого набора данных, а три другие головы, обученные на \texttt{Cobot Topics}, \texttt{Cobot DialogAct Topics} и \texttt{Cobot DialogAct Intents} - за классификацию в рамках соответствующих задач. При этом для каждой из этих задач ее набор данных претерпел изменения, описанные ниже
+\item[*]\textbf{Cobot topics}. Обучение для данного набора данных производилось на наборе данных DREAM-2,полученном из используемого ранее набора данных DREAM следующим образом. 
+Во-первых, все multilabel примеры были преобразованы в singlelabel с оставлением только наиболее редко встречаемого класса. Это позволило улучшить качество обучающей выборки, в основном в связи с тем, что до данного изменения основная часть multilabel примеров имела вид (класс-исключение, обычный класс),где класс-исключение - это Phatic либо Other. Во-вторых, из данного набора был убран наиболее встречаемый класс-исключение (Phatic), так как даже модель, обученная только на singlelabel версии данного набора данных, слишком часто путала его с другими классами(что было видно по матрице ошибок). \footnote{Была также попытка убрать из данного набора данных не один класс-исключение, а оба, но это изменение только понизило качество модели.}
+Оба этих изменения понизили вероятность переобучения модели на "классы-исключения", улучшив ее качество на реальных задачах. Итоговый размер тренировочной выборки составил около 216 тысяч примеров. 
+
 Cobot topics - on the private DREAM-2 dataset, from which one the most frequent “garbage” class (Phatic) was excluded, and all multilabel examples were converted to the single-label format. All these measures made model less likely to overfit on the “garbage” classes, thus improving it’s quality on the real-world data. Cleaned dataset size: 216k samples
-Примечание 2. Была неудачная попытка убрать из cobot topics классы Phatic и Other, и использовать Other как класс-исключение, если вероятности всех классов слишком малы. Идея не сработала ( 0.729<0.806)
+Была неудачная попытка убрать из cobot topics классы Phatic и Other, и использовать Other как класс-исключение, если вероятности всех классов слишком малы. Идея не сработала ( 0.729<0.806)
 2)Все multi-label примеры были приведены к single-label формату. Для каждого примера ( где метка - Коботовское предсказание) выбирался самый редкий класс. Это было связано с тем, что во-первых, multilabel встречался в нескольких процентах случаев, а во-вторых, с тем, что даже в этих нескольких процентах он, как правило, был вида нормальны класс+мусорный класс, т.е по сути он учил модель оверфититься на мусорные классы other/phatic.
 3)Для всех utterances, которые могли в имевшемся коботовском датасете(фраза+история из 3 реплик) быть классифицированы разным способом в зависимости от своей истории (что налюбдалось лишь для ~3% примеров) выбирался наиболее часто встречаемый класс после приведению к пункту 2. Примеры, где этот самый часто встречаемый класс относился к пункту 1, исключались.
 4)Был переразбит датасет в соотношении 70/15/15 - 70 процентов тренировочных примеров, 15 тестовых, 15 валидационных.
+% TODO - заглавные буквы в названиях коботовских датасетов! Единообразно
+\item[*]\textbf{Cobot dialogact topics}. Мы обучали модель для решения этой задачи на непубличном наборе данных DREAM-2. Данный набор данных был получен из  описанного в предыдущем разделе практически тем же способом, что и \texttt{Cobot topics} : точно так же все примеры были приведены к singlelabel формату, точно так же и по той же самой причине был исключен наиболее часто встречаемый "класс-исключение" (Other).
+ Единственным отличием было то, что, так как наборы данных для задач \texttt{Cobot DialogAct Topics} и \texttt{Cobot DialogAct Intents} содержали историю, из них она была удалена. Данное изменение повлияло только на три процента примеров из набора, которые могли классифицироваться по-разному в зависимости от своей истории. Для каждого из этих примеров был выбран наиболее часто встречаемый класс после приведения к singlelabel формату. 
+on the private DREAM-2 dataset, from which one the most frequent “garbage” class (other) was excluded, all multilabel examples were converted to the single-label format, and history support was also removed. All these measures made model less likely to overfit on the “garbage” classes, thus improving it’s quality on the real-world data. Cleaned dataset size: 127k samples
 
-Cobot dialogact topics - on the private DREAM-2 dataset, from which one the most frequent “garbage” class (other) was excluded, all multilabel examples were converted to the single-label format, and history support was also removed. All these measures made model less likely to overfit on the “garbage” classes, thus improving it’s quality on the real-world data. Cleaned dataset size: 127k samples
-Cobot dialogact intents - on the private DREAM-2 dataset, from which all multilabel examples were converted to the single-label format, and history support was also removed. All these measures made model less likely to overfit on the “garbage” classes, thus improving it’s quality on the real-world data. Cleaned dataset size: 318k samples
-There also were tried the ideas of improving architecture: using task_specific tokens in concatenation with the CLS for classification, or instead of the CLS. Which was not successful. However, increasing of the batch size from 32 to 640(for distil model) or 320(for ordinary model) yielded an improvement. 
+\item[*]\textbf{Cobot dialogact intents}. Мы обучали модель для решения этой задачи на непубличном наборе данных DREAM-2. Данный набор данных был получен из описанного в предыдущем разделе набора данных DREAM тем же способом, что и для \textbf{Cobot dialogact topics} - с поправкой на то, что мы не исключали "мусорный" класс из данных, так как матрица ошибок для классификатора, обученного на singlelabel данных только для этой задачи, показала, что нет таких пар классов, которые модель слишком часто "путает" друг с другом, и значит, необходимости в этом нет. Размер очищенного набора данных:318 тысяч примеров. 
 
-In the setting of 25-12-2022, only midas classifier utilized history. Training the model without history from scratch, almost didn;t impact performance and paradoxically yielded some improvement for Midas(setting 3 VS setting 2). And it allowed to use 2x less max sequence length and have only 1 model prediction to cache, which decreased the prediction time from 0.73 sec to 0.55 sec
+Также наборы \texttt{Cobot Topics}, \texttt{Cobot DialogAct Topics} и \texttt{Cobot DialogAct Intents} были переразбиты в соотношении 70/15/15 - 70 процентов тренировочных примеров, 15 тестовых, 15 валидационных.
 
+Мы приводим размеры наборов данных для каждой из задач в Аппендиксе \ref{Appendix:dream-tr-ag-sizes}. 
 
-
-For the sake of achieving the best trade-off between the memory use, inference time and test metrics, the model in green (Multitask, distilbert base uncased, batch 640) was used. It is now merged to dev.
-We show the results below.
-TODO ВСТАВИТЬ ТАБЛИЦУ. 
+В целях достижения наилучшего баланса между использованием памяти, временем предсказания и тестовыми метриками, в диалоговую платформу DREAM была встроена многозадачная модель distilbert-base-uncased, обучавшаяся на размере батча 640.
+Мы приводим результаты в таблице \ref{tab:tr-ag-dream} 
+%TODO  ВСТАВИТЬ ТАБЛИЦУ 
 
 \begin{table}[htbp]
 \centering
 \caption {Точность(f1) для оценки моделей в третьей серии экспериментов. Для не-Коботовских задач при оценке используются оригинальные тестовые наборы данных, для коботовских - тестовое разбиение данных.}
-\label{mtldream:5}% label всегда желательно идти после caption
+\label{tab:tr-ag-dream}% label всегда желательно идти после caption
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{|c||c|c|c|c|c|c|c|}
 \hline
@@ -317,11 +332,14 @@ factoid classification & 0.789(0.809) & 0.794(0.817) & \textbf{0.834(0.831)} & 0
 \end{tabular}
 }
 \end{table}
-
-New multitask: GPU memory economy
+\subsection{Экономия памяти GPU, CPU и быстродействия} 
+Использование многозадачной трансформер-агностичной модели в диалоговой системе DREAM позволило достичь существенной экономии всех видов вычислительных ресурсов. Так
 If we treated absolutely all models as singletask, 6 models that are being replaced by the current combined classifier in DREAM(emo,toxic,sentiment and 3 cobot models) would have taken ~3500*6 ~ 21000 Mb of the GPU memory. Midas classifier would have taken ~3500 Mb of the GPU memory, as it takes in current dev.  We don’t count topic classifier model as it is unclear what kind of singletask topic classifiers we would have used. If we would have used distilbert-like topic classifier, it would have taken ~2418 Mb of the GPU memory. In this case, replacements of all singletask models would have taken ~27000 Mb of the GPU memory.  Compared to this setting, our Multitask gives ~91% GPU memory economy. 
 This economy is caused by the replacement of many BERTs by one BERT, and also by the transformer-agnosticity that helped to quickly add distilbert-base-uncased instead of the BERT-base-uncased.
 CPU memory use for the multitask model: 2909 Mb. If treating absolutely all models as singletask, the economy estimate is 2594*8 + 2594*0.6 = 22308 Mb. Compared to this seitting, our Multitask gives ~87% CPU memory economy.
-Compared to the previous dev ( where multitask 6in1 bert-base is already used), our multitask gives ~75% GPU memory economy, ~57% CPU economy and ~80-85% postannotation inference time economy. (Inference time economy is due to the fact that current multitask is much faster than Midas thanks to the transformer-agnosticity, and we no longer need to use them both).
+Таким образом, даже по сравнению с предыдушей
+По сравнению с классификаторами в версии диалоговой платформы DREAM до внедрения многозадачной трансформер-агностичной модели (т.е основанной на модели PAL-BERT) многозадачная трансформер-агностичная модель дала экономию видеопамяти в 75 процентов, экономию оперативной памяти в 57 процентов и экономию времени на классификацию в 80-85 процентов. 
+Такая большая экономия времени на классификацию связана с эффектом от трансформер-агностичности. Если при использовании PAL-BERT для каждой задачи было необходимо получать предсказания многозадачной модели "с нуля", даже если Роль сыграло и то, что для задачи классификации интентов MIDAS больше не требовался отдельный классификатор. 
+Compared to the previous dev ( where multitask 6in1 bert-base is already used), our multitask gives ~75% GPU memory economy, ~57% CPU economy and ~80-85% postannotation inference time economy. (Inference time economy is due to the fact that current multitask is much faster than Midas thanks to the transformer-agnosticity, and we no longer need to use them both). And due to the caching of features that was allowed by transformer agnosticity
 
 TODO UPDATE THE TABLES WITH DATA SIZES IN APPENDIX OLD->NEW
