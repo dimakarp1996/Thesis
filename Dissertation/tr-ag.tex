@@ -204,11 +204,11 @@ begin{table*}
 
 \begin{figure}
 \centering
-\caption{Average accuracy for the five dialog tasks. Impact of reducing training data. Averaged by five runs.}
+\caption{Средняя точность для англоязычных диалоговых задач. Эффект уменьшения тренировочных данных. Результаты усреднены по пяти запускам.}
 \begin{tikzpicture}
 \label{fig:mtl_dialog_part}
-\begin{axis}[xlabel = Percentage of training data used,
-ylabel = Average accuracy,
+\begin{axis}[xlabel = Процент используемых тренировочных данных,
+ylabel = Средняя точность,
 legend pos= south east,
 % width=10cm,
 % height=10cm,
@@ -230,7 +230,7 @@ legend style={nodes={scale=0.7, transform shape}}
 (10, 75.9)%300
 (15, 77.4)
 };
-\addlegendentry{Multitask}
+\addlegendentry{Многозадачные модели}
 \addplot[color=green,dashed,mark=*] coordinates {
 (2, 44.9)%50
 (3, 59.6)%100
@@ -242,7 +242,7 @@ legend style={nodes={scale=0.7, transform shape}}
 (10,77.1)
 (15, 78.5)
 };
-\addlegendentry{Singletask}
+\addlegendentry{Однозадачные модели}
 \end{axis}%
 \end{tikzpicture}%
 \end{figure}
