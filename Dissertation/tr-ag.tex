@@ -55,87 +55,89 @@
 Еще одно преимущество многозадачной трансформер-агностичной модели, которое в рамках этой работы еще не было раскрыто до конца, заключается в том, что она поддерживает больший спектр задач. В частности, она (в реализации на момент написания диссертационной работы) поддерживает такие задачи, как распознавание именованных сущностей или выбор из нескольких вариантов ответа, которые невозможно реализовать в рамках модели с одним линейным слоем. 
 
 
-\section{Datasets}
+\section{Наборы данных}
+
+Исходя из специфики прикладного применения диалоговой платформы DREAM, было выбрано пять ключевых диалоговых задач для исследования переноса знаний. Это классификация эмоций, классификация токсичности, классификация тональности, классификация интентов и тематическая классификация. Так как одной из задачей диссертационной работы являлось исследование межъязыкового переноса знаний, было подготовлено по два набора данных для каждой из этих задач: русскоязычный и англоязычный набор. Отдельно обращаю внимание, что для классов, одинаковых в русском и английском языке, индексы соответствующих используемых моделью классов были тоже одинаковыми. Размеры каждого из наборов данных по классу и разбиению приведены в Аппендиксе \ref{appendix:tr-ag_sizes}. 
+
+Ниже подробно описаны наборы данных для каждой из диалоговых задач. 
+
+\subsection{Классификация эмоций}
+\subsubsection{Англоязычный набор данных} 
+В качестве англоязычного набора данных для классификации эмоций, использовался набор данных  \texttt{go\_emotions}~\cite{emotions}. Этот набор данных состоит из коротких комментариев из Реддита \footnote{\url{http://reddit.com}}, таких, как \textit{LOL. Super cute!} или \textit{Yikes. I admire your patience}. Все эмоции из данного набора данных были сгруппированы в семь типов по Экману, а именно \textit{anger}, \textit{fear}, \textit{disgust}, \textit{joy}, \textit{surprise}, \textit{sadness}, и \textit{neutral}. 
+
+После такой группировки, были выбраны только примеры, содержащие только одну метку. Исследование возможностей улучшения классификации таких примеров за счет использования примеров, содержащих более чем одну метку, успехом не увенчалось - подробнее эти попытки описаны в разделе \ref{ch:mtldream:failed_emo_attempts}. 
+
+Примерно 80 процентов данного набора данных, а именно около 39.5 тысяч примеров, составляли тренировочные данные. Размер валидационной выборки примерно равнялся размеру тестовой. 
+
+\subsubsection{Русскоязычный набор данных} 
+В качестве русскоязычного набора данных для классификации эмоций, использовался набор данных \texttt{CEDR}~\cite{ru_emotions}\footnote{Набор данных был получен по адресу \url{https://huggingface.co/datasets/cedr}}. Примеры из этого набора могут принадлежать пяти классам - \textit{anger}, \textit{fear}, \textit{joy}, \textit{surprise}, and \textit{sadness}. Помимо этого, примеры из этого набора могут принадлежать более чем одному классу или (в отличие от \texttt{go\_emotions}) не принадлежать ни к какому классу. 
+
+При подготовке набора данных, примеры, которые не принадлежат ни одному классу, были обозначены как принадлежащие классу \textit{neutral}, после чего были выбраны только примеры, принадлежащие одному классу. Соответственно, номенклатура такого набора данных была такая же, как и у англоязычного набора данных, с поправкой на отсутствие класса \textit{disgust}. Впрочем, так как примеров из этого класса и в англоязычном-то наборе данных было меньше, чем 1.5\%, на перенос знкний это сильно не повлияло. 
+
+В оригинальной работе набор данных CEDR ыюбыл разбит только на тренировочную и тестовую выборки в соотношении 80/20. В целях получения полноценной валидационной выборки, 12.5\% тренировочных примеров из CEDR было выделено как валидационный набор данных. Финальный размер тренировочных русскоязычных данных составил около 6.5 тысяч примеров.
+ % TODO проверить
 
 
-We explored the performance of the multi-task mode from the subset of datasets necessary for the dialog systems~\cite{wochat,lrec}. We trained models on datasets for five problems, i.e emotion classification, toxicity classification, sentiment classification, intent classification, and topic classification. Due to the scope of our work, we prepared a Russian-language dataset and an English-language dataset for every task. We note that for the Russian-language dataset and the English-language dataset, the indexes of the same classes used by the models were also the same. The sizes of all datasets by class and split can be found in Appendix. 
+\subsection{Классификация тональности}
 
-\subsection{Emotion classification }
+\subsubsection{Англоязычные данные} 
+В качестве англоязычного набора данных для классификации тональности, использовался набор данных \texttt{DynaSent}(r1)~\cite{sentiment} for the sentiment classification. Чтобы не переусложнять набор данных по сравнению с русскоязычными данными, использовались только примеры из первого этапа сбора данных DynaSent. В данном наборе данных есть 80.5 тренировочных примеров, разделенных на три класса - positive, negative, neutral. 
 
-As an English language dataset, we used dataset \texttt{go\_emotions}~\cite{emotions} for the emotion classification. We used Ekman-grouped emotions, grouping them into seven types, i.e \textit{anger}, \textit{fear}, \textit{disgust}, \textit{joy}, \textit{surprise}, \textit{sadness}, and \textit{neutral}. After such grouping, we selected only single-label examples. There were 39.5k such training examples. The train/test/validation split of this dataset was approximately 80/10/10.
-
-
-For the emotion classification, we used the \texttt{go\_emotions}~\cite{emotions} dataset. This dataset consists of short comments from Reddit, such as \textit{LOL. Super cute!} or \textit{Yikes. I admire your patience}. We have grouped all emotion classes from this dataset into seven Ekman types, i.e \textit{anger}, \textit{fear}, \textit{disgust}, \textit{joy}, \textit{surprise}, \textit{sadness}, and \textit{neutral}. After such grouping, we selected only single-label examples. We leave exploring multi-task learning with the multilabel data for future research. - ВСТАВИТЬ ИЗ ТОГО РАЗДЕЛА ЧТО НЕ ВЫШЛО
-
-As a Russian language dataset, we used for this task dataset \texttt{CEDR}~\cite{ru_emotions}\footnote{We retrieved this dataset from the URL \url{https://huggingface.co/datasets/cedr}}. This dataset has 5 classes - \textit{anger}, \textit{fear}, \textit{joy}, \textit{surprise}, and \textit{sadness} - but the samples from this dataset can belong to more than 1 class or (unlike \texttt{go\_emotions}) belong to no class. 
-
-From this dataset, we selected only examples that belong to 1 class or that have no class, labeling no-class examples as \textit{neutral}. The class nomenclature of this dataset was almost the same as for the English dataset, except for the \textit{disgust} class. Nonetheless, as \textit{disgust} examples comprised less than 1.5\% of the English training samples, it didn't impact knowledge transfer much.
-
-The work~\cite{ru_emotions} provided only the train-test split of the \texttt{CEDR} dataset, which is 80/20. We singled out 12.5\% of the training examples from CEDR as the validation set. 
-
-\subsection{Sentiment classification}
-
-As an English language dataset, we used dataset \texttt{DynaSent}(r1)~\cite{sentiment} for the sentiment classification. We used only examples from the first found of the collection, to match the Russian data by difficulty. This single-label dataset with 80.5k training samples has three classes - positive, negative, and neutral. One can contend that classes from the \texttt{go\_emotions} dataset can be grouped by sentiment, as proposed by the work~\cite{emotions}, but also by emotions. However, our experiments show that augmentation of the sentiment dataset with such samples decreases the metrics rather than increasing them. That shows that these datasets are sufficiently different to be used separately, as sentiment-grouping of the emotion dataset is too rough. This dataset has 3.6k validation samples and the same number of test samples. 
-
-As a Russian language dataset, we used the dataset \texttt{RuReviews}~\cite{ru_sentiment} of the product reviews from the large Russian e-commerce website, from the "Women’s Clothes and Accessories" category. Even though this dataset is domain-specific, we chose it because it is open source and it has a relatively large size. As the train/validation/test split of this dataset was not provided, we used the same split that exists for the \texttt{DynaSent}(r1) dataset. 
-For the sentiment classification, we utilized \texttt{DynaSent}(r1)~\cite{sentiment} dataset. It contains naturally occurring sentences. i.e. \textit{Need a cheap spatula?} There are three classes in this balanced multi-class dataset -- \textit{positive},  \textit{negative}, and \textit{neural}. % One can contend that classes from the \texttt{go\_emotions} dataset can be grouped by sentiment, as proposed in~\cite{emotions}, but also by emotions. However, our experiments show that augmentation of the sentiment dataset with such samples decreases the metrics rather than increasing them. That shows that these datasets are sufficiently different for separate use, as sentiment-grouping of the emotion dataset is too rough. 
-
+\subsubsection{Русскоязычные данные} 
+В качестве русскоязычного набора данных для классификации тональности, использовался набор данных \texttt{RuReviews}~\cite{ru_sentiment}. Данный набор данных содержит отзывы из крупного российского электронного магазина из категории "Женские товары и ассексуары". Данный набор данных был выбран, потому что он имеет достаточно большой размер(82.6 тысяч тренировочных примеров) и находится в открытом доступе, несмотря на свою специфичность. Так как авторы набора данных не предоставили его разбиение на тренировочные, валидационные и тестовые данные, он был разбит на эти три категории в тех же пропорциях, что и у набора данных
+ \texttt{DynaSent}(r1). 
 
 \subsection{Классификация токсичности}
-
-Для английского языка в работе использовался набор данных  \texttt{Wiki Talk}~\cite{toxic} для задачи классификации токсичности. В этом наборе данных, состоящем из комментариев из Википедии, есть всего два класса: \textit{toxic} и \textit{not toxic}. К первому классу относится примерно 10 процентов примеров (часть из которых слишком неблагозвучна для того, чтобы приводить их в диссертации). Ко второму классу, соответственно, примерно 90 процентов.  В работе использовалась предобработанная версия набора данных, предоставленная HuggingFace\footnote{\url{https://huggingface.co/datasets/OxAISH-AL-LLM/wiki_toxic}}. Данная версия подверглась незначительной очистке - к примеру, если какая фраза начиналась и заканчивалась с кавычек, эти кавычки удалялись. 
-... ДОДЕЛАТЬ
-Для русского языка в работе использовался двухклассовый набор данных \texttt{RuToxic} ~\cite{ru_toxic}. Этот  %! (of toxic comments from the largest Russian anonymous imageboard Dvach\footnote{Link to the imageboard: \url{http://2ch.hk}}. This dataset originally had ~162k training samples. As the authors didn't provide the original split in their repository\footnote{Russian toxicity dataset was retrieved from \url{https://github.com/s-nlp/rudetoxifier}}, we split this dataset in the same proportions as the split proportions of the Wiki Talk dataset.
+\subsubsection{Русскоязычный датасет} 
+Для английского языка в работе использовался набор данных  \texttt{Wiki Talk}~\cite{toxic} для задачи классификации токсичности. В этом наборе данных, состоящем из комментариев из Википедии и имевшем примерно 127.6 тысяч тренировочных примеров, есть всего два класса: \textit{toxic} и \textit{not toxic}. К первому классу относится примерно 10 процентов примеров (часть из которых слишком неблагозвучна для того, чтобы приводить их в диссертации). Ко второму классу, соответственно, примерно 90 процентов.  В работе использовалась предобработанная версия набора данных, предоставленная HuggingFace\footnote{\url{https://huggingface.co/datasets/OxAISH-AL-LLM/wiki_toxic}}. Данная версия подверглась незначительной очистке - к примеру, если какая фраза начиналась и заканчивалась с кавычек, эти кавычки удалялись.  
+%CHECK SIZES
+\subsubsection{Англоязычный датасет}
+Для русского языка в работе использовался двухклассовый набор данных \texttt{RuToxic} ~\cite{ru_toxic}. Этот набор данных состоял из комментариев из Двача, крупнейшего русскоязычного анонимного форума \footnote{\url{http://2ch.hk}}. Набор данных состоит из примерно 162 тысяч примеров, примерно 31 тысяча из которых - токсичные. Так как авторы не предоставили оригинальное разбиение данных в своем репозитории\footnote{Ссылка на репозиторий: \url{https://github.com/s-nlp/rudetoxifier}}, датасет был разбит на тренировочную, валидационную и тестовую выборку в тех же пропорциях, что и англоязычный датасет. Итоговая тренировочная выборка содержала примерно 93.3 тысячи примеров. 
 
 \subsection{Классификация интентов и тематическая классификация }
-%TODO. Набор данных - - датасет? Топик - тема? 
+%TODO. Набор данных - - датасет? Топик - тема? Единообразно сделать
 Мы использовали набор данных \texttt{MASSIVE}~\cite{massive} для классификации интентов и для тематической классификации как для русского, так и для английского языка. Этот набор данных основан на англоязычном наборе данных SLURP\cite{clurp}, содержащем фразы, предназначенные голосовому ассистенту. 
  Все примеры из этого набора данных были одновременно размечены(с адаптацией под национальные особенности) для 51 языка, включая русский и английский. Этот набор данных содержит для каждого языка 11514 тренировочных примера, 2033 валидационных примера и 2974 тестовых примера. Каждый пример принадлежит одному из 60 интентов и одной из 18 тем. 
 
+Для каждой задачи, число примеров для каждого класса в тренировочных, валидационных и тестовых данных приведено в Аппендиксе \ref{appendix:sizes_tr-ag} 
+% TODO. Как смотрится ссылка? 
 
 \section {Настройки экспериментов}
+%TODO. Беты единообразно
+%TODO. Почему не тюним скорость обучения? Васю спросить о ссылке на статью
+Для всех описанных в данной статье экспериментов, автор работы использовал оптимизатор AdamW~\cite{adam} с  $\beta_1$=0.9, $\beta_2$=0.99 и начальной скоростью обучения 2e-5. В качестве метрики, определяющей остановку обучения, использовалась средняя точность для всех задач\footnote{Или точность для одной задачи, если модели обучались в однозадачном режиме.}. Если на валидационных данных средняя точность не росла в течение двух эпох подряд, скорость обучения уменьшалась в два раза. Если на валидационных данных средняя точность не росла в течение трех эпох подряд, обучение прекращалось. В качестве итоговой версии модели, выбиралась модель с наилучшей средней точностью на валидационных данных. 
 
-Для всех 
-For all the experiments described in this article, the optimizer was AdamW~\cite{adam} with betas (0.9, 0.99), and the learning rate was 2e-5.%Ask Vasily for an article that proves that we should not tune the learning rate
-We used average accuracy for all tasks as an early stop metric. The training had a validation patience of 3, and the learning rate was halved if the early stopping metric did not improve for 2 epochs. 
+Как правило, обучение завершалось в течение менее, чем 10-15 эпох, и всегда - в течение менее, чем 25 эпох. 
 
-The training was usually completed in fewer than 10-15 epochs and never exceeded 25 epochs.% , even though the maximal number of epochs was equal to 100. 
-We have set the batch size to 160 to speed up the computations. For all the multi-task experiments, we used plain sampling (the probability of sampling an example from the dataset was proportional to the dataset size). 
-% Additionally, we explored the impact of using different sampling methods for multi-task training. We report only the results from the experiments when sampling was plain (the probability of sampling an example from the dataset was proportional to the dataset size). Annealed sampling~\cite{PAL:19} and uniform sampling did not make any improvement over plain sampling in our preliminary experiments.
-Мы приводим результаты для каждого запуска в Аппендиксе. TODO = ВСТАВИТЬ ИХ ТУДА
+Размер батча при тренировке моделей был выбран равным 160 для того, чтобы максимально быстро проводить серии экспериментов на доступных в рамках Лаборатории нейронных сетей и глубокого обучения МФТИ вычислительных мощностях - видеокартах Nvidia GeForce 1080 Ti и Tesla A100. 
+%TODO названия видеокарт
+При обучении, примеры для каждой задачи выбрались с вероятностью, пропорциональной размеру её набора данных. Ниже подобный способ выбора примеров будет обозначаться как простое сэмплирование. Были также проведены предварительные эксперименты(на русскоязычных и англоязычных дистиллированных моделях, на полной обучающей выборке) с выбором других способов сэмплирования: а именно однородного (с одинаковой вероятностью выбора примера для каждой из задач) и аннеализованное(описанное в \cite{PAL:19}). Данные эксперименты не показали стойкого улучшения показателей по сравнению с простым сэмплированием, поэтому использовалось именно оно. 
 
+Результаты всех экспериментов на диалоговых данных были усреднены по 3-5 запускам\footnote{ Для каждого из таких запусков, отличалась инициализация задаче-специфичных слоев и параметр random seed при сэмплировании.}. Подробные результаты для каждого запуска приведены в Аппендиксе \ref{appendix:tr-ag:allruns}. 
 
-For all the experiments described in this article, the optimizer was AdamW~\cite{adam} with betas (0.9, 0.99), and the learning rate was 2e-5. 
-We used average accuracies for all tasks as an early stop metric. The training had validation patience 3, and the learning rate was dropped by 2 times if the early stopping metric did not improve for 2 epochs. 
+\section{Многозадачные и однозадачные модели - эксперименты на полном наборе данных} 
+% TODO BACKBONE ВИДЕОПАМЯТЬ ТЕРМИНЫ
+Для английского языка, проводились эксперименты на трех разных базовых моделях типа BERT: \textit{distilbert-base-cased}~\cite{alina}, \textit{bert-base-cased}, И \textit{bert-large-cased}~\cite{bert}.  Эти три модели существенно различаются по объему потребляемых вычислительных ресурсов. Так, 
+\textit{distilbert-base-cased} требует на 40\% меньше видеопамяти, чем \textit{bert-base-cased}, а \textit{bert-large-cased} требуетзанимает в  3.1 раза больше видеопамяти, чем \textit{bert-base-cased}. Таким образом, эти три базовые модели покрывают большое количество разных способов использования нейросетевых классификаторов для диалоговых моделей. 
 
-The training was usually completed in fewer than 10-15 epochs and never exceeded 25 epochs, even though the maximal number of epochs was set to 100.
+Для русского языка, эксперименты проводились с базовыми моделями \textit{DeepPavlov/distilrubert-base-cased-conversational}~\cite{distilrubert} and \textit{DeepPavlov/rubert-base-cased-conversational}~\cite{rubert}.
 
-We set the batch size to 160. We had also tried batch size 32, and the metrics for batch size 160 were just insignificantly better. However, the article ~\cite{tuning_neural_networks} claims that this difference can be eliminated by better finetuning. Anyway, we finally chose batch size 160 because the computations with batch size 160 were performed several times faster.
+Результаты экспериментов на описанных выше диалоговых данных для англоязычных и русскоязычных моделей приведены в Таблице \ref{tab:tr-ag:en_results} и Таблице \ref{tab:tr-ag:ru_results} соответственно. Для каждого эксперимента, приведена точность и усредненное macro-f1.
+% TODO Average F1 macro? Как говорится? 
 
-In the preliminary multi-task experiments, apart from the plain sampling (a sampling mode where the example sampling probability is proportional to the task size), we also tried annealed sampling~\cite{PAL:19} and uniform sampling (the same sampling probability for all tasks). We performed such experiments for Russian and English distilbert-like models, for Russian and English tasks. The results for these sampling modes did not bring out a noticeable improvement, thus we used only plain sampling.
+Другой важной исследовательской задачей является оценка многозадачной трансформер-агностичной модели на других типах задач и данных, отличающихся от приведенных выше. В целях решения данной задачи, автор также провел аналогичные эксперименты для англоязычных моделей на бенчмарке GLUE\cite{GLUE:19} с теми же самыми гиперпараметрами \footnote{В связи с тем, что результаты на бенчмарке GLUE оценивается на сервере, у которого есть жесткие ограничения на то, сколько раз подряд можно отправлять свои результаты, усреднение по нескольким запускам на бенчмарке GLUE не проводилось.}. Результаты этих экспериментов представлены в таблице \ref{tab:tr-ag:glue} .
 
-We averaged all the experiment results by three runs. %\footnote{The results for every run can be found at \url{https://github.com/dimakarp1996/Dialogue2023/AllRuns.pdf}. We include also the source code at \url{https://github.com/dimakarp1996/Dialogue2023/source_code.zip}}.
-
-
-\subsection{Single-task vs Multi-task: full data}
-
-We performed experiments on three different BERT-based backbones: \textit{distilbert-base-cased}~\cite{alina}, \textit{bert-base-cased}, and \textit{bert-large-cased}~\cite{bert}. While \textit{distilbert-base-cased} takes 40\% less memory than \textit{bert-base-cased}, \textit{bert-large-cased} takes 3.1 times as much memory as \textit{bert-base-cased}. These three backbones cover a large variety of possible cases of using neural classifiers for dialog models. %Is it ok or maybe we need to use the short names somewhere?
-
-We also compared every such experiment with analogous single-task experiments (with all the same hyperparameters). All such experiments are presented in Table~\ref{tab:mtl_dialog}. We have averaged results for three restarts with different random seeds.
-
-We have performed similar experiments on the GLUE benchmark with the same hyperparameters.
-% \footnote{We also explored different hyperparameters(batch size 32, 5 training epochs, uncased backbones) and it did not significantly alter the results.} 
-Table~\ref{tab:mtl_glue} presents the results of these experiment series. For every experiment, we report accuracy / macro-averaged F1.
+Для всех таблиц в этой главе Acc означает точность, F1 метрику F1, режим S означает отдельную модель для каждую из задач и режим M многозадачную модель. "Число батчей" означает число батчей, которые видела модель при своем обучении.
 
 \begin{table*}
- \caption{Metrics for five dialog tasks. Acc stands for accuracy, F1 stands for F1 score, mode S stands for single-task, and mode M stands for multi-task(with plain sampling). Averaged by three runs.}
- \label{tab:mtl_dialog}
+ \caption{Метрики англоязычных моделей (точность/f1 macro) для пяти англоязычных диалоговых задач.Режим S означает однозадачные модели, режим M означает многозадачные модели. Усреднено по трем запускам.}
+ \label{tab:tr-ag:en_results}
 \centering
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{c|c|c|c|c|c|c|c|c}
 \hline
-\multirow{2}{*}{Model} & \multirow{2}{*}{Mode} & \multirow{2}{*}{Average} & Emotions & Sentiment & Toxic & Intents & Topics & Batches \\
-& & & 39.4k & 80.5k & 127.6k & 11.5k & 11.5k & seen \\ \hline
+\multirow{2}{*}{Модель} & \multirow{2}{*}{Режим} & \multirow{2}{*}{Среднее} & Эмоции & Тональность & Токсичность & Интенты & Темы & Число \\
+& & & 39.4k & 80.5k & 127.6k & 11.5k & 11.5k & батчей \\ \hline
 \textit{\multirow{2}{*}{distilbert-base-cased}} & S & \textbf{82.9/78.4} & \textbf{70.3/63.1} & 74.7/74.3 & 91.5/81.2 & \textbf{87.4/82.7} & \textbf{91.0/90.6} & 11390 \\
  & M  & 82.1/77.2 & 67.7/60.7 & \textbf{75.2/75.0} & 90.6/79.8 & 86.3/80.4 & 90.8/90.1 & 14000 \\ \hline
 \textit{\multirow{2}{*}{bert-base-cased}} & S & \textbf{83.9/79.7} & \textbf{71.2/64.2} & 76.1/75.8 & \textbf{93.2/83.5} & \textbf{87.9/84.2} & \textbf{91.3/90.7} & 9470 \\
@@ -145,129 +147,116 @@ Table~\ref{tab:mtl_glue} presents the results of these experiment series. For ev
  \end{tabular}
  }
  
-For the English-language tasks, we made the experiments for the backbones \textit{distilbert-base,-cased}~\cite{distilbert} and \textit{bert-base-cased}~\cite{bert}. %large is not reported here
-
-For the Russian-language tasks, we made experiments for the backbones \textit{DeepPavlov/distilrubert-base-cased-conversational}~\cite{distilrubert} and \textit{DeepPavlov/rubert-base-cased-conversational}~\cite{rubert}. As distilled BERTs takes 40\% less memory than BERTs and are 60\% faster, these experiments cover a variety of different model uses for different computational budgets and quality demands. 
-
-The results of the first stage of experiments are presented in Tables 1-2. For every experiment, we provide accuracy / f1-macro. 
-
-\begin{table*}
-\caption{Accuracy / f1 macro on the English data for the transformer-agnostic model. English cased models trained on English data, batch size 160, plain sampling. Mode S stands for singletask, mode M stands for multi-task}
-\label{en_results}
-%\begin{tabular}{|c|c||c|c|c|c|c|c|} \hline
-\begin{tabular}{|c|c||c|c|c|c|c|c||c|} \hline
-%Model & mode & Average & \begin{tabular}[c]{@{}l@{}}Emotions\\39.4 K\end{tabular} & \begin{tabular}[c]{@{}l@{}}Sentiment\\79.2 K\end{tabular} & \begin{tabular}[c]{@{}l@{}}Toxic\\127.6k\end{tabular} & \begin{tabular}[c]{@{}l@{}}Intents\\11.5k\end{tabular} & \begin{tabular}[c]{@{}l@{}}Topics\\11.5 k\end{tabular}  \\
-Model & mode & Average & \begin{tabular}[c]{@{}l@{}}Emotions\\39.4 K\end{tabular} & \begin{tabular}[c]{@{}l@{}}Sentiment\\79.2 K\end{tabular} & \begin{tabular}[c]{@{}l@{}}Toxic\\127.6k\end{tabular} & \begin{tabular}[c]{@{}l@{}}Intents\\11.5k\end{tabular} & \begin{tabular}[c]{@{}l@{}}Topics\\11.5 k\end{tabular} & \begin{tabular}[c]{@{}l@{}}Batches \\seen\end{tabular} \\
-\hline \hline
-\textit{distilbert-base-cased} & S & 82.9/78.4 & 70.3/63.1 & 74.7/74.3 & 91.5/81.2 & 87.4/82.7 & 91.0/90.6 & 11390 \\ \hline
-\textit{distilbert-base-cased} & M & 82.1/77.2 & 67.7/60.7 & 75.2/75.0 & 90.6/79.8 & 86.3/80.4 & 90.8/90.1 & 14000 \\ \hline
-\textit{bert-base-cased} & S & 83.9/79.7 & 71.2/64.2 & 76.1/75.8 & 93.2/83.5 & 87.9/84.2 & 91.3/90.7 & 9470 \\ \hline
-\textit{bert-base-cased} & M & 83.0/78.4 & 69.0/63.1 & 76.5/76.4 & 91.4/80.8 & 87.1/81.2 & 91.2/90.6 & 11760 \\ \hline
-% bert-large & S &  & 84.7/80.5 & 70.9/64.4 & 80.5/80.4 & 92.1/82.2 & 88.4/84.9 & 91.3/90.7 & 8526 \\ \hline
-\end{tabular}
-\end{table*}
-
-
-
-\begin{table*}
-\caption{Accuracy / f1 macro on the Russian data for the transformer-agnostic model. Russian cased models trained on Russian data, batch size 160, plain sampling. Mode S stands for singletask, and mode M stands for multi-task.}
-\label{ru_results}
-%\begin{tabular}{|c|c||c|c|c|c|c|c|} \hline
-\begin{tabular}{|c|c||c|c|c|c|c|c||c|} \hline
-%Model & mode & Average & \begin{tabular}[c]{@{}l@{}}Emotions\\6.5 K\end{tabular} & \begin{tabular}[c]{@{}l@{}}Sentiment\\82.6 K\end{tabular} & \begin{tabular}[c]{@{}l@{}}Toxic\\93.3k\end{tabular} & \begin{tabular}[c]{@{}l@{}}Intents\\11.5k\end{tabular} & \begin{tabular}[c]{@{}l@{}}Topics\\11.5 k\end{tabular}  \\
-Model & mode & Average & \begin{tabular}[c]{@{}l@{}}Emotions\\6.5 K\end{tabular} & \begin{tabular}[c]{@{}l@{}}Sentiment\\82.6 K\end{tabular} & \begin{tabular}[c]{@{}l@{}}Toxic\\93.3k\end{tabular} & \begin{tabular}[c]{@{}l@{}}Intents\\11.5k\end{tabular} & \begin{tabular}[c]{@{}l@{}}Topics\\11.5 k\end{tabular} &\begin{tabular}[c]{@{}l@{}}Batches\\seen\end{tabular} \\
-\hline \hline
+begin{table*}
+ \caption{Метрики русскоязычных моделей(точность/f1 macro) для пяти диалоговых задач. Режим S означает однозадачные модели, режим M означает многозадачные модели. Усреднено по трем запускам.}
+ \label{tab:tr-ag:ru_results}
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{c|c|c|c|c|c|c|c|c}
+\hline
+\multirow{2}{*}{Модель} & \multirow{2}{*}{Режим} & \multirow{2}{*}{Среднее} & Эмоции & Тональность & Токсичность & Интенты & Темы & Число \\
+& & & 6.5k & 82.6k & 93.3k & 11.5k & 11.5k & батчей \\ \hline
 \textit{DeepPavlov/distilrubert-base-cased-conversational} & S & 86.9/84.1 & 82.2/76.1 & 77.9/78.2 & 97.1/95.4 & 86.7/81.6 & 90.4/89.5 & 8472 \\ \hline
 \textit{DeepPavlov/distilrubert-base-cased-conversational} & M & 86.3/82.6 & 81.0/74.6 & 77.7/77.7 & 96.9/95.0 & 85.2/75.9 & 90.7/89.9 & 8540 \\ \hline
 \textit{DeepPavlov/rubert-base-cased-conversational} & S & 86.5/83.4 & 80.9/75.3 & 78.0/78.2 & 97.2/95.6 & 86.2/79.1 & 90.0/89.0 & 7999 \\ \hline
 \textit{DeepPavlov/rubert-base-cased-conversational} & M & 86.2/82.6 & 80.5/73.8 & 77.6/77.6 & 96.8/95.0 & 85.3/76.9 & 90.5/89.8 & 8113 \\ \hline
-% ru single, distilru single  - might need to restart in the future? Or not?
-\end{tabular}
-\end{table*}
-
-
-
-Overall, the performance of the multi-task transformer-agnostic models closely matches the performance of the analogous singletask models. This effect holds for the Russian language as well as for the English language. 
-
-%It is also worth noting that distilbert-like English models almost match bert-like English models by their average metrics, and for the Russian language the average metrics of distilbert-like models are no worse at all than the metrics of bert-like models. 
-In the next experiment, we put the main focus on the distilbert-like models for the purpose of speeding up the computations.
-
-
-\subsection{Multilingual multi-task backbones, the impact of cross-lingual training}
-
-In the second stage of experiments, we utilized only multilingual backbones. Specifically, we used \textit{distilbert-base-multilingual-cased} and \textit{bert-base-multilingual-cased}. Our main goal was:
-
- \begin{itemize}
-\item Compare the performance of the multi-task and singletask models with the multilingual backbones for the Russian language.
-\item Check out how the performance of singletask models and the performance of multi-task models varies if we add to them the English language data, and the data are merged by task (for every task, the model is trained on English+Russian training data and validated on Russian data).
-\item Check out whether treating English-language tasks as separate tasks, yields any improvements if we perform the validation on the Russian data.
-\end{itemize} 
-
+ \end{tabular}
+ }
 
 \begin{table*}
-\caption{Accuracy / f1 macro on the Russian data for the transformer-agnostic model. Multilingual cased models, batch size 160, plain sampling. Mode S stands for singletask, mode M stands for multi-task, RU stands for the Russian language, and EN stands for the English language. Merged means that Russian and English data are merged by task. Separate means that Russian and English tasks are treated as separate tasks.}
-\label{mult_results}
-%\begin{tabular}{|c|c|c||c|c|c|c|c|c|} \hline
-\scalebox{0.8}{
-\begin{tabular}{|c|c|c||c|c|c|c|c|c||c|} \hline
-%Model & mode & Average & \begin{tabular}[c]{@{}l@{}}Emotions\\6.5 K\end{tabular} & \begin{tabular}[c]{@{}l@{}}Sentiment\\82.6 K\end{tabular} & \begin{tabular}[c]{@{}l@{}}Toxic\\93.3k\end{tabular} & \begin{tabular}[c]{@{}l@{}}Intents\\11.5k\end{tabular} & \begin{tabular}[c]{@{}l@{}}Topics\\11.5 k\end{tabular}  \\
-Model & \begin{tabular}[c]{@{}l@{}}Training\\data\end{tabular} & Mode & Average & \begin{tabular}[c]{@{}l@{}}Emotions\end{tabular} & \begin{tabular}[c]{@{}l@{}}Sentiment\end{tabular} & \begin{tabular}[c]{@{}l@{}}Toxic\end{tabular} & \begin{tabular}[c]{@{}l@{}}Intents\end{tabular} & \begin{tabular}[c]{@{}l@{}}Topics\end{tabular} &\begin{tabular}[c]{@{}l@{}}Batches\\seen\end{tabular} \\
-\hline \hline
-\textit{distilbert-base-multilingual-cased} & RU & S & 84.7/81.0 & 77.4/69.1 & 77.7/77.9 & 96.7/94.8 & 83.5/76.6 & 88.1/86.9 & 10058 \\ \hline
-\textit{distilbert-base-multilingual-cased} & RU & M & 84.3/80.2 & 78.1/70.5 & 76.8/76.7 & 96.5/94.4 & 81.9/72.3 & 88.2/87.1 & 9821 \\ \hline
-\textit{distilbert-base-multilingual-cased} & \begin{tabular}[c]{@{}l@{}}RU+EN,\\merged\end{tabular} & S & 85.2/81.8 & 78.9/70.2 & 77.4/77.3 & 96.8/94.9 & 84.7/79.1 & 88.4/87.4 & 31843 \\ \hline
-\textit{distilbert-base-multilingual-cased} & \begin{tabular}[c]{@{}l@{}}RU+EN,\\merged\end{tabular} & M & 84.5/81.1 & 77.9/70.7 & 76.6/76.7 & 96.5/94.5 & 82.9/76.5 & 88.4/87.2 & 17790 \\ \hline
-\textit{distilbert-base-multilingual-cased} & \begin{tabular}[c]{@{}l@{}}RU+EN,\\separate\end{tabular} & M & 84.4/80.6 & 77.6/70.0 & 76.8/77.1 & 96.5/94.5 & 82.4/73.9 & 88.3/87.2 & 23688 \\ \hline
-\textit{bert-base-multilingual-cased} & RU & S & 84.7/80.2 & 76.6/64.2 & 77.8/78.2 & 96.9/95.1 & 83.9/76.3 & 88.4/87.0 & 10884 \\ \hline
-\textit{bert-base-multilingual-cased} & RU & M & 84.8/81.4 & 78.4/71.4 & 76.3/76.3 & 96.8/94.8 & 83.7/76.6 & 89.0/87.8 & 12810 \\ \hline
-\textit{bert-base-multilingual-cased} & \begin{tabular}[c]{@{}l@{}}RU+EN,\\merged\end{tabular} & S & 85.6/82.3 & 78.9/70.1 & 77.6/77.8 & 96.9/94.9 & 85.0/80.4 & 89.4/88.5 & 23752 \\ \hline
-\textit{bert-base-multilingual-cased} & \begin{tabular}[c]{@{}l@{}}RU+EN,\\merged\end{tabular} & M & 85.2/82.3 & 79.2/72.7 & 76.4/76.6 & 96.7/94.8 & 84.3/79.3 & 89.4/88.3 & 20755 \\ \hline
-\textit{bert-base-multilingual-cased} & \begin{tabular}[c]{@{}l@{}}RU+EN,\\separate\end{tabular} & M & 85.0/81.6 & 78.3/71.4 & 77.1/77.0 & 96.7/94.7 & 84.0/76.7 & 89.1/88.0 & 22701 \\ \hline
+\caption{Метрики многозадачной трансформер-агностичной модели для набора задач GLUE. M.Corr означает корреляцию Мэттью, P/S означает корреляцию Пирсона-Спирмена, Acc точность, F1 - f1 метрику. Режим S означает однозадачные модели, режим M означает многозадачные модели. Размер означает размер тренировочного набора данных}
+\label{tab:tr-ag:mtl_glue}
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{c|c|c|c|c|c|c|c|c|c|c|c|c}
+\hline
+\multirow{3}{*}{Модель} & \multirow{3}{*}{Режим}  & Среднее & CoLA & SST-2 & MRPC &STS-B &QQP&MNLI & QNLI & RTE & AX & Число \\
+       &        & Размер  & 8.6k & 67.3k & 2.5k & 5.7k & 363.8k & 392.7k & 104.7k & 2.5k & как у MNLI & батчей \\ 
+       &        & метрика  & M.Corr & Acc & F1/Acc & P/S Corr & F1/Acc & Acc(m/mm) & Acc & Acc & M.Corr &  \\ \hline
+Человек & - & 87.1 & 66.4 & 97.8 & 86.3/80.8 & 92.7/92.6 & 59.5/80.4 & 92.0/92.8 & 91.2 & 93.6 & - & -\\ \hline
+%\textit{\multirow{2}{*}{distilbert-base-cased}} & S & 73.1 & \textbf{42.4} & \textbf{92.1} & 85.6/\textbf{80.3} & 78.8/76.8 & \textbf{69.5/88.5} & \textbf{81.3/80.8} & \textbf{87.5} & 49.8 & 29.9 & 70846 \\ 
+\textit{\multirow{2}{*}{distilbert-base-cased}} & S & 73.3 & \textbf{42.4} & \textbf{92.1} & 85.6/\textbf{80.3} & 78.8/76.8 & \textbf{69.5/88.5} & \textbf{81.3/80.8} & \textbf{87.5} & 52.1 & 29.9 & 70861 \\ 
+ & M & \textbf{74.5} & 36.0 & 91.0 & \textbf{85.7}/79.9 & \textbf{82.6/81.6} & 68.4/87.4 & 80.4/80.3 & 86.0 & \textbf{69.5} & \textbf{30.1} & 88905 \\  \hline
+\textit{\multirow{2}{*}{bert-base-cased}} & S & 77.3 & \textbf{53.7} & \textbf{93.2} & \textbf{87.7/82.8} & 83.8/82.2 & \textbf{70.3/88.9} & \textbf{83.8/83.1} & \textbf{90.6} & 62.1 & 32.1 & 42722\\ 
+ & M & \textbf{77.8} & 45.8 & 92.9 & 86.8/82.2 & \textbf{85.3/84.7} & 70.2/88.6 & 83.5/82.6 & 90.1 & \textbf{74.5} & \textbf{32.8} & 112613\\  \hline
+\textit{\multirow{2}{*}{bert-large-cased}} & S & \textbf{79.5} & \textbf{59.2} & \textbf{94.9} & 85.0/80.6 & \textbf{85.8/84.5} & 70.5/89.1 & \textbf{86.7/85.6} & 92.2 & 70.1 & \textbf{39.4} & 37290 \\ 
+ & M & \textbf{79.5} & 50.8 & 94.1 & \textbf{87.3/82.8} & 83.8/83.9 & \textbf{71.0/89.2} & 85.9/85.0 & \textbf{92.4} & \textbf{78.5} & 38.5 & 53343 \\  \hline
 \end{tabular}
 }
 \end{table*}
 
-As we see, the results of all settings are pretty similar: using Russian+English data puts us on the plateau, while improvements are only moderate. Treating English tasks as separate tasks does not bring out improvements, and brings out even a small deterioration. 
+В общем и целом, метрики многозадачных трансформер-агностичных моделей на диалоговых как для русского, так и для английского языка примерно соответствуют метрикам однозадачных моделей. 
+ Для бенчмарка GLUE многозадачные модели дпже превосходят по своей средней метрике однозадачные модели за счет малоразмерных задач (STS-B, AX и особенно RTE), на которых лучше работает перенос знаний с задач, у которых более крупная обучающая выборка. 
 
-In the same setting, we also explored whether utilizing English-language tasks as separate tasks is more beneficial than merging the English data and Russian data by task. This approach did not prove to be any better or worse.
+Среди поставленных в работе задач было также исследование того, как будет меняться эффект переноса знаний при уменьшении размера обучающей выборки. Данному исследованию посвящен следующий раздел. 
 
-The exact exploration of the impact of adding English data where we have limited Russian data (like in most cases) requires additional investigation, which was done in the next series of experiments. The real-world situation is that we usually have a huge body of datasets for English data, but not nearly as much for Russian data. This gives additional practical value to that experiments. 
+\subsection{Эффект уменьшения размера обучающей выборки (англоязычные данные)}
+% TODO - Автор делал или в пассивном залоге? Как писать? 
+В работе был также исследован эффект уменьшения размера обучающей выборки для англоязычных данных. В частности, автор работы обучал модель с теми же гиперпараметрами, что и в предыдущем режиме, но только на небольшой доле тренировочных данных. При этом валидационные и тестовые данные, для чистоты эксперимента, не менялись. В связи с малым размером обучающей выборки, для этого эксперимента данные усреднялись по пяти запускам. Для ускорения вычислений, эксперименты в этом разделе проводились только для базовой модели \textit{distilbert-base-cased}. 
 
-\subsection{When the adding of English data helps?}
+Особо отмечаю, что для каждого такого эксперимента разбиение было одним и тем же, то есть при проведении любого эксперимента с тем или иным процентом тренировочных данных в этих данных содержались данные из всех экспериментов с меньшими процентами тренировочных данных. 
 
-In this experiment series, we explore multi-task settings with merged labels. We study how much improves the performance of multilingual distilbert (multi-task or singletask), trained on some share of Russian train data if we add English training data to this share of Russian train data and validate on the English validation data. 
+Результаты данного эксперимента представлены в Таблице ~\ref{tab:tr-ag:en_dialog_part} и на Графике \ref{fig:tr-ag:en_dialog_part}.
 
-Specifically, we performed experiments for the following data shares: 0\%,3\%, 5\%, 15 \%, 20\%, 25\%, 50\%, and 100\%. For 0\%, we added to the table the model trained on English train data and validated on Russian validation data, and the model which is trained on English train data and validated on English validation data (but tested still on Russian test data). We restarted the experiments with three random seeds. For every series of experiments, we randomly shuffled the datasets and then selected all subsets at once, while the larger subsets contained all examples from the smaller subsets (like, 10\% subset contains all examples from 5\% and also from 3\%)
+Из представленных данных можно увидеть, что в общем и целом, многозадачный перенос знаний работает лучше для задач с меньшим числом примеров (при условии, что в обучающей выборке есть задачи, у которых число примеров существенно больше). 
 
-We present the averaged results in ~\ref{mult_smalldata_results}, in Appendix. We averaged the results by three runs. For training on the 3-5\% of the Russian data without the English data, we averaged the results by five runs due to the high variability of results. We plot the results below, in~\ref{fig:thresholds_acc}. The task-wise results for the Russian data are also plotted in Appendix.
+В общем и целом, можно сделать вывод, что метрики многозадачных моделей превосходят метрики для однозадачных моделей только на небольших данных -(2-5\% от всего набора англоязычных данных), и уже на 9\% от набора англоязычных данных это преимущество исчезает. Более подробно результаты этого эксперимента проанализированы в разделе \ref{tr-ag:discussion_conclusion}
 
-We also note that in the settings where 100\% share of the English data was used, we performed the experiments also with validation on the Russian data instead of the English data. That change did not impact the scores in any meaningful way.
-
-\begin{figure}[ht]
-    \includegraphics[width=\textwidth]{RuMTL/thresholds_acc}
-  \caption{Singletask and multi-task accuracy, while using some share of Russian training data alone or augmenting them with the full English data in "merged by task" mode.}\label{fig:thresholds_acc}
+\begin{figure}
+\centering
+\caption{Average accuracy for the five dialog tasks. Impact of reducing training data. Averaged by five runs.}
+\begin{tikzpicture}
+\label{fig:mtl_dialog_part}
+\begin{axis}[xlabel = Percentage of training data used,
+ylabel = Average accuracy,
+legend pos= south east,
+% width=10cm,
+% height=10cm,
+% xmin=2,
+% xmax=100,
+xtick={2,3,5,10,15},
+ymin=40,ymax=85,
+legend cell align={left},
+legend style={nodes={scale=0.7, transform shape}}
+]
+\addplot[color=blue,solid, mark=*] coordinates {
+(2, 64.8)%50
+(3, 68.8)%50
+(5, 71.7)%100
+(7,74.2)
+%(7.5,74.6)
+% (8,74.9)
+(9,75.4)
+(10, 75.9)%300
+(15, 77.4)
+};
+\addlegendentry{Multitask}
+\addplot[color=green,dashed,mark=*] coordinates {
+(2, 44.9)%50
+(3, 59.6)%100
+(5, 69.1)%300
+(7,73.5)
+%(7.5,73.5)
+% (8,73.8)%500
+(9,76.7)
+(10,77.1)
+(15, 78.5)
+};
+\addlegendentry{Singletask}
+\end{axis}%
+\end{tikzpicture}%
 \end{figure}
-\begin{figure}[ht]
-    \includegraphics[width=\textwidth]{RuMTL/accuracy_by_task_n_samples}
-  \caption{Singletask and multi-task accuracy, while using some share of Russian training data alone, depending on the number of samples. Accuracies are provided for every task, average accuracy is also provided for comparison to be more convenient.}\label{fig:accuracy_by_task_n_samples}
-\end{figure}
-
-%\begin{figure}[ht]
-%    \includegraphics[width=\textwidth]{plot}
-%  \caption{Singletask and multi-task f1 macro, while using some share of Russian training data alone or augmenting them with the full English data in "merged by task" mode.}\label{fig:thresholds_f1_macro}
-%\end{figure}
 
  
- 
- %HOW CAN I MAKE THIS TABLE SMALLER?
+ %TODO - Italicize all backbones? 
 \end{table*}
 \begin{table*}
-\caption{Accuracy / F1 macro. Batch size 160, plain sampling. Mode M stands for multi-task, mode S stands for single-task, and Share stands for the share of training data used. Backbone distilbert-base-cased. Averaged by five runs.}
+\caption{Точность/ F1.  Режим M означает многозадачные модели, режим S означает однозадачные модели, и Доля означает долю использованных тренировочных данных. Базовая модель distilbert. Усреднено по пяти запускам. }
 \label{tab:mtl_dialog_part}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{c|c|c|c|c|c|c|c|c}
 \hline
- \multirow{2}{*}{Mode} &  \multirow{2}{*}{Share} &  \multirow{2}{*}{Average} & Emotions & Sentiment & Toxic & Intents & Topics & Batches \\
+ \multirow{2}{*}{Режим} &  \multirow{2}{*}{Доля} &  \\multirow{2}{*}{Среднее} & Эмоции & Тональность & Токсичность & Интенты & Темы & Число \\
 & & & 39.4k & 80.5k & 127.6k & 11.5k & 11.5k & seen \\
 \hline 
 S & 15\% & 78.5/70.9 & 65.8/50.6 & 69.3/68.8 & 92.2/81.2 & 78.7/68.8 & 86.3/85.1 & 2173 \\ \hline
@@ -291,37 +280,81 @@ M & 2\% & 64.8/52.1 & 57.6/38.4 & 61.4/60.1 & 90.8/78.0 & 44.2/23.5 & 69.9/60.4 
 \end{tabular}
 }
 \end{table*}
+
+
+Другим интересным направлением исследований является исследование переноса знаний между английским и русским языками в многозадачных моделях. Для исследования данного переноса автор диссертационной работы использовал мультиязыковые базовые модели, предобучавшиеся на большом числе языков. 
+
+
+\subsection{Многоязычные многозадачные модели - эффект кросс-языкового обучения}
+
+На этой стадии экспериментов, использовались только многоязычные модели. В качестве многоязычных базовых моделей использовались \textit{distilbert-base-multilingual-cased} и \textit{bert-base-multilingual-cased}. На этом этапе решались следующие задачи:
+
+ \begin{itemize}
+\item[*] Сравнить качество многозадачных и однозадачных моделей для русского языка при использовании многоязычных базовых моделей. 
+\item[*] Проверить, как меняются результаты у однозадачных и у многозадачных моделей, если добавлять при их обучении к русскоязычным данным англоязычные данные, объединяя данные по задаче(то есть для каждой задачи, учить модель на английских и русских данных, но валидировать только на русских). 
+\item[*] Проверить, дает ли для описанного в предыдущем пункте какое-то улучшение, если считать англоязычные задачи отдельными задачами (валидируясь все так же только на русскоязычные данных), и соответственно, при обучении на русскоязычных задачах использовать только русскоязычные данные, а при англоязычных - только англоязычные. 
+\end{itemize} 
+
+Заметим, что так как англоязычных открытых данных для большинства задач гораздо больше, чем русскоязычных, именно изучение переноса знаний с английского языка на русский представляет бОльший практический интерес, чем изучение переноса знаний с русского языка на английский. Хотя в разделе \ref{ch:yaqtopics} изучается и такой перенос знаний тоже. 
+%TODO. Формат представления Accuracy /f1 - должен быть единообразным по диссеру? 
+%TODO. Выделять режимы экспериментов в таблицах и перед ними через Italic? 
 \begin{table*}
-\caption{Metrics of the DeepPavlov's MTL model for the GLUE benchmark. M.Corr stands for Matthew's correlation, P/S corr stands for Pearson/Spearman correlation, Acc stands for accuracy, and m/mm means "matched/mismatched". Mode S stands for single-task, and mode M stands for multi-task. Results show that multi-task models either approach the metrics of analogous single-task models or even exceed them.}
-\label{tab:mtl_glue}
-\centering
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{c|c|c|c|c|c|c|c|c|c|c|c|c}
-\hline
-\multirow{3}{*}{Model} & \multirow{3}{*}{Mode}  & Average & CoLA & SST-2 & MRPC &STS-B &QQP&MNLI & QNLI & RTE & AX & Batches\\
-       &        & train size  & 8.6k & 67.3k & 2.5k & 5.7k & 363.8k & 392.7k & 104.7k & 2.5k & as MNLI & seen \\ 
-       &        & metric  & M.Corr & Acc & F1/Acc & P/S Corr & F1/Acc & Acc(m/mm) & Acc & Acc & M.Corr &  \\ \hline
-Human & - & 87.1 & 66.4 & 97.8 & 86.3/80.8 & 92.7/92.6 & 59.5/80.4 & 92.0/92.8 & 91.2 & 93.6 & - & -\\ \hline
-%\textit{\multirow{2}{*}{distilbert-base-cased}} & S & 73.1 & \textbf{42.4} & \textbf{92.1} & 85.6/\textbf{80.3} & 78.8/76.8 & \textbf{69.5/88.5} & \textbf{81.3/80.8} & \textbf{87.5} & 49.8 & 29.9 & 70846 \\ 
-\textit{\multirow{2}{*}{distilbert-base-cased}} & S & 73.3 & \textbf{42.4} & \textbf{92.1} & 85.6/\textbf{80.3} & 78.8/76.8 & \textbf{69.5/88.5} & \textbf{81.3/80.8} & \textbf{87.5} & 52.1 & 29.9 & 70861 \\ 
- & M & \textbf{74.5} & 36.0 & 91.0 & \textbf{85.7}/79.9 & \textbf{82.6/81.6} & 68.4/87.4 & 80.4/80.3 & 86.0 & \textbf{69.5} & \textbf{30.1} & 88905 \\  \hline
-\textit{\multirow{2}{*}{bert-base-cased}} & S & 77.3 & \textbf{53.7} & \textbf{93.2} & \textbf{87.7/82.8} & 83.8/82.2 & \textbf{70.3/88.9} & \textbf{83.8/83.1} & \textbf{90.6} & 62.1 & 32.1 & 42722\\ 
- & M & \textbf{77.8} & 45.8 & 92.9 & 86.8/82.2 & \textbf{85.3/84.7} & 70.2/88.6 & 83.5/82.6 & 90.1 & \textbf{74.5} & \textbf{32.8} & 112613\\  \hline
-\textit{\multirow{2}{*}{bert-large-cased}} & S & \textbf{79.5} & \textbf{59.2} & \textbf{94.9} & 85.0/80.6 & \textbf{85.8/84.5} & 70.5/89.1 & \textbf{86.7/85.6} & 92.2 & 70.1 & \textbf{39.4} & 37290 \\ 
- & M & \textbf{79.5} & 50.8 & 94.1 & \textbf{87.3/82.8} & 83.8/83.9 & \textbf{71.0/89.2} & 85.9/85.0 & \textbf{92.4} & \textbf{78.5} & 38.5 & 53343 \\  \hline
+\caption{Точность/f1 macro на русскоязычных данных для многоязычных моделей. Режим S означает однозадачные модели, режим M - многозадачные модели. RU означает русскоязычные данные , EN означает англоязычные данные. Объединенные означает, что русскоязычные и англоязычные данные объединены по задаче, Отдельные означает, что русскоязычные и англоязычными задачи считаются отдельными задачами. Усреднено по трем запускам. }
+\label{mult_results}
+%\begin{tabular}{|c|c|c||c|c|c|c|c|c|} \hline
+\scalebox{0.8}{
+\begin{tabular}{|c|c|c||c|c|c|c|c|c||c|} \hline
+Модель & \begin{tabular}[c]{@{}l@{}}Тренировочные\\данные\end{tabular} & Режим & Среднее & \begin{tabular}[c]{@{}l@{}}Эмоции\end{tabular} & \begin{tabular}[c]{@{}l@{}}Тональность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Токсичность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Интенты\end{tabular} & \begin{tabular}[c]{@{}l@{}}Темы\end{tabular} &\begin{tabular}[c]{@{}l@{}}Число\\батчей\end{tabular} \\
+\hline \hline
+\textit{distilbert-base-multilingual-cased} & RU & S & 84.7/81.0 & 77.4/69.1 & 77.7/77.9 & 96.7/94.8 & 83.5/76.6 & 88.1/86.9 & 10058 \\ \hline
+\textit{distilbert-base-multilingual-cased} & RU & M & 84.3/80.2 & 78.1/70.5 & 76.8/76.7 & 96.5/94.4 & 81.9/72.3 & 88.2/87.1 & 9821 \\ \hline
+\textit{distilbert-base-multilingual-cased} & \begin{tabular}[c]{@{}l@{}}RU+EN,\\объединенные\end{tabular} & S & 85.2/81.8 & 78.9/70.2 & 77.4/77.3 & 96.8/94.9 & 84.7/79.1 & 88.4/87.4 & 31843 \\ \hline
+\textit{distilbert-base-multilingual-cased} & \begin{tabular}[c]{@{}l@{}}RU+EN,\\объединенные\end{tabular} & M & 84.5/81.1 & 77.9/70.7 & 76.6/76.7 & 96.5/94.5 & 82.9/76.5 & 88.4/87.2 & 17790 \\ \hline
+\textit{distilbert-base-multilingual-cased} & \begin{tabular}[c]{@{}l@{}}RU+EN,\\отдельные\end{tabular} & M & 84.4/80.6 & 77.6/70.0 & 76.8/77.1 & 96.5/94.5 & 82.4/73.9 & 88.3/87.2 & 23688 \\ \hline
+\textit{bert-base-multilingual-cased} & RU & S & 84.7/80.2 & 76.6/64.2 & 77.8/78.2 & 96.9/95.1 & 83.9/76.3 & 88.4/87.0 & 10884 \\ \hline
+\textit{bert-base-multilingual-cased} & RU & M & 84.8/81.4 & 78.4/71.4 & 76.3/76.3 & 96.8/94.8 & 83.7/76.6 & 89.0/87.8 & 12810 \\ \hline
+\textit{bert-base-multilingual-cased} & \begin{tabular}[c]{@{}l@{}}RU+EN,\\объединенные\end{tabular} & S & 85.6/82.3 & 78.9/70.1 & 77.6/77.8 & 96.9/94.9 & 85.0/80.4 & 89.4/88.5 & 23752 \\ \hline
+\textit{bert-base-multilingual-cased} & \begin{tabular}[c]{@{}l@{}}RU+EN,\\объединенные\end{tabular} & M & 85.2/82.3 & 79.2/72.7 & 76.4/76.6 & 96.7/94.8 & 84.3/79.3 & 89.4/88.3 & 20755 \\ \hline
+\textit{bert-base-multilingual-cased} & \begin{tabular}[c]{@{}l@{}}RU+EN,\\отдельные\end{tabular} & M & 85.0/81.6 & 78.3/71.4 & 77.1/77.0 & 96.7/94.7 & 84.0/76.7 & 89.1/88.0 & 22701 \\ \hline
 \end{tabular}
 }
 \end{table*}
-\subsection{Single-task vs Multi-task: impact of reducing training data}
-We also report the impact of reducing training data. Specifically, we have trained the model with the same hyperparameters as in the previous setting, but we have kept only a small share of training data while leaving test and validation data intact. In every such experiment, any percentage of training data contained all training data from lower percentages.%maybe express in the other way?
-In this case, the multi-task metrics exceed single-task ones only on small-scale data (like 2-5\% of the whole dataset), and this advantage evaporates even on 9\% of the dataset. 
-We did this exploration only for \textit{distilbert-base-cased} to speed up the calculations. Also, for every training data share in this experiment, we have made five restarts for different random seeds and have averaged the metrics. 
 
-We present the detailed results of this experiment in Table~\ref{tab:mtl_dialog_part} and Figure \ref{fig:mtl_dialog_part}. One can see that generally, the multi-task knowledge transfer works better for tasks with a lower number of samples.
+Как можно видеть, результаты для каждого из экспериментов в этой серии доволтно
+As we see, the results of all settings are pretty similar: using Russian+English data puts us on the plateau, while improvements are only moderate. Treating English tasks as separate tasks does not bring out improvements, and brings out even a small deterioration. 
 
-\input{EnMTL/Plot.tex}
+In the same setting, we also explored whether utilizing English-language tasks as separate tasks is more beneficial than merging the English data and Russian data by task. This approach did not prove to be any better or worse.
 
-\section{Discussion} 
+The exact exploration of the impact of adding English data where we have limited Russian data (like in most cases) requires additional investigation, which was done in the next series of experiments. The real-world situation is that we usually have a huge body of datasets for English data, but not nearly as much for Russian data. This gives additional practical value to that experiments. 
+
+\subsection{When the adding of English data helps?}
+
+In this experiment series, we explore multi-task settings with merged labels. We study how much improves the performance of multilingual distilbert (multi-task or singletask), trained on some share of Russian train data if we add English training data to this share of Russian train data and validate on the English validation data. 
+
+Specifically, we performed experiments for the following data shares: 0\%,3\%, 5\%, 15 \%, 20\%, 25\%, 50\%, and 100\%. For 0\%, we added to the table the model trained on English train data and validated on Russian validation data, and the model which is trained on English train data and validated on English validation data (but tested still on Russian test data). We restarted the experiments with three random seeds. For every series of experiments, we randomly shuffled the datasets and then selected all subsets at once, while the larger subsets contained all examples from the smaller subsets (like, 10\% subset contains all examples from 5\% and also from 3\%)
+
+We present the averaged results in ~\ref{mult_smalldata_results}, in Appendix. We averaged the results by three runs. For training on the 3-5\% of the Russian data without the English data, we averaged the results by five runs due to the high variability of results. We plot the results below, in~\ref{fig:thresholds_acc}. The task-wise results for the Russian data are also plotted in Appendix.
+
+We also note that in the settings where 100\% share of the English data was used, we performed the experiments also with validation on the Russian data instead of the English data. That change did not impact the scores in any meaningful way.
+
+\begin{figure}[ht]
+    \includegraphics[width=\textwidth]{thresholds_acc_ru.jpg}
+  \caption{Singletask and multi-task accuracy, while using some share of Russian training data alone or augmenting them with the full English data in "merged by task" mode.}\label{fig:thresholds_acc}
+\end{figure}
+\begin{figure}[ht]
+    \includegraphics[width=\textwidth]{acc_ru_by_task_n_samples.jpg}
+  \caption{Singletask and multi-task accuracy, while using some share of Russian training data alone, depending on the number of samples. Accuracies are provided for every task, average accuracy is also provided for comparison to be more convenient.}\label{fig:accuracy_by_task_n_samples}
+\end{figure}
+
+%\begin{figure}[ht]
+%    \includegraphics[width=\textwidth]{plot}
+%  \caption{Singletask and multi-task f1 macro, while using some share of Russian training data alone or augmenting them with the full English data in "merged by task" mode.}\label{fig:thresholds_f1_macro}
+%\end{figure}
+
+ 
+
+\section{Выводы и анализ результатов}
+% объединить 2 секции в 1
 
 Based on the metrics on the diverse set of dialog-related tasks, the proposed multi-task transformer-agnostic model almost matches the single-label model. 
 For all explored BERT-based backbones the drop in average accuracy is between 0.8\%-0.9\% on the dialogue tasks.
@@ -368,8 +401,4 @@ The proposed transformer-agnostic multi-task models yield results matching or ap
 The multi-task transformer-agnostic architecture we propose yields just a minor decrease in accuracy and F1 macro on the dialog tasks compared to the singletask architecture. 
 
 Adding English data to the Russian dataset can improve the metrics by up to several percent for the singletask and multi-task training. Also, starting from some data sizes, multi-task architecture starts overcoming the singletask one.
-
-
-\section{Выводы (название как в pseudolabel сделать)}
-
 
