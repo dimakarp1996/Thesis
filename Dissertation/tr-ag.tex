@@ -320,12 +320,11 @@ M & 2\% & 64.8/52.1 & 57.6/38.4 & 61.4/60.1 & 90.8/78.0 & 44.2/23.5 & 69.9/60.4 
 }
 \end{table*}
 
-Как можно видеть, результаты для каждого из экспериментов в этой серии доволтно
-As we see, the results of all settings are pretty similar: using Russian+English data puts us on the plateau, while improvements are only moderate. Treating English tasks as separate tasks does not bring out improvements, and brings out even a small deterioration. 
+Как можно видеть, результаты для каждого из экспериментов в этой серии довольно похожи друг на друга:добавление английских данных к русским выводит нас на плато, лишь с небольшими улучшениями по сравнению с использованием только русскоязычных данных.  
 
-In the same setting, we also explored whether utilizing English-language tasks as separate tasks is more beneficial than merging the English data and Russian data by task. This approach did not prove to be any better or worse.
+При этом выделение англоязычных данных в отдельные задачи не приводит к дополнительному улучшению и даже приводит к небольшому ухудшению. Это показывает, что перенос знаний лучше работает в рамках одной задачи, чем в рамках разных задач. Что ожидаемо, так как в первом случае перенос знаний происходит и для тела модели, и для ее задаче-специфичных слоев, а во втором - только для тела модели. 
 
-The exact exploration of the impact of adding English data where we have limited Russian data (like in most cases) requires additional investigation, which was done in the next series of experiments. The real-world situation is that we usually have a huge body of datasets for English data, but not nearly as much for Russian data. This gives additional practical value to that experiments. 
+Более точное исследование того, насколько сильно помогает добавление англоязычных данных в обучающую выборку, когда русскоязычных данных у нас мало, требует дополнительных экспериментов. Еще раз отмечаю, что эти эксперименты имеют прикладное значение, так как для большинства задач англоязычных данных в открытом доступе гораздо больше, чем русскоязычных. Эти эксперименты описаны в следующем разделе.
 
 \subsection{When the adding of English data helps?}
 
