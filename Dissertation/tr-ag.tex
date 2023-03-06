@@ -197,7 +197,7 @@ begin{table*}
 
 Особо отмечаю, что для каждого такого эксперимента разбиение было одним и тем же, то есть при проведении любого эксперимента с тем или иным процентом тренировочных данных в этих данных содержались данные из всех экспериментов с меньшими процентами тренировочных данных. 
 
-Результаты данного эксперимента представлены в Таблице ~\ref{tab:tr-ag:en_dialog_part} и на Графике \ref{fig:tr-ag:en_dialog_part}.
+Результаты данного эксперимента представлены в Таблице ~\ref{tab:tr-ag:en_dialog_part} и на Графике \ref{fig:tr-ag:en_dialog_part}. Результаты для каждой задачи представлены на Графике  \ref{fig:tr-ag:en_dialog_part_n_samples}. % TODO -- ВСТРОИТЬ ГРАФИК
 
 Из представленных данных можно увидеть, что в общем и целом, многозадачный перенос знаний работает лучше для задач с меньшим числом примеров (при условии, что в обучающей выборке есть задачи, у которых число примеров существенно больше). 
 
@@ -336,16 +336,16 @@ M & 2\% & 64.8/52.1 & 57.6/38.4 & 61.4/60.1 & 90.8/78.0 & 44.2/23.5 & 69.9/60.4 
  Полные результаты данного эксперимента представлены в Таблице ~\ref{tab:tr-ag:mult_smalldata_results}. 
 %TODO все графики чтобы отображались. И лучше в pgfplots
 
-В графической форме усредненные по задачам результаты данного эксперимента представлены на графике ~\ref{fig:thresholds_acc_ru}, а результаты для каждой задачи - на графике ~\ref{fig:thresholds_acc_ru_by_task_n_samples}. 
+В графической форме усредненные по задачам результаты данного эксперимента представлены на графике ~\ref{fig:ru_dialog_part}, а результаты для каждой задачи - на графике ~\ref{fig:ru_dialog_part_n_samples}. 
 %TODO - дописать, что все метрики они для теста если явно не указано иное. И ссылки на свои статьи по аналогии с pseudolabel. 
 
 \begin{figure}[ht]
-    \includegraphics[width=\textwidth]{thresholds_acc_ru.jpg}
-  \caption{Точность \textit{distilbert-multilingual-base-cased} на русскоязычных данных в однозадачном и многозадачном режиме, при использовании некой доли русскоязычных обучающих данных или добавление к ним полного англоязычного набора данных.}\label{fig:thresholds_acc_ru}
+    \includegraphics[width=\textwidth]{ru_dialog_part.jpg}
+  \caption{Точность \textit{distilbert-multilingual-base-cased} на русскоязычных данных в однозадачном и многозадачном режиме, при использовании некой доли русскоязычных обучающих данных или добавление к ним полного англоязычного набора данных.}\label{fig:ru_dialog_part}
 \end{figure}
 \begin{figure}[ht]
-    \includegraphics[width=\textwidth]{thresholds_acc_ru_by_task_n_samples.jpg}
-  \caption{Точность \textit{distilbert-multilingual-base-cased} на русскоязычных данных в однозадачном и многозадачном режиме, при использовании некой доли русскоязычных обучающих данных, в зависимости от числа примеров. Для каждой задачи приводится точность, средняя точность также приводится для более удобного сравнения.}\label{fig:thresholds_acc_ru_by_task_n_samples}
+    \includegraphics[width=\textwidth]{ru_dialog_part_n_samples.jpg}
+  \caption{Точность \textit{distilbert-multilingual-base-cased} на русскоязычных данных в однозадачном и многозадачном режиме, при использовании некой доли русскоязычных обучающих данных, в зависимости от числа примеров. Для каждой задачи приводится точность, средняя точность также приводится для более удобного сравнения.}\label{fig:ru_dialog_part_n_samples}
 \end{figure}
 
  \begin{table*}
@@ -424,34 +424,16 @@ M & 3\% & 100\% & RU & 70.7/63.0 & 58.7/39.5 & 67.8/67.2 & 90.6/85.2 & 62.1/50.8
 \fi
 
 \section{Выводы и анализ результатов}
-% объединить 2 секции в 1
+Многозадачные трансформер-агностичные модели практически соответствуют однозадачным моделям по своим метрикам на диалоговых задачах. Для моделей, предобученных только на одном языке, разрыв в средней точности составляет около 0.8-0.9\% для английского языка и около 0.3-0.6\% для русского языка. Для многоязычных моделей, разрыв остается в тех же пределах, кроме одного эксперимента(\textit{bert-base-multilingual-cased}, обученный только на русскоязычных данных), для которого разрыв полностью исчезает.
+%TODO. Тело модели --- базовая модель. Терминология.
 
-Based on the metrics on the diverse set of dialog-related tasks, the proposed multi-task transformer-agnostic model almost matches the single-label model. 
-For all explored BERT-based backbones the drop in average accuracy is between 0.8\%-0.9\% on the dialogue tasks.
+Для набора задач GLUE, многозадачные англоязычные модели даже превосходят однозадачные модели по своей средней точности. Это происходит за счет задач с недостаточно большими тренировочными наборами данных(AX, STS-B и особенно RTE), метрики на которых улучшаются за счет переноса знаний с задач, для которых тренировочных данных на порядки больше (MNLI, QQP).
+При этом обучение многозадачных нейронных сетей с тем же самым критерием остановки обучения требовало больше обучающих шагов, чем обучение соответствующих однозадачных моделей.
 
-For the GLUE tasks, the multi-task models even exceed the single-task ones by average accuracy. This applies to GLUE tasks with not large enough training sets (AX, STS-B, and especially RTE) which benefit from knowledge transfer from large-scale tasks (MNLI, QQP).
-%Distilbert-like models almost match the bert-like ones by their overall performance, for single-task and multi-task settings.
-The training of the multi-task neural network, however, took more training steps than the training of the corresponding single-task models with the same early stopping criteria. The reason is that the training did not stop until the metrics on relatively small-data tasks stopped improving. 
-% Therefore, examples from relatively high-size tasks, metrics for which had already reached their saturation points, were seen more frequently than they would have been seen if the model was single-task and trained for any of these tasks. If we train on the data subsets, this effect is more pronounced, probably because the gap between the saturation points from smaller-data tasks and larger-data tasks widens.
-From all the tasks, the dropdown is the lowest on the topic classification tasks, which suggests that this task is more prone to knowledge transfer.
+Причиной этого является то, что обучение многозадачных моделей не прекращалось до тех пор, пока метрики на задачах, для которых данных мало, не прекращали улучшаться.
+Следовательно, примеры из достаточно крупных по размеру обучающей выборки задач, метрики для которых уже достигли своих точек насыщения,многозадачные модель видела чаще, чем видели соответствующие им однозадачные модели. При обучении на долях тренировочной обучающей выборки, этот эффект выражен сильнее - вероятно, в связи с тем, что разрыв между точками насыщения для задач с меньшим объёмом обучающей выборки и задач с большим объемом обучающей выборки растет.
 
-For the small-scale data, we can see that if we train on small shares of training data (2-5\%), multi-task models overcome single-task models, for 2\% and 3\% -- by a huge margin. However, even on 9\%, for all dialog tasks, this advantage eliminates.
-
-The multi-task small-scale advantage in accuracy strongly depends on the data size. For the toxicity classification (127k samples), single-task models excel multi-task ones even at 2\% data. For the sentiment and emotion classification (79.2k and 39.3k), the advantage starts at 3\%, for topic classification (11.5k) at 5\%, and for intent classification (11.5k) at 9\%. 
-
-Therefore, the smaller the auxiliary dataset (on the scale of ~200-2000 samples), the larger the advantage of multi-task models. This advantage shows that the knowledge transfer effect is the most noticeable for small-scale datasets.
-
-Also, the difference between metrics of the topic classification and intent classification makes us suppose that the advantage of multi-task training depends not just on the number of samples, but on the number of samples per class. Testing this hypothesis, however, might require additional investigation. 
-
-We also leave exploring whether these conclusions hold for the different task types, for example, sequence tagging and question answering, as a subject of future research. Testing these 
-conclusions on other languages or on other transformer-based models (for example, decoder-base ones)  is also a possible future field of study.
-
-.
-Multi-task transformer-agnostic models almost match the singletask models by metrics on the dialog tasks. The accuracy gap between the multi-task and singletask monolingual models is about 0.8-0.9\% for the English language and about 0.3-0.6\% for the Russian language. For the multilingual models, the gap remains within the same limit, except for the multilingual BERT trained on Russian data, where the gap evaporates completely.
-
-% We also report that the training of the multi-task neural network for English data took 21-24\% more training steps than the training of the singletask models with the same criteria of early stopping. The reason is that the model did not stop until the metrics on relatively low-size tasks stop improving, therefore examples from relatively high-size tasks that already were trained) were seen more times than they would have been seen if the model was singletask and trained for any of these tasks. Убрать вообще batches seen, раз не видно паттерна?
-
-We also show that if we have Russian and English data for the same tasks, it does not matter match whether we unite data for every task, or we treat them as separate tasks. The choice of sampling, between plain, uniform, and annealed, also did not matter match in our experiments; however, this might also indicate that annealed sampling requires thorough tuning of hyperparameters.
+Также в работе было показано, что в случае, если для одной и той же задачи имеются обучающие данные для английского и для русского языка, соответствующие друг другу по номенклатуре и нумерации классов, эти данные при обучении трансформер-агностичной многозадачной модели лучше использовать в рамках одной задачи, а не в рамках отдельной задачи для каждого языка. Это связано с тем, что при использовании данных из разных языков в рамках одной задачи перенос знаний происходит как на уровне тела модели, так и на уровне задаче-специфичных линейных слоев, тогда как если выделять данные для каждого языка в отдельную задачу, то перенос знаний между ними будет происходить только на уровне тела модели.
 
 For the small-scale data, we can see that if we train the multilingual distilbert on small shares of Russian training data (2-5\%), multi-task models overcome singletask models in the average accuracy. As shown in Figure 2, this accuracy advantage strongly depends on the dataset size - the smaller the truncated dataset size, the larger the advantage. For intent and topic datasets this advantage evaporates at 1151 training samples, but for the emotion dataset, surprisingly, this advantage holds true with any dataset partition, possibly due to the effect of knowledge transfer from the sentiment task.
 
