@@ -252,13 +252,13 @@ legend style={nodes={scale=0.7, transform shape}}
  %TODO - Italicize all backbones? 
 \end{table*}
 \begin{table*}
-\caption{Точность/ F1.  Режим M означает многозадачные модели, режим S означает однозадачные модели, и Доля означает долю использованных тренировочных данных. Базовая модель distilbert. Усреднено по пяти запускам. }
+\caption{Точность/ F1 для запусков на части тренировочных данных.  Режим M означает многозадачные модели, режим S означает однозадачные модели, и Доля означает долю использованных тренировочных данных. Базовая модель \textit{distilbert-base-cased}. Усреднено по пяти запускам. }
 \label{tab:mtl_dialog_part}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{c|c|c|c|c|c|c|c|c}
 \hline
  \multirow{2}{*}{Режим} &  \multirow{2}{*}{Доля} &  \\multirow{2}{*}{Среднее} & Эмоции & Тональность & Токсичность & Интенты & Темы & Число \\
-& & & 39.4k & 80.5k & 127.6k & 11.5k & 11.5k & seen \\
+& & & 39.4k & 80.5k & 127.6k & 11.5k & 11.5k & батчей \\
 \hline 
 S & 15\% & 78.5/70.9 & 65.8/50.6 & 69.3/68.8 & 92.2/81.2 & 78.7/68.8 & 86.3/85.1 & 2173 \\ \hline
 M & 15\% & 77.4/70.6 & 64.0/55.0 & 68.3/67.7 & 91.6/80.0 & 76.9/64.6 & 86.4/85.4 & 4741 \\ \hline
@@ -350,7 +350,8 @@ M & 2\% & 64.8/52.1 & 57.6/38.4 & 61.4/60.1 & 90.8/78.0 & 44.2/23.5 & 69.9/60.4 
 
  \begin{table*}
 \caption{ Влияние добавления англоязычных данных. Точность/ f1-макро на русскоязычных данных для трансформер-агностичного \textit{distilbert-base-multilingual-cased}. Число батчей означает число батчей, которые видела модель в процессе своего обучения, режим S означает однозадачное обучение, режим M - многозадачное обучение. RU доля - доля тренировочных примеров, взятых из каждого русскоязычного тренировочного набора данных, и EN  доля - доля примеров, взятых из каждого англоязычного тренировочного набора данных. Усреднено по 3 запускам, кроме указанных выше экспериментов, для которых усреднение проводилось по 5 запускам.}\label{mult_smalldata_results}
-\scalebox{0.95}{\begin{tabular}{|c|c|c|c||c|c|c|c|c|c||c|} \hlinemode & \begin{tabular}[c]{@{}l@{}}RU\\доля\end{tabular} & \begin{tabular}[c]{@{}l@{}}EN\\доля\end{tabular} &\begin{tabular}[c]{@{}l@{}}Валидация\\на\end{tabular} & Среднее & \begin{tabular}[c]{@{}l@{}}Эмоции\end{tabular} & \begin{tabular}[c]{@{}l@{}}Тональность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Токсичность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Интенты\end{tabular} & \begin{tabular}[c]{@{}l@{}}Топики\end{tabular} & \begin{tabular}[c]{@{}l@{}}Число\\ батчей\end{tabular} \\\hline \hline
+\scalebox{0.95}{\begin{tabular}{|c|c|c|c||c|c|c|c|c|c||c|} \hline
+Режим & \begin{tabular}[c]{@{}l@{}}RU\\доля\end{tabular} & \begin{tabular}[c]{@{}l@{}}EN\\доля\end{tabular} &\begin{tabular}[c]{@{}l@{}}Валидация\\на\end{tabular} & Среднее & \begin{tabular}[c]{@{}l@{}}Эмоции\end{tabular} & \begin{tabular}[c]{@{}l@{}}Тональность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Токсичность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Интенты\end{tabular} & \begin{tabular}[c]{@{}l@{}}Топики\end{tabular} & \begin{tabular}[c]{@{}l@{}}Число\\ батчей\end{tabular} \\\hline \hline
 S & 100\% & 100\% & EN & 85.2/82.1 & 79.0/70.8 & 77.2/77.4 & 96.5/94.5 & 84.5/80.6 & 88.4/87.4 & 15946 \\ \hline
 M & 100\% & 100\% & EN & 84.4/80.9 & 77.2/70.5 & 75.8/75.8 & 96.4/94.4 & 83.5/76.3 & 88.9/87.8 & 20737 \\ \hline
 S & 50\% & 100\% & EN & 83.2/79.5 & 75.6/65.8 & 75.6/75.7 & 96.1/93.9 & 82.2/76.5 & 86.8/85.5 & 16672 \\ \hline
@@ -394,7 +395,7 @@ M & 3\% & 0\% & RU & 65.9/55.1 & 62.6/41.3 & 69.0/69.2 & 91.2/85.6 & 42.6/24.2 &
  \label{mult_smalldata_results2} 
  \scalebox{0.95}{ 
  \begin{tabular}{|c|c|c|c||c|c|c|c|c|c||c|} \hline 
- mode & \begin{tabular}[c]{@{}l@{}}RU\\доля\end{tabular} & \begin{tabular}[c]{@{}l@{}}EN\\доля\end{tabular} &\begin{tabular}[c]{@{}l@{}}Валидация\\на\end{tabular} & Среднее & \begin{tabular}[c]{@{}l@{}}Эмоции\end{tabular} & \begin{tabular}[c]{@{}l@{}}Тональность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Токсичность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Интенты\end{tabular} & \begin{tabular}[c]{@{}l@{}}Топики\end{tabular} & \begin{tabular}[c]{@{}l@{}}Число\\ батчей\end{tabular} \hline \hline
+Режим & \begin{tabular}[c]{@{}l@{}}RU\\доля\end{tabular} & \begin{tabular}[c]{@{}l@{}}EN\\доля\end{tabular} &\begin{tabular}[c]{@{}l@{}}Валидация\\на\end{tabular} & Среднее & \begin{tabular}[c]{@{}l@{}}Эмоции\end{tabular} & \begin{tabular}[c]{@{}l@{}}Тональность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Токсичность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Интенты\end{tabular} & \begin{tabular}[c]{@{}l@{}}Топики\end{tabular} & \begin{tabular}[c]{@{}l@{}}Число\\ батчей\end{tabular} \hline \hline
  S & 100\% & 100\% & EN & 85.2/82.1 & 79.0/70.8 & 77.2/77.4 & 96.5/94.5 & 84.5/80.6 & 88.4/87.4 & 15946 \\ \hline
  S & 100\% & 100\% & RU & 85.3/81.9 & 79.2/71.4 & 77.2/77.3 & 96.7/94.7 & 84.6/78.2 & 88.6/87.7 & 29204 \\ \hline 
 M & 100\% & 100\% & EN & 84.4/80.9 & 77.2/70.5 & 75.8/75.8 & 96.4/94.4 & 83.5/76.3 & 88.9/87.8 & 20737 \\ \hline 
