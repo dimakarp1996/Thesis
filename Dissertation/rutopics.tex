@@ -1,53 +1,27 @@
 \chapter{Исследование переноса знаний в многоязычных моделях на новом тематическом наборе данных}
+\section{Введение}
+В предыдущей главе \ref{ch:tr-ag} был исследован перенос знаний в многозадачных многоязычных моделях. Тем не менее, в этой главе остался не исследован перенос знаний с русского языка на другие языки. Также, в этой главе осталось не раскрыто то, от чего зависит качество переноса знаний в многоязычных моделях на разные языки.
 
-В предыдущей главе \ref{ch:tr-ag} 
-
-\section{Introduction}
-Topic classification is a widespread task in dialog systems\cite{dream1_trudy}. The dialog system must in some way classify the topic of user utterance, to make the dialog go as planned. For this reason, researchers have made different datasets for solving a topic classification problem. 
-The dataset \texttt{MASSIVE}~\cite{massive} is created for the conversational topic and intent classification. In this dataset with ~17k samples(train+test+valid), one of the 18 topic classes and one of the 60 intent classes is assigned to every utterance. This dataset is massively multilingual, as every utterance from that is provided in 52 different languages (including Russian). Also, every utterance from the dataset looks like a real conversational user request to Amazon Alexa. However, the nomenclature of topics provided in this dataset does not even remotely cover all possible user topics.
-
-Another class of topic datasets is comprised of the datasets which are created for the classification of large texts. Among such datasets, we can consider, for example, DeepPavlov Topics~\cite{dp_topics}. The positive sides of this dataset are the large class nomenclature (33 classes) and the large number of samples (~1.6 million training samples). However, this dataset contains samples only for the English language. Also, samples in this dataset are much larger than ordinary conversational utterances, which can introduce undesirable biases while using models trained on this dataset for the classification of short conversational utterances.
-\iffalse
-For 4 class dp topics:
-en & 5,731,625 & 0 & 74.6 & 75.6 & 94.2 & 91.4 & 93.6 & 86.4 & 79.3 & 78.1 & 82.1 & 76.9\\ \hline
-en & 5,731,625 & 1 & 77.5 & 78.1 & 93.7 & 90.8 & 94.0 & 86.9 & 81.5 & 80.1 & 85.8 & 82.5\\ \hline
-
-For 3 class dp topics:
-en & 5,731,625 & 0 & 88.0 & 87.7 & 93.8 & 92.9 & 94.1 & 90.8 & 88.1 & 88.1\\ \hline
-en & 5,731,625 & 1 & 88.4 & 87.8 & 93.9 & 93.0 & 93.9 & 90.1 & 89.0 & 89.0\\ \hline
-\fi
-
-
-A large variety of topic datasets is explicitly about the classification of large pieces of text (mostly - news) and therefore suffers from the same problems as~\cite{dp_topics}. 
-These datasets include, for example, the dataset \texttt{AG-NEWS}~\cite{ag_news} which has only 4 topics, or the dataset from \texttt{The Guardian}~\cite{guardian_authorship}. These datasets are also English-only. 
-
-The news dataset \texttt{MLSUM}~\cite{mlsum} has versions for several languages (French, German, Turkish, Spanish, Russian). Due to the large size of news articles (compared to the conversational utterances), this dataset should have the same problem. Also, the 16 Russian topical classes from this dataset are derived from the news categories. That classes still don't cover the vast majority of conversational topics. 
-
-The same problem probably also holds for the dataset~\cite{xglue}. This 10-class news dataset has an English-only training set, and a test sample from 5 European languages, including Russian. 
-An ontology dataset~\cite{dbpedia} probably also suffers from the same problems as it contains very long texts. Also, the nomenclature of this dataset (14 classes) is by no means sufficient for topical classification. 
-
-Another idea is to extract topic datasets from the question-answering website. The creators of dataset~\cite{yahoo_answers_topics} implemented this idea. This 10-topic dataset contains questions and answers for topics from Yahoo. Answers service. However, the variety of topics covered in this dataset is far from exhaustive. This dataset also does not cover the Russian language. 
-
-The dataset~\cite{chatbotru} has a very large nomenclature of Russian intents and topics (79 classes). However, the size of the dataset is too small for such amount of classes (~7.1k total samples). Given that this dataset is also imbalanced, it means that the vast majority of intents of topics in this dataset have less than 100 samples per class(or even much less, up to 10-20). Such a small number of samples per class makes the dataset more suitable for the few-shot setting than for the finetuning of BERT-like models. Therefore, the room for the larger Russian topical dataset remained open at the time of writing this article. 
-
-We can also single out the massively multilabel Russian-language dataset from the website "Kill Me Please"~\cite{kill_me_please}. This dataset contained sad stories that belong to any number of 12 topics covered on this website. However, the list of 12 covered topics is not exhaustive, the large percentage of stories on the website have much larger sizes than any conversational utterance, and the body of stories on this website, by definition, is biased. Therefore, we still cannot rely on this dataset in the dialog system.
-Some other topic classification datasets are too topic-specific to be the main backbone of the general-purpose dialog system. For example, datasets~\cite{lexglue} and~\cite{lextreme} are focused on legal-specific topics. Dataset~\cite{hupd} is created for the patent classification task. Dataset~\cite{blbooksgenre} serves for book title classification.
- Among the Russian-language datasets, a small dataset~\cite{pstu}(less than 1k samples) is created for the classification between seven university-specific intents. The dataset~\cite{healthcare_facilities_reviews} contains reviews of Russian medical facilities, which is also too specific for the vast majority of conversational topics. 
-The multilingual product review dataset from Amazon~\cite{amazon_reviews} contains reviews of products sold on Amazon from different categories, grouped by the topic. However, the topics provided in this dataset are still insufficient for building the general-purpose topic classifier, as the possible range of topics to discuss differs from the range of Amazon product categories. 
-
-As one can see from our review, not all topic datasets are suitable for use to train the dialog system, that works with real user phrases. Some datasets have a too small number of classes, some other datasets have very specific class nomenclature, and other datasets' examples are too different from the real-world dialog data which can cause additional distortions. Also, the body of work especially lacks the Russian language topic datasets, as existing Russian datasets are incomplete and either too small or too specific. Our article aims to bridge this gap. 
-
+Помимо этого, прикладные задачи диалоговой платформы DREAM требовали создания русскоязычного набора данных для тематической классификации, которые подходят к применению в реальных диалоговых системах. Существующие наборы данных для тематической классификации, поддерживающие русский язык, имеют следующие проблемы:
+\begin{itemize}
+    \item[*] Часть таких наборов данных состоит из длинных обучающих примеров(как правило - новостей). Опыт применения моделей, обученных на наборе данных \texttt{DeepPavlov Topics} в диалоговой платформе DREAM, показывает(см. Раздел \ref{mtldream:dp_topics_problems}), что модели, обученные на таких данных, могут переобучаться на них и плохо себя показывать на реальных диалоговых задачах. Примерами таких наборов данных являются \texttt{MLSUM}~\cite{mlsum} и \texttt{XGLUE-nc}~\cite{xglue}.
+    \item[*] Часть таких наборов данных является слишком специфичными и хорошо подходят для классификации узкоспециализированных вопросов, но не подходят для классификации широкого спектра тем из-за специфичной номенклатуры классов.  Примерами таких наборов данных являются~\cite{healthcare_facilities_reviews} и  ~\cite{pstu}
+    \item[*] Некоторые наборы данных для тематической классификации лишены этих проблем, но либо имеют слишком маленькое число примеров~\cite{chatbotru}, либо имеют номенклатуру классов, далекую от покрытия всех потребностей диалоговой системы~\cite{massive}.
+\end{itemize}
+Данные вопросы были подробно освещены в статье \cite{yaqtopics}, по мотивам которой написана данная глава. В этой главе представляется новый тематический набор данных - \texttt{YAQTopics}. Приводятся метрики базовых моделей на этом наборе данных, доказывается пригодность набора данных \texttt{YAQTopics} для разговорной тематической классификации и исследуется перенос знаний с этого набора данных на 50 разных языков для многоязычной нейросетевой модели типа Трансформер.
 
 \section{Набор данных \texttt{YAQTopics}} 
 
-В работе предлагается новый русскоязычный набор данных для тематической классификацииt - \texttt{YAQTopics}. This dataset was parsed from Yandex. Que service~\cite{yandex_q} on the allowance of administration of this service\iffalse\footnote{After submitting the article, we have found the dataset \url{https://huggingface.co/datasets/its5Q/yandex-q}, which also contains the questions and answers from "Yandex.Que". However, this dataset does not contain topics.}\fi.
+В работе предлагается новый русскоязычный набор данных для тематической классификацииt - \texttt{YAQTopics}. This dataset was parsed from Yandex. Que service~\cite{yandex_q} on the allowance of administration of this service.\iffalse\footnote{After submitting the article, we have found the dataset \url{https://huggingface.co/datasets/its5Q/yandex-q}, which also contains the questions and answers from "Yandex.Que". However, this dataset does not contain topics.}\fi.
 
-The utterances in this dataset have 76 topics. We have selected the topics to parse, based on the dataset \cite{dp_topics}. The topic of every question corresponded to this question's topic from Yandex.Que. We note that some of the topics can be similar to each other, as the real Yandex.Que topics are - therefore, the utilization of the \texttt{YAQTopics} dataset in the applied setting might require the merging of some topics. 
+В данный датасет были спарсены примеры из 76 разных тем. Выбор тем осуществлялся, основываясь на наборе данных \texttt{DeepPavlov Topics} и потребностях диалоговой платформы \textbf{DREAM}. Тема каждого вопроса соответствовала теме этого вопроса из "Яндекс.Кью". We note that some of the topics can be similar to each other, as the real Yandex.Que topics are - therefore, the utilization of the \texttt{YAQTopics} dataset in the applied setting might require the merging of some topics. 
 
- For all the parsed topics, 330,582 unique questions were parsed, of which 123,748 are answered. Instead of the full answers, we have saved the versions of answers which are summarized by TextRank~\cite{summarizer}. Nevertheless, we provide all questions with links, so the full texts of answers can be retrieved from the Yandex website.
-Among all the questions, 265,068 belong to only one topic, and another 65,514 belong to multiple topics. Among all the answers, 93,087 answers belong to only one topic and 30,661 belong to multiple topics. 
 
-% TODO ВЫБОРКА ТЕСТОВАЯ ВАЛИДАЦИОННАЯ ИЛИ РАЗБИЕНИЕ? singlelabel multilabel перевод) однометочная? многометочная?
+Для всех выбранных тем из этого сервиса, было получено 330,582 уникальных вопросов, из которых 123,748 были отвечены. Чтобы ответы не были слишком длинными и, следовательно, лучше подходили для тематической классификации, в набор данных добавлялись не сами ответы, а их версии, суммаризованные в одно предложение алгоритмом \texttt{TextRank}. В любом случае, все ответы предоставляются вместе со ссылками, так что полные версии ответов можно получить с сервиса Яндекса.
+
+Из всех вопросов, 265,068 принадлежат только одной теме, а остальные 65,514 - нескольким темам. Из всех суммаризованных ответов, 93,087 принадлежат только одной теме, а остальные 30,661 - нескольким темам.
+
+% TODO ВЫБОРКА ТЕСТОВАЯ ВАЛИДАЦИОННАЯ ИЛИ РАЗБИЕНИЕ? singlelabel multilabel перевод) однометочная? многометочная? Формат чисел. DREAM - жирным
 Полученные пары вопрос-ответ (в которых ответ мог быть пустым) были разбиты на тренировочную, валидационную и тестовую выборку в следующем соотношении: 80 процентов в тренировочную выборку, 10 процентов в валидационную и 10 процентов в тестовую. После этого, тренировочный, валидационный и тестовый наборы данных были разбиты на две части. В первую часть(однометочную) попали примеры, в которых вопрос встречается только в одной теме, и при этом либо для этого вопроса ответ не существует, либо суммаризованный ответ можно обнаружить только в той же теме. Все остальные примеры попали в часть 2(многометочную).
 
 Размеры всех частей и разбиений набора данных \texttt{YAQTopics} для любого из классов приведены в Таблице \ref{rutopics:data_sizes}. 
