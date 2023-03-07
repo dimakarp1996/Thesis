@@ -12,9 +12,10 @@
 
 \section{Набор данных \texttt{YAQTopics}} 
 
-В работе предлагается новый русскоязычный набор данных для тематической классификацииt - \texttt{YAQTopics}. This dataset was parsed from Yandex. Que service~\cite{yandex_q} on the allowance of administration of this service.\iffalse\footnote{After submitting the article, we have found the dataset \url{https://huggingface.co/datasets/its5Q/yandex-q}, which also contains the questions and answers from "Yandex.Que". However, this dataset does not contain topics.}\fi.
+В работе предлагается новый русскоязычный набор данных для тематической классификацииt - \texttt{YAQTopics}. Этот набор данных был спарсен из сервиса "Яндекс.Кью"~\cite{yandex_q} с разрешения администрации этого сервиса.\footnote{Стоит также упомянуть про другой набор данных \url{https://huggingface.co/datasets/its5Q/yandex-q}, который тоже одержит вопросы и ответы из "Яндекс.Кью". Но он не содержит темы оттуда.}
+%TODO - уточнить этот footnote в соответствии с оригинальной статьей
 
-В данный датасет были спарсены примеры из 76 разных тем. Выбор тем осуществлялся, основываясь на наборе данных \texttt{DeepPavlov Topics} и потребностях диалоговой платформы \textbf{DREAM}. Тема каждого вопроса соответствовала теме этого вопроса из "Яндекс.Кью". We note that some of the topics can be similar to each other, as the real Yandex.Que topics are - therefore, the utilization of the \texttt{YAQTopics} dataset in the applied setting might require the merging of some topics. 
+В данный датасет были спарсены примеры из 76 разных тем. Выбор тем осуществлялся, основываясь на наборе данных \texttt{DeepPavlov Topics} и потребностях диалоговой платформы \textbf{DREAM}. Тема каждого вопроса соответствовала теме этого вопроса из "Яндекс.Кью". Некоторые из выбранных тем могут быть похожими друг на друга, как и реальные темы из "Яндекс.Кью" - следовательно, прикладное использование набора данных \texttt{YAQTopics} может требовать объединения некоторых тем. 
 
 
 Для всех выбранных тем из этого сервиса, было получено 330,582 уникальных вопросов, из которых 123,748 были отвечены. Чтобы ответы не были слишком длинными и, следовательно, лучше подходили для тематической классификации, в набор данных добавлялись не сами ответы, а их версии, суммаризованные в одно предложение алгоритмом \texttt{TextRank}. В любом случае, все ответы предоставляются вместе со ссылками, так что полные версии ответов можно получить с сервиса Яндекса.
@@ -126,8 +127,8 @@
 \label{tab:rubaseline}
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
 \hline
-\textbf{Trained and tested on} & \multicolumn{2}{c|}{\textbf{Singlelabel}} & \multicolumn{2}{c|}{\textbf{Full}} \\ \hline
- & & Acc & f1 & Acc & f1  \\
+\textbf{Училось и тестировалось на} & \multicolumn{2}{c|}{\textbf{Для примеров с одной меткой}} & \multicolumn{2}{c|}{\textbf{Для всех примеров}} \\ \hline
+ & & Точность & f1 & Точность & f1  \\
 \hline 
 \textbf{Q}              & 65.2 & 59.5 & 39.5 & 58.9 \\ \hline
 \textbf{A}              & 47.6 & 37.4 & 24.2 & 37.6 \\ \hline
