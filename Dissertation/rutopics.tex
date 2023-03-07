@@ -318,44 +318,21 @@ Amharic & am & 14,375 & 9.1 & 3.5 & 0.0 & 0.0 & 100.0 & 100.0 & 0.2 & 0.2 & 0.0 
 % two chinese languages - specify what?
 The Pearson correlation of the smoothed Wikipedia size with the total accuracy is 0.609 (p-value 1.66e-6), whereas the Spearman correlation is 0.817 (p-value is 1.47e-13). If we do not perform smoothing, the Pearson correlation is 0.517(p-value 8.81e-5), whereas the Spearman correlation remains the same.
 
-\iffalse # TODO
-We also have performed the same experiments with the baseline Russian-only large model, which also was trained only on the 6-class \texttt{YAQTopics} subset in this setting. Surprisingly, even for that model we still have a noticeable knowledge transfer from Russian to the English language. Also, the correlation between the smoothed Wikipedia size and the number of articles does not evaporate, even though it becomes lower\footnote{Spearman correlation: 0.452, p-value 8.5e-4. Pearson correlation: 0.521, p-value 8.74e-5}. We provide the scores for the top-10 languages in the Tab \ref{crosslingual2}.
+\section{Обсуждение и анализ результатов} 
+
+В данной главе предлагается новый русскоязычный набор данных для разговорной тематической классификации - \texttt{YAQTopics}. Этот тематический датасет объединяет большое количество примеров (265,068 принадлежащих одному классу, 65,514 -2 классам и более) с обширным охватом классов (76 классов). Этот набор данных сгруппирован по темам из «Яндекс.Кью»; для каждого вопроса приводится суммаризованный вариант ответа, ссылка на полный ответ и темы вопросов и ответов в «Яндекс.Кью».
+
+Как можно видеть, набор данных \texttt{YAQTopics} подходит достаточно хорошо для разговорной тематической классификации . Так, для классификации вопросов, модель \textit{bert-base-multilingual-cased}, обученная на шестиклассовой подвыборке \texttt{YAQTopics}, показывает точность 76.0 и макро-f1 72.1 на подвыборке соответствующих 6 классов из русскоязычного \texttt{MASSIVE}. 
+% todo metric names
+
+ На удивление, конкатенация суммаризованных ответов к вопросов не улучшает эти цифры, и даже их несколько ухудшает. А классификация одних только суммаризованных ответов дает существенно более низкие результаты на русскоязычном \texttt{MASSIVE}, чем классификация одних только вопросов, даже при одниаковом размере обучающей выборки. Более того, даже простое добавление суммаризованных ответов к обучающей выборке также несколько ухудшает результаты. Это показывает ограниченную полезность суммаризованных ответов на вопросы для задачи классификации разговорных реплик, а значит, показывает, что использование одних только вопросов  из \texttt{YAQTopics} для классификации разговорных реплик полностью оправдано. 
+
+Также в данной главе показано, что в случае оценки модели  \textit{bert-base-multilingual-cased}, обученной на шестиклассовой подвыборке \texttt{YAQTopics}, на подвыборке соответствующих 6 классов из \texttt{MASSIVE} для всех 51 поддерживаемых в \texttt{MASSIVE} языков, точность для каждого языка сильно коррелирует с аппроксимированном набором обучающей выборки для этого языка ( корреляция Спирмена 0.817 c p-значением 1.47е-13). Размер обучающей выборки был аппроксимирован при помощи возведения числа статей в Википедии для каждого языка на 11 октября 2018 года(дата выпуска статьи \cite{bert}) в степень 0.7, по аналогии с оригинальной статьей. 
+%TODO - Спирмен, пи-значение, как пишется?
+
+Данная корреляция была получена даже несмотря на то, что средняя статья в Википедии на разных языках имеет разное число токенов и предложений. Это приводит к предположению о том, что если бы для каждого языка имелось в явном виде число тренировочных примеров, которое модель \textit{bert-base-multilingual-cased} получала на этапе предобучения, корреляция была бы еще выше - но авторы оригинальной статьи не предоставили ни оригинальную обучающую выборку, ни её размер по языкам. 
+
+Это приводит к выводу, что основной фактор, определяющий качество переноса знаний между языками в многоязычных моделях типа BERT - это размер выборки на предобучении для этого языка\footnote{Вероятно, для языков, которые являются очень лингвистически близкими, лингвистическая близость также влияет на качество переноса знаний, но оценка этого фактора требует дополнительных исследований.}.С учетом выводов Главы \ref{ch:tr-ag}, данный вывод может быть расширен и на многозадачные модели. 
 
 
-\begin{table*}
-\centering
-\caption{Accuracy(f1) for the baseline model(\textit{sbert\_large\_nlu\_ru}) trained on the "Q" version of \texttt{YAQTopics}, with the one question corresponding to exactly one answer. "Code" means ISO 639-1 language code, and "N" means the number of Wikipedia articles on that language on 11-10-2018. Total score for majority baseline: accuracy 22.9, f1 6.2}
-\scalebox{0.8}{
-\label{crosslingual2}
-\begin{tabular}{|c|c|c||c|c|c|c|c|c|c|c|c|c|c|c|c|c|} \hline
-{\textbf{Language}}  & \textbf{Code} & \textbf{N}  &  \multicolumn{2}{c|}{\textbf{Total}} &  \multicolumn{2}{c|}{\textbf{music}} &  \multicolumn{2}{c|}{\textbf{cooking}} &  \multicolumn{2}{c|}{\textbf{news}} &  \multicolumn{2}{c|}{\textbf{transport}} &  \multicolumn{2}{c|}{\textbf{weather}} &  \multicolumn{2}{c|}{\textbf{social}} \\ \hline
-& & & Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 \\ \hline \hline
-Russian & ru & 1,501,878 & 79.8 & 72.4 & 96.0 & 91.6 & 93.4 & 84.3 & 92.0 & 88.0 & 95.6 & 93.8 & 96.8 & 95.4 & 85.7 & 52.2\\ \hline
-English & en & 5,731,625 & 52.4 & 48.2 & 76.2 & 67.0 & 80.5 & 60.6 & 88.2 & 81.7 & 87.7 & 78.1 & 86.7 & 75.7 & 85.6 & 52.8\\ \hline
-Slovenian & sl &162,453 & 23.3 & 20.0 & 61.0 & 50.8 & 59.2 & 46.8 & 85.7 & 72.3 & 78.5 & 50.8 & 77.1 & 43.5 & 85.1 & 47.9\\ \hline
-German & de & 2,227,483 & 21.1 & 18.2 & 44.7 & 41.4 & 76.8 & 52.3 & 77.7 & 52.6 & 79.7 & 58.6 & 77.1 & 43.6 & 86.1 & 54.4\\ \hline
-Polish & pl & 1,303,297 & 19.8 & 17.5 & 67.1 & 51.8 & 54.4 & 45.1 & 81.1 & 61.6 & 74.6 & 50.3 & 77.0 & 43.5 & 85.4 & 50.1\\ \hline
-Spanish & es & 1,480,965 & 19.7 & 16.9 & 58.6 & 50.6 & 58.4 & 46.2 & 79.6 & 51.9 & 79.3 & 50.7 & 76.9 & 43.5 & 86.6 & 57.1\\ \hline
-Catalan & ca & 591,783 & 19.3 & 16.8 & 43.2 & 40.0 & 70.7 & 49.4 & 81.7 & 56.7 & 80.1 & 53.3 & 77.0 & 43.6 & 85.9 & 54.2\\ \hline
-Mongolian & mn & 18,353 & 18.8 & 15.4 & 57.0 & 48.2 & 55.3 & 45.0 & 80.6 & 45.6 & 81.3 & 57.6 & 77.6 & 45.8 & 85.8 & 52.3\\ \hline
-Portuguese & pt & 1,007,323 & 18.7 & 13.8 & 49.5 & 45.5 & 66.0 & 48.5 & 79.9 & 50.2 & 79.6 & 51.5 & 77.1 & 43.8 & 85.3 & 49.3\\ \hline
-French & fr & 2,046,793 & 18.1 & 14.7 & 34.8 & 33.7 & 78.4 & 49.9 & 80.9 & 55.7 & 79.4 & 51.2 & 77.0 & 43.5 & 85.7 & 53.4\\ \hline
-\end{tabular}
-}
-\end{table*}
-\fi
-\section{Discussion} 
-As one can see, the \texttt{YAQTopics} dataset overall suits fairly well for the conversational topic classification. In the case of question classification, even lightweight models trained on the \texttt{YAQTopics} subset obtain an accuracy of 76.0 and an f1 macro of 72.1 on the 6-class \texttt{MASSIVE} subset.
 
- Surprisingly, the concatenation of the summarized answers does not change these results in a significant way. And answer-only classification yields much lower scores on \texttt{MASSIVE} than the question-only classification even if we control for the sample size, making it identical for the question-only dataset and the answer-only dataset. Moreover, even using answers in addition to questions (as separate samples) also deteriorates the scores by several percent. That can prove the limited usability of summarized answers for the conversational utterance classification, which leads to the conclusion that using a question-only version of \texttt{YAQTopics} for the conversational topics classification is fully legitimate.
-
-In the case of evaluation of multilingual BERT(trained on the questions and answers) on all languages included in the \texttt{MASSIVE} dataset, the accuracy by language closely correlates with the size of Wikipedia for the same language (Spearman correlation 0.817 with p-value 1.47e-13, Pearson correlation 0.517 with p-value 8.81e-5), if we approximate this size by the number of Wikipedia articles. If we perform the exponential weighting of the Wikipedia sizes with the factor 0.7, as in~\cite{bert}, the Pearson correlation grows to 0.609(p-value 1.66e-6).
-
- Such correlation was obtained even though in different languages every Wikipedia article, on average, has a different number of tokens or sentences; we suggest that if we explicitly had the number of training samples for every language that the original multilingual model received, the correlation would have been even higher; but the authors of original BERT article provided neither the original training sample nor its size. 
-
-This leads to the conclusion that the main factor determining the quality of knowledge transfer between different languages in the multilingual model is, by far, the size of the pretraining sample for this language. We can suppose that for the case of languages that are very linguistically close (e.g Russian and Belarussian) such closeness also impacts knowledge transfer, but examining the importance of this factor requires additional research. 
-
-
-%TODO. REEXAMINE THIS SECTION AFTER OBTAINING FULL RESULTS. 
-\section{Conclusion} 
-\input{RuTopics/Abstract.tex}
