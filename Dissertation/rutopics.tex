@@ -242,9 +242,16 @@ The results of such a comparison are presented in the Table \ref{subsampled}.
 We see that the questions are indeed more informative for the conversational tasks than the answers. And overall, the suitability of the \texttt{YAQTopics} for the classification of the conversational aforementioned topics remains fairly high. However, we take for the next section the \textbf{Q and A} setting (treating questions and answer as separate examples), as using answers as separate samples still boosts the scores. 
 
 %REMAINS IT. 
-\section{Crosslingual knowledge transfer} 
+\section{Перенос знаний между языками} 
 
+После выбора наилучшего метода использования набора данных \texttt{YAQTopics}, были поставлены следующие задачи:
 
+\begin{itemize}
+\item[*]Как эффективно знания из \texttt{YAQTopics} переносятся между несколькими языками?
+\item[*]Что влияет на эффективность этого переноса?
+\end{itemize}
+
+Чтобы ответить на эти вопросы, ней
 After we have selected the best setting, other questions are: how effectively does the knowledge from this setting transfer across multiple languages? And what influences the efficiency of this transfer. To answer this question, we infer the comparison model trained in the \textbf{Q} setting (as described in the previous section) not only on the Russian-language \texttt{MASSIVE} but also on the \texttt{MASSIVE} dataset for all languages it contains \footnote{We use \texttt{MASSIVE} version 1.1, which contains the Catalan language. For the Chinese language, we have utilized both character sets as \texttt{MASSIVE} has two Chinese versions.}. 
 
 An interesting research question is the correlation of the model quality for different languages with the training sample size. The work~\cite{bert} claims that the learning sample for every utilized language contained from the text of Wikipedia for that language, and that they performed an exponential smoothing of the training sample with the factor of 0.7 to balance the languages. Therefore, as a proxy of the Wikipedia size for every language, we used the number of articles in the Wikipedia of this language at the time of the BERT article's release, smoothed by the factor of 0.7. 
