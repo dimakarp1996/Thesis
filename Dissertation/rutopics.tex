@@ -1,10 +1,6 @@
-Тут будет глава, основанная на статье YAQTopics
-  В этой статье мы предлагаем новый русскоязычный датасет для разговорной тематической классификации - YAQTopics. Этот тематический датасет объединяет большое количество примеров (265,068принадлежащих одному классу, 65,514 -2 классам и более) с обширным охватом классов (76 классов). Этот набор данных сгруппирован по темам из «Яндекс.Кью»; для каждого вопроса приводится суммаризованный вариант ответа, ссылка на полный ответ и темы вопросов и ответов в «Яндекс.Кью».
-Оценивая модели, обученные YAQTopics, на 6 совпадающих классах русскоязычного набора данных  MASSIVE, мы доказали, что набор данных YAQTopics подходит для реальных разговорных задач, поскольку модель, состоящая только из вопросов, дает точность в 76,2\% и макро-f1 72,9\%. Мы также выяснили, что для многоязычного BERT, обученного на YAQTopics 
-на тех же 6 классах MASSIVE (для всех языков из набора данных MASSIVE),точносит для каждого языка тесно коррелирует(корреляция Спирмена 0,71 с p-значением 5,37e-9) с размером данных предварительного обучения BERT для этого языка, который был аппроксимирован в соответствии с оригинальной статьей. 
-  
-\textbf{Ключевые слова:} датасет, тематическая классификация, перенос знаний, перенос знаний между языками
+\chapter{Исследование переноса знаний в многоязычных моделях на новом тематическом наборе данных}
 
+В предыдущей главе \ref{ch:tr-ag} 
 
 \section{Introduction}
 Topic classification is a widespread task in dialog systems\cite{dream1_trudy}. The dialog system must in some way classify the topic of user utterance, to make the dialog go as planned. For this reason, researchers have made different datasets for solving a topic classification problem. 
@@ -42,20 +38,20 @@ The multilingual product review dataset from Amazon~\cite{amazon_reviews} contai
 As one can see from our review, not all topic datasets are suitable for use to train the dialog system, that works with real user phrases. Some datasets have a too small number of classes, some other datasets have very specific class nomenclature, and other datasets' examples are too different from the real-world dialog data which can cause additional distortions. Also, the body of work especially lacks the Russian language topic datasets, as existing Russian datasets are incomplete and either too small or too specific. Our article aims to bridge this gap. 
 
 
-\section{\texttt{YAQTopics} dataset} 
-We propose the new Russian topic classification dataset - \texttt{YAQTopics}. This dataset was parsed from Yandex. Que service~\cite{yandex_q} on the allowance of administration of this service\iffalse\footnote{After submitting the article, we have found the dataset \url{https://huggingface.co/datasets/its5Q/yandex-q}, which also contains the questions and answers from "Yandex.Que". However, this dataset does not contain topics.}\fi.
+\section{Набор данных \texttt{YAQTopics}} 
+
+В работе предлагается новый русскоязычный набор данных для тематической классификацииt - \texttt{YAQTopics}. This dataset was parsed from Yandex. Que service~\cite{yandex_q} on the allowance of administration of this service\iffalse\footnote{After submitting the article, we have found the dataset \url{https://huggingface.co/datasets/its5Q/yandex-q}, which also contains the questions and answers from "Yandex.Que". However, this dataset does not contain topics.}\fi.
 
 The utterances in this dataset have 76 topics. We have selected the topics to parse, based on the dataset \cite{dp_topics}. The topic of every question corresponded to this question's topic from Yandex.Que. We note that some of the topics can be similar to each other, as the real Yandex.Que topics are - therefore, the utilization of the \texttt{YAQTopics} dataset in the applied setting might require the merging of some topics. 
 
  For all the parsed topics, 330,582 unique questions were parsed, of which 123,748 are answered. Instead of the full answers, we have saved the versions of answers which are summarized by TextRank~\cite{summarizer}. Nevertheless, we provide all questions with links, so the full texts of answers can be retrieved from the Yandex website.
 Among all the questions, 265,068 belong to only one topic, and another 65,514 belong to multiple topics. Among all the answers, 93,087 answers belong to only one topic and 30,661 belong to multiple topics. 
 
-% TODO. CHECK THE TOPIC NUMBER. PROVIDE a LINK TO EVERY QUESTION in the final dataset version. 
+% TODO ВЫБОРКА ТЕСТОВАЯ ВАЛИДАЦИОННАЯ ИЛИ РАЗБИЕНИЕ? singlelabel multilabel перевод) однометочная? многометочная?
+Полученные пары вопрос-ответ (в которых ответ мог быть пустым) были разбиты на тренировочную, валидационную и тестовую выборку в следующем соотношении: 80 процентов в тренировочную выборку, 10 процентов в валидационную и 10 процентов в тестовую. После этого, тренировочный, валидационный и тестовый наборы данных были разбиты на две части. В первую часть(однометочную) попали примеры, в которых вопрос встречается только в одной теме, и при этом либо для этого вопроса ответ не существует, либо суммаризованный ответ можно обнаружить только в той же теме. Все остальные примеры попали в часть 2(многометочную).
 
- We have split the question-answer pairs we obtained in the ratio 80/10/10 for training, validation, and testing samples. We also have split the training set, validation set, and testing set for the 2 parts. In part 1 (singlelabel) we select only those pairs where the question belongs to only one topic, and the answer either not exists or can be found solely in this topic. All other examples belong to part 2 (multilabel). 
-Sizes of all parts and splits of the dataset can be found in Table \ref{data_sizes}. 
+Размеры всех частей и разбиений набора данных \texttt{YAQTopics} для любого из классов приведены в Таблице \ref{rutopics:data_sizes}. 
 
-% TODO. INSERT HERE A TABLE WITH DATA SIZES. SCALEBOX 0.6. IT SHOULD TAKE 1 PAGE
 
 \begin{table}[t]
 %\centering
@@ -169,22 +165,19 @@ Sizes of all parts and splits of the dataset can be found in Table \ref{data_siz
 
 Стоит ответить, что, так как некоторые классы из \texttt{YAQTopics} похожи друг на друга, результаты из Таблицы~\ref{tab:rubaseline} могут быть улучшены при помощи объединения некоторых классов, например, \textit{Food} и \textit{FoodDrinksCulinary}). Результаты, приведенные в таблице, верны только для оригинального набора данных без объединения классов. Тем не менее, даже на этом наборе классов \textit{sbert\_large\_nlu\_ru} может показывать точность выше 65 \%.
 
-%TODO. DISCUSS WITH VASILY - WHAT SHOULD BE THE BASELINE MODEL?? 
+%TODO. никаких мы
 
 Далее в этой главе диссертации используются только примеры, принадлежащие только к одной теме, для упрощения оценки моделей на наборе данных \texttt{MASSIVE}.
 
 \section{Выбор представления набора данных \texttt{YAQTopics}} 
 
-We need to figure out the best method of utilization of \texttt{YAQTopics} for training on conversational tasks, and to score it on conversational tasks. We can utilize only answers from \texttt{YAQTopics}, only questions, utilize questions and answers as separate examples or concatenate(with [SEP] token) questions to answers where answers exist. 
+Следующей задачей, которую требуется решить, является выбор наилучшего метода использования набора данных \texttt{YAQTopics} для получения наилучших результатов на разговорных задачей. Было проведено сравнение следующих методов использования этого набора данных - использование только ответов из \texttt{YAQTopics}, только вопросов из этого набора данных, использование ответов и вопросов из этого набора данных как отдельных примеров или же конкатенация ответов к вопросам ( при помощи токена [SEP]) для отвеченных вопросов.
 
-Anyway, to evaluate the suitability of \texttt{YAQTopics}(preprocessed in any way) for the topical classification, we:
-\begin{itemize}
-\item Select the comparison model and train it on the \texttt{YAQTopics} subset 
-\item Evaluate the model on the corresponding \texttt{MASSIVE} subset after the end of the training. 
-\end{itemize}
-This method is explained in the next two subsections. 
+Для оценки любого из этих методов предобработки набора данных, модель для сравнения обучалась на тренировочных примерах из \texttt{YAQTopics}, принадлежащих любому из соответствующих набору данных \texttt{MASSIVE} шести классов и полученных в соответствии с этим методом. После завершения обучения, данная модель оценивалась на поднаборе примеров из русского \texttt{MASSIVE}, принадлежащих соответствующим шести классам из этого набора данных.
 
-\subsection{Обучение модели для сравнения}
+Этот метод оценки подробнее раскрыт в Разделе \ref{comparison_model}.
+
+\subsection{Обучение модели для сравнения}\label{comparison_model}
 Здесь и далее, для оценки набора данных \texttt{YAQTopics}, обучалась модель типа \textit{bert-base-multilingual-cased} с параметрами, аналогичными разделу \ref{ch:tr-ag:settings}. Подобный тип нейросетевых моделей позволяет как быстро проводить эксперименты, так и исследовать перенос знаний между языками. Результаты для каждого эксперимента с участием этой модели усреднялись по трем запускам.Результаты для каждого запуска представлены в Разделе~\ref{appendix:rutopics:allruns}.
 
 При сравнении набора данных \texttt{YAQTopics} с набором данных \texttt{MASSIVE}, можно видеть, что только шесть классов из \texttt{MASSIVE} можно поставить в соответствие классам из  \texttt{YAQTopics}. Следовательно, нейросетевая модель в данных экспериментах обучалась только для шести соответствующих классов \texttt{YAQTopics}: \textit{FoodDrinksCulinary} (соответствует классу \textit{cooking} из \texttt{MASSIVE}), \textit{News} (соответствует классу \textit{news} из \texttt{MASSIVE} ), \textit{Transport} (соответствует классу \textit{transport} из \texttt{MASSIVE}), \textit{Music} (соответствует классу \textit{music} из \texttt{MASSIVE}),\textit{MediaCommunications} (соответствует классу \textit{social} из \texttt{MASSIVE}) и \textit{Weather} (соответствует классу \textit{weather} из \texttt{MASSIVE} class). После завершения обучения моделей, эти модели были протестированы на подвыборке всех примеров из вышеупомянутых классов набора данных \texttt{MASSIVE}(тренировочные+тестовые+валидационные). Этот метод позволяет проверить пригодность набора данных \texttt{YAQTopics} для тематической классификации в разговорной речи - по крайней мере на этих шести классов. Впрочем, так как примеры для всех классов \texttt{YAQTopics} собирались одинаково, похожие результаты можно ожидатьь и для других классов.
@@ -212,7 +205,7 @@ This method is explained in the next two subsections.
 % TODO. ALL TABLES TO RUSSIAN AND ALL ALLRUNS TO APPENDIX
 
 
-\subsection {Вопросы точно информативнее ответов?} 
+\subsection {Действительно ли вопросы информативнее ответов?} 
 Можно возразить, что Таблица~\ref{tab:rutopics:versions} не является окончательным доказательством того, что средний вопрос из \texttt{YAQTopics} несет больше информации, чем средней ответ, так как число вопросов и ответов в \texttt{YAQTopics} сильно отличается. Чтобы провести честное сравнение между вопросными и ответными данными из \texttt{YAQTopics},из данных, обучение на которых проводилось для Таблицы~\ref{tab:rutopics_versions} были выбраны только те из вопросов, у которых есть уникальные суммаризованные ответы(не попадающиеся ни в каком другом вопросе)\footnote{В результате чего пришлось исключить около 200 примеров} и которые при этом принадлежат только к одной теме. Эти версии YAQTopics в статье обозначаются как "субсэмплированные"
 Сравнение обучения на вопросах и на ответах приведено в Таблице \ref{tab:rutopics:subsampled}. 
 \begin{table*}
