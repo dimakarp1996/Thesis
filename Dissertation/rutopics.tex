@@ -25,18 +25,17 @@
 % TODO ВЫБОРКА ТЕСТОВАЯ ВАЛИДАЦИОННАЯ ИЛИ РАЗБИЕНИЕ? singlelabel multilabel перевод) однометочная? многометочная? Формат чисел. DREAM - жирным
 Полученные пары вопрос-ответ (в которых ответ мог быть пустым) были разбиты на тренировочную, валидационную и тестовую выборку в следующем соотношении: 80 процентов в тренировочную выборку, 10 процентов в валидационную и 10 процентов в тестовую. После этого, тренировочный, валидационный и тестовый наборы данных были разбиты на две части. В первую часть(однометочную) попали примеры, в которых вопрос встречается только в одной теме, и при этом либо для этого вопроса ответ не существует, либо суммаризованный ответ можно обнаружить только в той же теме. Все остальные примеры попали в часть 2(многометочную).
 
-Размеры всех частей и разбиений набора данных \texttt{YAQTopics} для любого из классов приведены в Таблице \ref{rutopics:data_sizes}. 
-
+Размеры всех частей и разбиений набора данных \texttt{YAQTopics} для любого из классов приведены в Таблице \ref{tab:yaqtopics_size}. 
 
 \begin{table}[t]
 %\centering
-\caption{Dataset sizes for the \texttt{YAQTopics} task, for every class. \textbf{Dataset size} refers to the total dataset size.}
-\label{data_sizes}
-\scalebox{0.6}{
+\caption{Размеры набора данных \texttt{YAQTopics}, по классу и разбиению}
+\label{tab:yaqtopics_size}
+\scalebox{0.7}{
 \begin{tabular}{|c||c|c|c||c|c|c||c|c|c||c|c|c|} \hline
-\textbf{data type} & \textbf{train} & \textbf{valid} & \textbf{test} & \textbf{train} & \textbf{valid} & \textbf{test} & \textbf{train} & \textbf{valid} & \textbf{test} & \textbf{train} & \textbf{valid} & \textbf{test} \\ \hline
-\textbf{by label}  & \multicolumn{6}{c|}{singlelabel} & \multicolumn{6}{c|}{multilabel} \\ \hline
-\textbf{class}  & \multicolumn{3}{c|}{all} & \multicolumn{3}{c|}{answered} & \multicolumn{3}{c|}{all} & \multicolumn{3}{c|}{answered}\\ \hline \hline
+\textbf{тип данных} & \textbf{тренировочные} & \textbf{валидационные} & \textbf{тестовые} & \textbf{тренировочные} & \textbf{валидационные} & \textbf{тестовые} & \textbf{тренировочные} & \textbf{валидационные} & \textbf{тестовые} & \textbf{тренировочные} & \textbf{валидационные} & \textbf{тестовые} \\ \hline
+\textbf{по числу меток}  & \multicolumn{6}{c|}{1 метка} & \multicolumn{6}{c|}{более 1 метки} \\ \hline
+\textbf{класс}  & \multicolumn{3}{c|}{все} & \multicolumn{3}{c|}{отвеченные} & \multicolumn{3}{c|}{все} & \multicolumn{3}{c|}{отвеченные}\\ \hline \hline
 \textbf{Dataset size} & 212,021 & 26,562 & 26,485 & 74,600 & 9,308 & 9,179 & 52,444 & 6,497 & 6,573 & 24,576 & 3,042 & 3,043\\ \hline
 \textbf{PersonalTransport} & 6,873 & 892 & 895 & 1,557 & 200 & 208 & 676 & 107 & 86 & 209 & 45 & 29\\ \hline
 \textbf{Politics} & 6,199 & 758 & 804 & 2,711 & 335 & 352 & 2,119 & 263 & 298 & 1,133 & 153 & 147\\ \hline
@@ -117,19 +116,21 @@
 \end{tabular}
 }
 \end{table}
+
+
 %TODO. Разделе - заглавными буквами? macro-average единообразно - замечание на этапе диссера что макро усредненное f1 обозначается как f1
 В качестве базовой модели, использовалась модель\textit{sbert\_large\_nlu\_ru}~\cite{sbert_large_nlu_ru}.Все гиперпараметры при дообучении данной модели были аналогичными описанным в Разделе \ref{ch:tr-ag:settings}. Модель была обучена и протестирована на всех вариантах набора данных \texttt{YAQTopics}, упомянутых в Таблице \ref{tab:versions}, но на всех 76 классах. Результаты данной модели представлены в Таблице~\ref{tab:rubaseline}. В этой таблице, как и во всех таблицах этого раздела макро-усредненное f1 обозначается как f1.
 
 \begin{table*}
 \centering
-\caption{Accuracy(f1) of the Russian baseline models for different versions of \texttt{YAQTopics}. \textbf{Q} means questions, \textbf{A} means answers, \textbf{Q and A} means treating questions and answers as separate examples, and \textbf{Q [SEP] A} means concatenation  of every questions with the corresponding answer(if that answer exist) using [SEP] token. Full means we have used singlelabel and multilabel data. Otherwise we have used only singlelabel data/  Backbone: \textit{sbert\_large\_nlu\_ru}.}
+\caption{Точность (f1) \textit{sbert\_large\_nlu\_ru} для разных методов предобработки набора данных \texttt{YAQTopics}. \textbf{Q} означает использование только вопросов, \textbf{A} означает использование только ответов, \textbf{Q and A} означает использование вопросов и ответов как отдельных примеров, и \textbf{Q [SEP] A} означает использование конкатенации каждого вопроса с соответствующим ему ответом при помощи токена [SEP](если такой ответ существует, иначе просто использование вопроса). Для каждого метода точность вычислялась на соответствующем тестовом разбиении \texttt{YAQTopics}, полученном с использовании этого метода.}
 \scalebox{0.8}{
 \label{tab:rubaseline}
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\begin{tabular}{|c|c|c|c|c|}
 \hline
 \textbf{Училось и тестировалось на} & \multicolumn{2}{c|}{\textbf{Для примеров с одной меткой}} & \multicolumn{2}{c|}{\textbf{Для всех примеров}} \\ \hline
  & & Точность & f1 & Точность & f1  \\
-\hline 
+\hline \hline
 \textbf{Q}              & 65.2 & 59.5 & 39.5 & 58.9 \\ \hline
 \textbf{A}              & 47.6 & 37.4 & 24.2 & 37.6 \\ \hline
 \textbf{Q [SEP] A}        & 65.8 & 59.9 & 39.4 & 59.5 \\ \hline
@@ -157,18 +158,19 @@
 
 При сравнении набора данных \texttt{YAQTopics} с набором данных \texttt{MASSIVE}, можно видеть, что только шесть классов из \texttt{MASSIVE} можно поставить в соответствие классам из  \texttt{YAQTopics}. Следовательно, нейросетевая модель в данных экспериментах обучалась только для шести соответствующих классов \texttt{YAQTopics}: \textit{FoodDrinksCulinary} (соответствует классу \textit{cooking} из \texttt{MASSIVE}), \textit{News} (соответствует классу \textit{news} из \texttt{MASSIVE} ), \textit{Transport} (соответствует классу \textit{transport} из \texttt{MASSIVE}), \textit{Music} (соответствует классу \textit{music} из \texttt{MASSIVE}),\textit{MediaCommunications} (соответствует классу \textit{social} из \texttt{MASSIVE}) и \textit{Weather} (соответствует классу \textit{weather} из \texttt{MASSIVE} class). После завершения обучения моделей, эти модели были протестированы на подвыборке всех примеров из вышеупомянутых классов набора данных \texttt{MASSIVE}(тренировочные+тестовые+валидационные). Этот метод позволяет проверить пригодность набора данных \texttt{YAQTopics} для тематической классификации в разговорной речи - по крайней мере на этих шести классов. Впрочем, так как примеры для всех классов \texttt{YAQTopics} собирались одинаково, похожие результаты можно ожидатьь и для других классов.
 
+
 Результаты оценки обучения модели для сравнения на русскоязычном наборе данных \texttt{MASSIVE} в Таблице~\ref{tab:versions}. Из этой таблицы видно, что классификация конкатенации вопросов и ответов приводит к небольшому ухудшению метрик на разговорных данных относительно классификации только вопросов, и использование ответов как дополнительных примеров лишь дополнительно ухудшает эти метрики. Использование в качестве обучающей выборки одних только ответов приводит к серьезному падению метрик.
 % TODO. LANGUAGE OF TABLES - RU ONLY. набор данных датасет
 
 \begin{table*}
 \centering
-\caption{Accuracy(f1) on the Russian \texttt{MASSIVE} for different versions of \texttt{YAQTopics}. \textbf{Q} means questions, \textbf{A} means answers, \textbf{Q and A} means treating questions and answers as separate examples, and \textbf{Q [SEP] A} means concatenation  of every questions with the corresponding answer(if that answer exist) using [SEP] token. Averaged by three runs. Backbone: \textit{bert-base-multilingual-cased}. Total score for majority baseline: accuracy 22.9, f1 6.2}
+\caption{Accuracy(f1) on the Russian \texttt{MASSIVE} for different versions of \texttt{YAQTopics}. \textbf{Q} означает использование только вопросов, \textbf{A} означает использование только ответов, \textbf{Q and A} означает использование вопросов и ответов как отдельных примеров, и \textbf{Q [SEP] A} означает использование конкатенации каждого вопроса с соответствующим ему ответом при помощи токена [SEP](если такой ответ существует, иначе просто использование вопроса). Backbone: \textit{bert-base-multilingual-cased}. }
 \scalebox{0.8}{
 \label{tab:versions}
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
 \hline
-\textbf{Trained on}  &  \multicolumn{2}{c|}{\textbf{Total}} &  \multicolumn{2}{c|}{\textbf{music}} &  \multicolumn{2}{c|}{\textbf{cooking}} &  \multicolumn{2}{c|}{\textbf{news}} &  \multicolumn{2}{c|}{\textbf{transport}} &  \multicolumn{2}{c|}{\textbf{weather}} &  \multicolumn{2}{c|}{\textbf{social}} \\ \hline
-& Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 \\
+{\textbf{Обучалось на}}  &  \multicolumn{2}{c|}{\textbf{Для всех классов}} &  \multicolumn{2}{c|}{\textbf{music}} &  \multicolumn{2}{c|}{\textbf{cooking}} &  \multicolumn{2}{c|}{\textbf{news}} &  \multicolumn{2}{c|}{\textbf{transport}} &  \multicolumn{2}{c|}{\textbf{weather}} &  \multicolumn{2}{c|}{\textbf{social}} \\ \hline
+Точность & f1 & Точность & f1 & Точность & f1 & Точность & f1 & Точность & f1 & Точность & f1 & Точность & f1 \\ \hline \hline
 \hline 
 \textbf{Q}              & 76.0 & 72.1 & 94.9 & 17.3 & 98.9 & 27.6 & 78.5 & 14.7 & 89.6 & 16.8 & 76.5 & 15.4 & 23.8 & 6.4 \\ \hline
 \textbf{A}              & 61.9 & 56.1 & 97.9 & 27.5 & 95.4 & 25.5 & 52.6 & 12.1 & 82.0 & 18.0 & 58.4 & 14.7 & 0.7 & 0.2\\ \hline
@@ -185,12 +187,12 @@
 Сравнение обучения на вопросах и на ответах приведено в Таблице \ref{tab:rutopics:subsampled}. 
 \begin{table*}
 \centering
-\caption{Accuracy(f1) on the Russian \texttt{MASSIVE} for the subsampled versions of \texttt{YAQTopics}, with the one question corresponding to exactly one answer. Q means questions, and A means answers. Averaged by three runs. Backbone: \textit{bert-base-multilingual-cased}. Total score for majority baseline: accuracy 22.9, f1 6.2}
+\caption{Точность(макро-f1) модели \textit{bert-base-multilingual-cased} на русскоязычном наборе данных MASSIVE при разных методах предобработки набора данных \texttt{YAQTopics}. \textbf{Qs} означает субсэмплированные вопросы, \textbf{As} означает субсэмплированные ответы.}
 \scalebox{0.8}{
 \label{tab:rutopics:subsampled}
 \begin{tabular}{|c||c|c|c|c|c|c|c|c|c|c|c|c|c|c|} \hline
-{\textbf{Trained on}}  &  \multicolumn{2}{c|}{\textbf{Total}} &  \multicolumn{2}{c|}{\textbf{music}} &  \multicolumn{2}{c|}{\textbf{cooking}} &  \multicolumn{2}{c|}{\textbf{news}} &  \multicolumn{2}{c|}{\textbf{transport}} &  \multicolumn{2}{c|}{\textbf{weather}} &  \multicolumn{2}{c|}{\textbf{social}} \\ \hline
-& Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 \\ \hline \hline
+{\textbf{Обучалось на}}  &  \multicolumn{2}{c|}{\textbf{Для всех классов}} &  \multicolumn{2}{c|}{\textbf{music}} &  \multicolumn{2}{c|}{\textbf{cooking}} &  \multicolumn{2}{c|}{\textbf{news}} &  \multicolumn{2}{c|}{\textbf{transport}} &  \multicolumn{2}{c|}{\textbf{weather}} &  \multicolumn{2}{c|}{\textbf{social}} \\ \hline
+Точность & f1 & Точность & f1 & Точность & f1 & Точность & f1 & Точность & f1 & Точность & f1 & Точность & f1 \\ \hline \hline
 \textbf{Q}  & 72.3 & 65.5 & 94.3 & 22.6 & 98.6 & 21.5 & 81.7 & 16.0 & 88.3 & 17.7 & 73.2 & 16.9 & 3.1 & 1.0\\ \hline
 \textbf{A} & 62.0 & 56.6 & 98.4 & 23.1 & 94.3 & 38.8 & 57.0 & 12.8 & 80.2 & 19.3 & 57.5 & 14.5 & 0.1 & 0.0\\ \hline
 \end{tabular}
@@ -217,12 +219,14 @@
 
 \begin{table*}
 \centering
-\caption{Accuracy(f1) for the "Q" version of \texttt{YAQTopics}, with the one question corresponding to exactly one answer. "Code" means ISO 639-1 language code, and "N" means the number of Wikipedia articles on that language on 11-10-2018. Backbone: \textit{bert-base-multilingual-cased}. Total score for majority baseline: accuracy 22.9, f1 6.2}
+\caption{Точность(f1) yн для версии \textbf{Q} version of \texttt{YAQTopics}, with the one question corresponding to exactly one answer. "Code" means ISO 639-1 language code, and "N" means the number of Wikipedia articles on that language on 11-10-2018. Backbone: \textit{bert-base-multilingual-cased}. }
+Accuracy (f1) on the all \texttt{MASSIVE} languages of the \textit{bert-base-multilingual-cased}, which was trained on the \textbf{Q} version of \texttt{YAQTopics}. \textbf{Code} means ISO 639-1 language code, and \textbf{N} means the number of Wikipedia articles on that language on 11-10-2018. Backbone: \textit{bert-base-multilingual-cased}.
+
 \scalebox{0.8}{
 \label{crosslingual}
 \begin{tabular}{|c|c|c||c|c|c|c|c|c|c|c|c|c|c|c|c|c|} \hline
-{\textbf{Language}}  & \textbf{Code} & \textbf{N}  &  \multicolumn{2}{c|}{\textbf{Total}} &  \multicolumn{2}{c|}{\textbf{music}} &  \multicolumn{2}{c|}{\textbf{cooking}} &  \multicolumn{2}{c|}{\textbf{news}} &  \multicolumn{2}{c|}{\textbf{transport}} &  \multicolumn{2}{c|}{\textbf{weather}} &  \multicolumn{2}{c|}{\textbf{social}} \\ \hline
-& & & Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 \\ \hline \hline
+{\textbf{Язык}}  & \textbf{Код} & \textbf{Число статей}  &  \multicolumn{2}{c|}{\textbf{Для всех классов}} &  \multicolumn{2}{c|}{\textbf{music}} &  \multicolumn{2}{c|}{\textbf{cooking}} &  \multicolumn{2}{c|}{\textbf{news}} &  \multicolumn{2}{c|}{\textbf{transport}} &  \multicolumn{2}{c|}{\textbf{weather}} &  \multicolumn{2}{c|}{\textbf{social}} \\ \hline
+& & & Точность & f1 & Точность & f1 & Точность & f1 & Точность & f1 & Точность & f1 & Точность & f1 & Точность & f1 \\ \hline \hline
 Russian & ru & 1,501,878 & 76.0 & 72.0 & 95.0 & 17.3 & 98.9 & 27.6 & 78.5 & 14.7 & 89.5 & 16.8 & 76.5 & 15.4 & 23.7 & 6.4\\ \hline
 Chinese (Taiwan) & zh-TW & 1,025,366 & 72.9 & 71.0 & 96.3 & 24.5 & 99.4 & 38.8 & 59.9 & 12.3 & 85.1 & 15.3 & 71.9 & 14.8 & 38.5 & 9.2\\ \hline
 Chinese & zh & 1,025,366 & 70.4 & 68.3 & 95.2 & 22.8 & 97.6 & 27.5 & 57.8 & 12.0 & 85.8 & 16.4 & 67.5 & 13.4 & 32.4 & 8.1\\ \hline

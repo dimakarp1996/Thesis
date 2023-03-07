@@ -1,11 +1,11 @@
 \chapter{Приложение}\label{appendix}
 
-\section{Все запуски для трансформер-агностичной многозадачной модели}
+\section{Все запуски для трансформер-агностичной многозадачной модели}\label{appendix:allruns_tr-ag}
 %TIDI, ПЕРЕВРЛ ИАЬОИЦ
 
 \begin{table*}
 \caption{Метрики англоязычных моделей(точность/f1 macro) для пяти диалоговых задач. Режим S означает однозадачные модели, режим M означает многозадачные модели. Все запуски.}
-\label{en_results}
+\label{appendix:tr-ag:en_results}
 %\begin{tabular}{|c|c||c|c|c|c|c|c|} \hline
 \begin{tabular}{|c|c|c||c|c|c|c|c|c||c|} \hline
 \multirow{2}{*}{Модель} & \multirow{2}{*}{Режим} &  \multirow{2}{*}{Запуск} &\multirow{2}{*}{Среднее} & Эмоции & Тональность & Токсичность & Интенты & Темы & Число \\
@@ -34,7 +34,7 @@
 
 \begin{table*}
 \caption{Точность/ F1 для запусков на части тренировочных данных.  Режим M означает многозадачные модели, режим S означает однозадачные модели, и Доля означает долю использованных тренировочных данных. Базовая модель \textit{distilbert-base-cased}. Все запуски. Часть 1. }% do need they?
-\label{model_results2}
+\label{appendix:tr-ag:en_results_part}
 \begin{tabular}{|c|c|c||c|c|c|c|c|c||c|} \hline
  \multirow{2}{*}{Запуск} & \multirow{2}{*}{Режим} &  \multirow{2}{*}{Доля} &\multirow{2}{*}{Среднее} & Эмоции & Тональность & Токсичность & Интенты & Темы & Число \\
 & & & & 39.4k & 80.5k & 127.6k & 11.5k & 11.5k & батчей \\ \hline \hline
@@ -68,7 +68,7 @@
 
 \begin{table*}
 \caption{Точность/ F1 для запусков на части тренировочных данных.  Режим M означает многозадачные модели, режим S означает однозадачные модели, и Доля означает долю использованных тренировочных данных. Базовая модель \textit{distilbert-base-cased}. Все запуски. Часть 2. }% do need they?
-\label{model_results2}
+\label{appendix:model_results2}
 \begin{tabular}{|c|c|c||c|c|c|c|c|c||c|} \hline
  \multirow{2}{*}{Запуск} & \multirow{2}{*}{Режим} &  \multirow{2}{*}{Доля} &\multirow{2}{*}{Среднее} & Эмоции & Тональность & Токсичность & Интенты & Темы & Число \\
 & & & & 39.4k & 80.5k & 127.6k & 11.5k & 11.5k & батчей \\ \hline \hline
@@ -121,7 +121,7 @@
 \end{table*}
 \begin{table*}
 \caption{Точность/ F1 для запусков на части тренировочных данных.  Режим M означает многозадачные модели, режим S означает однозадачные модели, и Доля означает долю использованных тренировочных данных. Базовая модель \textit{distilbert-base-cased}. Все запуски. Часть 3. }% do need they?
-\label{model_results2}
+\label{appendix:model_results2}
 \begin{tabular}{|c|c|c||c|c|c|c|c|c||c|} \hline
  \multirow{2}{*}{Запуск} & \multirow{2}{*}{Режим} &  \multirow{2}{*}{Доля} &\multirow{2}{*}{Среднее} & Эмоции & Тональность & Токсичность & Интенты & Темы & Число \\
 & & & & 39.4k & 80.5k & 127.6k & 11.5k & 11.5k & батчей \\ \hline \hline
@@ -176,7 +176,7 @@
 
 \begin{table*}
 \caption{Метрики русскоязычных моделей(точность/f1 macro) для пяти диалоговых задач. Режим S означает однозадачные модели, режим M означает многозадачные модели. Все запуски.}
-\label{ru_results}
+\label{appendix:ru_results}
 %\begin{tabular}{|c|c||c|c|c|c|c|c|} \hline
 \begin{tabular}{|c|c|c||c|c|c|c|c|c||c|} \hline
 \multirow{2}{*}{Модель} & \multirow{2}{*}{Режим} &  \multirow{2}{*}{Запуск}  & \multirow{2}{*}{Среднее} & Эмоции & Тональность & Токсичность & Интенты & Темы & Число \\
@@ -200,7 +200,7 @@
 
 \begin{table*}
 \caption{Точность/f1 macro на русскоязычных данных для многоязычных моделей. Режим S означает однозадачные модели, режим M - многозадачные модели. RU означает русскоязычные данные , EN означает англоязычные данные. Объединенные означает, что русскоязычные и англоязычные данные объединены по задаче, Отдельные означает, что русскоязычные и англоязычными задачи считаются отдельными задачами. Все запуски. }
-\label{mult_results}
+\label{appendix:mult_results}
 %\begin{tabular}{|c|c|c||c|c|c|c|c|c|} \hline
 \scalebox{0.8}{
 \begin{tabular}{|c|c|c|c||c|c|c|c|c|c||c|} \hline
@@ -243,7 +243,7 @@
 
 \begin{table*}
 \caption{Точность/ f1-макро на русскоязычных данных для трансформер-агностичного \textit{distilbert-base-multilingual-cased}. Число батчей означает число батчей, которые видела модель в процессе своего обучения, режим S означает однозадачное обучение, режим M - многозадачное обучение. RU доля - доля тренировочных примеров, взятых из каждого русскоязычного тренировочного набора данных, и EN  доля - доля примеров, взятых из каждого англоязычного тренировочного набора данных. Все запуски. Часть 1.}
-\label{mult_smalldata_results_all}
+\label{appendix:mult_smalldata_results_all}
 \scalebox{0.8}{
 \begin{tabular}{|c|c|c|c|c||c|c|c|c|c|c||c|} \hline
 Запуск & Режим & \begin{tabular}[c]{@{}l@{}}RU\\доля\end{tabular} & \begin{tabular}[c]{@{}l@{}}EN\\доля\end{tabular} &\begin{tabular}[c]{@{}l@{}}Валидация\\на\end{tabular} & Среднее & \begin{tabular}[c]{@{}l@{}}Эмоции\end{tabular} & \begin{tabular}[c]{@{}l@{}}Тональность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Токсичность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Интенты\end{tabular} & \begin{tabular}[c]{@{}l@{}}Топики\end{tabular} & \begin{tabular}[c]{@{}l@{}}Число\\ батчей\end{tabular} 
@@ -309,7 +309,7 @@
 
 \begin{table*}
 \caption{Точность/ f1-макро на русскоязычных данных для трансформер-агностичного \textit{distilbert-base-multilingual-cased}. Число батчей означает число батчей, которые видела модель в процессе своего обучения, режим S означает однозадачное обучение, режим M - многозадачное обучение. RU доля - доля тренировочных примеров, взятых из каждого русскоязычного тренировочного набора данных, и EN  доля - доля примеров, взятых из каждого англоязычного тренировочного набора данных. Все запуски. Часть 2.}
-\label{mult_smalldata_results_all_2}
+\label{appendix:mult_smalldata_results_all_2}
 \scalebox{0.8}{
 \begin{tabular}{|c|c|c|c|c||c|c|c|c|c|c||c|} \hline
 Запуск & Режим & \begin{tabular}[c]{@{}l@{}}RU\\доля\end{tabular} & \begin{tabular}[c]{@{}l@{}}EN\\доля\end{tabular} &\begin{tabular}[c]{@{}l@{}}Валидация\\на\end{tabular} & Среднее & \begin{tabular}[c]{@{}l@{}}Эмоции\end{tabular} & \begin{tabular}[c]{@{}l@{}}Тональность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Токсичность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Интенты\end{tabular} & \begin{tabular}[c]{@{}l@{}}Топики\end{tabular} & \begin{tabular}[c]{@{}l@{}}Число\\ батчей\end{tabular} 
@@ -378,7 +378,7 @@
 
 \begin{table*}
 \caption{Точность/ f1-макро на русскоязычных данных для трансформер-агностичного \textit{distilbert-base-multilingual-cased}. Число батчей означает число батчей, которые видела модель в процессе своего обучения, режим S означает однозадачное обучение, режим M - многозадачное обучение. RU доля - доля тренировочных примеров, взятых из каждого русскоязычного тренировочного набора данных, и EN  доля - доля примеров, взятых из каждого англоязычного тренировочного набора данных.Все запуски. Часть 3.}
-\label{mult_smalldata_results_all_2}
+\label{appendix:mult_smalldata_results_all_2}
 \scalebox{0.8}{
  \begin{tabular}{|c|c|c|c||c|c|c|c|c|c||c|} \hline 
 Запуск & Режим & \begin{tabular}[c]{@{}l@{}}RU\\доля\end{tabular} & \begin{tabular}[c]{@{}l@{}}EN\\доля\end{tabular} &\begin{tabular}[c]{@{}l@{}}Валидация\\на\end{tabular} & Среднее & \begin{tabular}[c]{@{}l@{}}Эмоции\end{tabular} & \begin{tabular}[c]{@{}l@{}}Тональность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Токсичность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Интенты\end{tabular} & \begin{tabular}[c]{@{}l@{}}Топики\end{tabular} & \begin{tabular}[c]{@{}l@{}}Число\\ батчей\end{tabular} \hline \hline
@@ -437,7 +437,7 @@
 \section{Размеры наборов данных, на которых тестировался перенос знаний в многозадачных моделях для диалоговых задач}
 \label{tr-ag-sizes}
 \begin{table}[t]
-\label{emo_sizes}
+\label{emo_sizes_tr-ag}
 %\centering
 \caption{Размеры наборов данных для классификации эмоций. Английские и русские данные}
 \begin{tabular}{|c||c|c|c|c|c|c|} \hline
@@ -458,7 +458,7 @@
 \begin{table}[t]
 %\centering
 \caption{Размеры наборов данных для классификации токсичности. Английские и русские данные}
-\label{toxic_sizes}
+\label{toxic_sizes_tr-ag}
 \begin{tabular}{|c||c|c|c|c|c|c|} \hline
 {тип данных} & {тренировочные} & {валидациооные} & {тестовые} & {тренировочные} & {валидационные} & {тестовые} \\ \hline
 {класс} & \multicolumn{3}{c|}{EN} & \multicolumn{3}{c|}{RU} \\ \hline \hline
@@ -585,12 +585,46 @@
 }
 \end{table}
 
-\section{Pаспределение числа тренировочных примеров по классам в серии экспериментов с моделью PAL-BERT в DREAM, до и после дополнительной псевдоразметки} \label{appendix:n-samples}
+\section{Все запуски для моделей, работавших с набором данных \texttt{YAQTopics}}
+
+%TODO - table* единообращно
+\begin{table*}
+\caption{Точность(макро-f1) модели \textit{bert-base-multilingual-cased} на русскоязычном наборе данных MASSIVE при разных методах предобработки набора данных \texttt{YAQTopics}.  \textbf{Q} означает использование только вопросов, \textbf{A} означает использование только ответов, \textbf{Q and A} означает использование вопросов и ответов как отдельных примеров, \textbf{Q [SEP] A} означает использование конкатенации каждого вопроса с соответствующим ему ответом при помощи токена [SEP](если такой ответ существует, иначе просто использование вопроса). \textbf{Qs} означает субсэмплированные вопросы, \textbf{As} означает субсэмплированные ответы. Все запуски.}
+\scalebox{0.8}{
+\label{YAQTopics_versions_MASSIVE}
+\begin{tabular}{|c|c||c|c|c|c|c|c|c|c|c|c|c|c|c|c|} \hline
+{\textbf{Обучалось на}} &\textbf{Запуск} &  \multicolumn{2}{c|}{\textbf{Для всех классов}} &  \multicolumn{2}{c|}{\textbf{music}} &  \multicolumn{2}{c|}{\textbf{cooking}} &  \multicolumn{2}{c|}{\textbf{news}} &  \multicolumn{2}{c|}{\textbf{transport}} &  \multicolumn{2}{c|}{\textbf{weather}} &  \multicolumn{2}{c|}{\textbf{social}} \\ \hline
+& & Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 & Acc & f1 \\ \hline
+\textbf{Q} & 0 & 75.9 & 72.5 & 95.5 & 19.5 & 99.1 & 33.2 & 80.4 & 14.9 & 87.2 & 15.5 & 73.2 & 14.1 & 28.8 & 7.5\\ \hline
+\textbf{Q} & 1 & 77.9 & 73.3 & 95.3 & 16.3 & 98.5 & 24.8 & 82.5 & 15.1 & 91.4 & 15.9 & 82.0 & 15.0 & 20.4 & 5.6\\ \hline
+\textbf{Q} & 2 & 74.1 & 70.4 & 94.0 & 16.2 & 99.1 & 24.9 & 72.5 & 14.0 & 90.1 & 19.0 & 74.4 & 17.1 & 22.1 & 6.0\\ \hline
+\textbf{A} & 0 & 63.6 & 56.5 & 97.2 & 24.6 & 97.5 & 32.9 & 64.6 & 15.7 & 84.2 & 18.3 & 53.8 & 14.0 & 0.0 & 0.0\\ \hline
+\textbf{A} & 1 & 57.2 & 52.1 & 97.9 & 33.0 & 96.0 & 24.5 & 28.6 & 7.4 & 84.8 & 18.4 & 54.7 & 14.1 & 1.4 & 0.5\\ \hline
+\textbf{A} & 2 & 64.8 & 59.8 & 98.7 & 24.8 & 92.6 & 19.2 & 64.5 & 13.1 & 76.9 & 17.4 & 66.8 & 16.0 & 0.7 & 0.2\\ \hline
+\textbf{Q [SEP] A} & 0 & 75.6 & 71.4 & 95.5 & 16.3 & 98.8 & 24.8 & 80.7 & 14.9 & 87.5 & 15.6 & 76.0 & 14.4 & 21.6 & 5.9\\ \hline
+\textbf{Q [SEP] A} & 1 & 75.2 & 71.5 & 95.9 & 19.6 & 99.1 & 33.2 & 74.5 & 14.2 & 89.6 & 18.9 & 74.0 & 14.2 & 26.4 & 7.0\\ \hline
+\textbf{Q [SEP] A} & 2 & 73.8 & 69.8 & 94.7 & 24.3 & 98.5 & 24.8 & 76.9 & 14.5 & 85.8 & 15.4 & 73.2 & 16.9 & 22.1 & 6.0\\ \hline
+\textbf{Q and A} & 0 & 73.3 & 68.8 & 96.6 & 16.4 & 99.1 & 33.2 & 76.3 & 14.4 & 85.6 & 15.4 & 72.9 & 16.9 & 18.6 & 5.2\\ \hline
+\textbf{Q and A} & 1 & 73.3 & 68.0 & 95.7 & 19.6 & 99.1 & 33.2 & 79.7 & 14.8 & 86.7 & 18.6 & 72.5 & 14.0 & 13.8 & 4.0\\ \hline
+\textbf{Q and A} & 2 & 74.7 & 70.1 & 94.9 & 32.5 & 99.7 & 49.9 & 76.9 & 14.5 & 88.8 & 18.8 & 75.0 & 14.3 & 20.0 & 5.6\\ \hline
+  \textbf{Qs} & 0 & 72.4 & 65.1 & 94.0 & 24.2 & 98.5 & 19.8 & 80.1 & 17.8 & 90.7 & 19.0 & 74.5 & 17.1 & 0.7 & 0.2\\ \hline
+  \textbf{Qs} & 1 & 72.0 & 66.1 & 94.0 & 24.2 & 99.1 & 24.9 & 82.4 & 15.1 & 87.1 & 15.5 & 69.6 & 16.4 & 7.4 & 2.3\\ \hline
+  \textbf{Qs} & 2 & 72.5 & 65.2 & 94.9 & 19.5 & 98.2 & 19.8 & 82.7 & 15.1 & 87.2 & 18.6 & 75.4 & 17.2 & 1.2 & 0.4\\ \hline
+  \textbf{As} & 0 & 67.3 & 60.5 & 97.9 & 19.8 & 95.4 & 19.5 & 70.1 & 13.7 & 81.7 & 18.0 & 68.3 & 16.2 & 0.0 & 0.0\\ \hline
+  \textbf{As} & 1 & 62.5 & 56.8 & 98.5 & 24.8 & 94.8 & 48.7 & 57.1 & 14.5 & 82.5 & 18.1 & 57.4 & 14.6 & 0.0 & 0.0\\ \hline
+  \textbf{As} & 2 & 56.1 & 52.4 & 98.7 & 24.8 & 92.6 & 48.1 & 43.7 & 10.1 & 76.4 & 21.7 & 46.9 & 12.8 & 0.4 & 0.1\\ 
+\fi
+\end{tabular}
+}
+\end{table*}
+
+
+\section{Pаспределение числа тренировочных примеров по классам в серии экспериментов с моделью PAL-BERT и моделью с одним линейным слоем в DREAM, до и после дополнительной псевдоразметки} \label{appendix:mtl-dream:palbert-n-samples}
 
 
 \begin{table}[htbp]
 \caption{Фактоидная классификация}
-\label{appendix:factoid}
+\label{appendix:mtl-dream:palbert:factoid}
 \begin{tabular}{|c||c|c|}
 \hline
 класс & \begin{tabular}[c]{@{}l@{}}примеров\\ до псевдоразметки \end{tabular} &  \begin{tabular}[c]{@{}l@{}}примеров\\ после псевдоразметки \end{tabular}\\
@@ -605,7 +639,7 @@ conversational & 1606 & 259068 \\
 
 \begin{table}[]
 \caption{Классификация тональности}
-\label{appendix:sentiment}
+\label{appendix:mtl-dream:palbert:sentiment}
 \begin{tabular}{|c||c|c|}
 \hline
 класс & \begin{tabular}[c]{@{}l@{}}примеров\\ до псевдоразметки \end{tabular} &  \begin{tabular}[c]{@{}l@{}}примеров\\ после псевдоразметки \end{tabular}\\
@@ -623,7 +657,7 @@ negative & 3122 & 137202 \\
 
 \begin{table}[]
 \caption{Классификация токсичности}
-\label{appendix:toxic}
+\label{appendix:mtl-dream:palbert:toxic}
 \begin{tabular}{|c||c|c|}
 \hline
 класс & \begin{tabular}[c]{@{}l@{}}примеров\\ до псевдоразметки \end{tabular} &  \begin{tabular}[c]{@{}l@{}}примеров\\ после псевдоразметки \end{tabular}\\
@@ -651,7 +685,7 @@ severe\_toxic & 28 & 28 \\
 
 \begin{table}[]
 \caption{Классификация эмоций}
-\label{appendix:emo}
+\label{appendix:mtl-dream:palbert:emo}
 \begin{tabular}{|c||c|c|}
 \hline
 класс & \begin{tabular}[c]{@{}l@{}}примеров\\ до псевдоразметки \end{tabular} &  \begin{tabular}[c]{@{}l@{}}примеров\\ после псевдоразметки \end{tabular}\\
@@ -677,7 +711,7 @@ surprise & 11966 & 12304 \\
 
 \begin{table}[]
 \caption{Классификация cobot topics}
-\label{appendix:ct}
+\label{appendix:mtl-dream:palbert:ct}
 \begin{tabular}{|c||c|c|}
 \hline
 класс & \begin{tabular}[c]{@{}l@{}}примеров\\ до псевдоразметки \end{tabular} &  \begin{tabular}[c]{@{}l@{}}примеров\\ после псевдоразметки \end{tabular}\\
@@ -715,7 +749,7 @@ Fashion & 435 & 1003 \\ \hline
 
 \begin{table}[]
 \caption{Классификация cobot dialogact topics}
-\label{appendix:dct}
+\label{appendix:mtl-dream:palbert:dct}
 \begin{tabular}{|c||c|c|}
 \hline
 класс & \begin{tabular}[c]{@{}l@{}}примеров\\ до псевдоразметки \end{tabular} &  \begin{tabular}[c]{@{}l@{}}примеров\\ после псевдоразметки \end{tabular}\\
@@ -738,7 +772,7 @@ Interactive & 136 & 348 \\ \hline
 
 \begin{table}[]
 \caption{Классификация cobot dialogact intents}
-\label{appendix:dci}
+\label{appendix:mtl-dream:palbert:dci}
 \begin{tabular}{|c||c|c|}
 \hline
 класс & \begin{tabular}[c]{@{}l@{}}примеров\\ до псевдоразметки \end{tabular} &  \begin{tabular}[c]{@{}l@{}}примеров\\ после псевдоразметки \end{tabular}\\
