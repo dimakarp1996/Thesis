@@ -198,9 +198,8 @@
 
 
 \begin{table*}
-\caption{Точность/f1 macro на русскоязычных данных для многоязычных моделей. Режим S означает однозадачные модели, режим M - многозадачные модели. RU означает русскоязычные данные , EN означает англоязычные данные. Объединенные означает, что русскоязычные и англоязычные данные объединены по задаче, Отдельные означает, что русскоязычные и англоязычными задачи считаются отдельными задачами. Все запуски. }
+\caption{Точность/f1 macro на русскоязычных данных для многоязычных моделей. Режим S означает однозадачные модели, режим M - многозадачные модели. RU означает русскоязычные данные, EN означает англоязычные данные. Объединенные означает, что русскоязычные и англоязычные данные объединены по задаче, Отдельные означает, что русскоязычные и англоязычными задачи считаются отдельными задачами. Все запуски. }
 \label{appendix:mult_results}
-%\begin{tabular}{|c|c|c||c|c|c|c|c|c|} \hline
 \scalebox{0.8}{
 \begin{tabular}{|c|c|c|c||c|c|c|c|c|c||c|} \hline
 Модель & \begin{tabular}[c]{@{}l@{}}Тренировочные\\данные\end{tabular} & Режим & Среднее & \begin{tabular}[c]{@{}l@{}}Эмоции\end{tabular} & \begin{tabular}[c]{@{}l@{}}Тональность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Токсичность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Интенты\end{tabular} & \begin{tabular}[c]{@{}l@{}}Темы\end{tabular} &\begin{tabular}[c]{@{}l@{}}Число\\батчей\end{tabular} \\
@@ -243,10 +242,8 @@
 \begin{table*}
 \caption{Точность/ f1-макро на русскоязычных данных для трансформер-агностичного \textit{distilbert-base-multilingual-cased}. Число батчей означает число батчей, которые видела модель в процессе своего обучения, режим S означает однозадачное обучение, режим M - многозадачное обучение. RU доля - доля тренировочных примеров, взятых из каждого русскоязычного тренировочного набора данных, и EN  доля - доля примеров, взятых из каждого англоязычного тренировочного набора данных. Все запуски. Часть 1.}
 \label{appendix:mult_smalldata_results_all}
-\scalebox{0.8}{
 \begin{tabular}{|c|c|c|c|c||c|c|c|c|c|c||c|} \hline
-Запуск & Режим & \begin{tabular}[c]{@{}l@{}}RU\\доля\end{tabular} & \begin{tabular}[c]{@{}l@{}}EN\\доля\end{tabular} &\begin{tabular}[c]{@{}l@{}}Валидация\\на\end{tabular} & Среднее & \begin{tabular}[c]{@{}l@{}}Эмоции\end{tabular} & \begin{tabular}[c]{@{}l@{}}Тональность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Токсичность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Интенты\end{tabular} & \begin{tabular}[c]{@{}l@{}}Топики\end{tabular} & \begin{tabular}[c]{@{}l@{}}Число\\ батчей\end{tabular} 
-\hline \hline
+Запуск & Режим & \begin{tabular}[c]{@{}l@{}}RU\\доля\end{tabular} & \begin{tabular}[c]{@{}l@{}}EN\\доля\end{tabular} &\begin{tabular}[c]{@{}l@{}}Валидация\\на\end{tabular} & Среднее & \begin{tabular}[c]{@{}l@{}}Эмоции\end{tabular} & \begin{tabular}[c]{@{}l@{}}Тональность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Токсичность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Интенты\end{tabular} & \begin{tabular}[c]{@{}l@{}}Топики\end{tabular} & \begin{tabular}[c]{@{}l@{}}Число\\ батчей\end{tabular} \\ \hline \hline
 0 & S & 100\% & 100\% & EN & 85.2/82.1 & 78.9/71.5 & 77.3/77.5 & 96.6/94.7 & 84.3/79.1 & 88.7/87.7 & 8889 \\ \hline
 1 & S & 100\% & 100\% & EN & 85.3/82.5 & 79.4/71.4 & 77.0/77.1 & 96.6/94.7 & 85.0/82.0 & 88.3/87.3 & 20563 \\ \hline
 2 & S & 100\% & 100\% & EN & 85.0/81.8 & 78.8/69.4 & 77.3/77.5 & 96.4/94.2 & 84.1/80.7 & 88.3/87.2 & 18386 \\ \hline
@@ -302,17 +299,14 @@
 1 & M & 0\% & 100\% & EN & 50.4/40.5 & 39.9/24.3 & 40.6/36.2 & 78.8/61.7 & 40.7/31.5 & 51.8/48.7 & 13440 \\ \hline
 2 & M & 0\% & 100\% & EN & 52.2/41.6 & 45.0/22.9 & 47.0/46.0 & 78.0/59.3 & 38.5/29.9 & 52.3/49.8 & 15120 \\ \hline
 \end{tabular}
-}
 \end{table*}
 
 
 \begin{table*}
 \caption{Точность/ f1-макро на русскоязычных данных для трансформер-агностичного \textit{distilbert-base-multilingual-cased}. Число батчей означает число батчей, которые видела модель в процессе своего обучения, режим S означает однозадачное обучение, режим M - многозадачное обучение. RU доля - доля тренировочных примеров, взятых из каждого русскоязычного тренировочного набора данных, и EN  доля - доля примеров, взятых из каждого англоязычного тренировочного набора данных. Все запуски. Часть 2.}
 \label{appendix:mult_smalldata_results_all_2}
-\scalebox{0.8}{
 \begin{tabular}{|c|c|c|c|c||c|c|c|c|c|c||c|} \hline
-Запуск & Режим & \begin{tabular}[c]{@{}l@{}}RU\\доля\end{tabular} & \begin{tabular}[c]{@{}l@{}}EN\\доля\end{tabular} &\begin{tabular}[c]{@{}l@{}}Валидация\\на\end{tabular} & Среднее & \begin{tabular}[c]{@{}l@{}}Эмоции\end{tabular} & \begin{tabular}[c]{@{}l@{}}Тональность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Токсичность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Интенты\end{tabular} & \begin{tabular}[c]{@{}l@{}}Топики\end{tabular} & \begin{tabular}[c]{@{}l@{}}Число\\ батчей\end{tabular} 
-\hline \hline
+Запуск & Режим & \begin{tabular}[c]{@{}l@{}}RU\\доля\end{tabular} & \begin{tabular}[c]{@{}l@{}}EN\\доля\end{tabular} &\begin{tabular}[c]{@{}l@{}}Валидация\\на\end{tabular} & Среднее & \begin{tabular}[c]{@{}l@{}}Эмоции\end{tabular} & \begin{tabular}[c]{@{}l@{}}Тональность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Токсичность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Интенты\end{tabular} & \begin{tabular}[c]{@{}l@{}}Топики\end{tabular} & \begin{tabular}[c]{@{}l@{}}Число\\ батчей\end{tabular}  \\ \hline \hline
 0 & S & 100\% & 0\% & RU & 84.5/80.5 & 77.1/67.3 & 77.0/77.2 & 96.8/94.9 & 83.2/76.3 & 88.3/86.9 & 10581 \\ \hline
 1 & S & 100\% & 0\% & RU & 84.4/80.0 & 76.0/63.4 & 77.5/77.7 & 96.8/94.8 & 83.7/76.9 & 88.0/87.0 & 13806 \\ \hline
 2 & S & 100\% & 0\% & RU & 84.3/80.6 & 76.3/68.7 & 77.0/77.1 & 96.5/94.4 & 83.5/76.0 & 88.3/87.0 & 9210 \\ \hline
@@ -370,7 +364,6 @@
 3 & M & 3\% & 0\% & RU & 65.7/54.5 & 61.3/40.8 & 68.6/68.8 & 91.7/86.5 & 40.0/19.8 & 66.8/56.7 & 1073 \\ \hline
 4 & M & 3\% & 0\% & RU & 67.0/56.8 & 63.4/40.9 & 69.8/69.8 & 91.4/85.3 & 45.0/29.0 & 65.2/59.1 & 1110 \\ \hline
 \end{tabular}
-}
 \end{table*}
 
 
@@ -380,7 +373,7 @@
 \label{appendix:mult_smalldata_results_all_2}
 \scalebox{0.8}{
  \begin{tabular}{|c|c|c|c||c|c|c|c|c|c||c|} \hline 
-Запуск & Режим & \begin{tabular}[c]{@{}l@{}}RU\\доля\end{tabular} & \begin{tabular}[c]{@{}l@{}}EN\\доля\end{tabular} &\begin{tabular}[c]{@{}l@{}}Валидация\\на\end{tabular} & Среднее & \begin{tabular}[c]{@{}l@{}}Эмоции\end{tabular} & \begin{tabular}[c]{@{}l@{}}Тональность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Токсичность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Интенты\end{tabular} & \begin{tabular}[c]{@{}l@{}}Топики\end{tabular} & \begin{tabular}[c]{@{}l@{}}Число\\ батчей\end{tabular} \hline \hline
+Запуск & Режим & \begin{tabular}[c]{@{}l@{}}RU\\доля\end{tabular} & \begin{tabular}[c]{@{}l@{}}EN\\доля\end{tabular} &\begin{tabular}[c]{@{}l@{}}Валидация\\на\end{tabular} & Среднее & \begin{tabular}[c]{@{}l@{}}Эмоции\end{tabular} & \begin{tabular}[c]{@{}l@{}}Тональность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Токсичность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Интенты\end{tabular} & \begin{tabular}[c]{@{}l@{}}Топики\end{tabular} & \begin{tabular}[c]{@{}l@{}}Число\\ батчей\end{tabular} \\ \hline \hline
 0 & S & 100\% & 100\% & RU & 85.0/81.1 & 78.8/70.2 & 76.7/76.8 & 96.8/94.9 & 84.3/76.3 & 88.2/87.5 & 35408 \\ \hline
 1 & S & 100\% & 100\% & RU & 85.5/82.4 & 79.5/72.4 & 77.4/77.6 & 96.6/94.6 & 84.8/79.0 & 89.2/88.4 & 23869 \\ \hline
 2 & S & 100\% & 100\% & RU & 85.3/82.1 & 79.2/71.7 & 77.5/77.6 & 96.6/94.6 & 84.6/79.3 & 88.4/87.3 & 28337 \\ \hline
@@ -585,12 +578,11 @@
 \end{table}
 
 \section{Все запуски для моделей, работавших с набором данных \texttt{YAQTopics}}
-\begin{minipage}
-\begin{table}[]
+\begin{table}[t]
 \caption{Запуски для моделей, работавших с субсэмплированным набором данных.}
-\begin{tabular}{|c|c|c|c|c|} \hline
+\begin{tabular}{|c|c|c|c|c|}
 {\textbf{Запуск}} & {\textbf{Модель}} & \textbf{Режим} & \textbf{Метрики} \\ \hline
-& & & & Точность & f1 \\ \hline \hline
+& & & Точность & f1 \\ \hline \hline
 0 & \textit{rubert} &  \textbf{Q} & 83.4 & 82.7 \\ \hline
 1 & \textit{rubert} &  \textbf{Q} & 83.7 & 82.8 \\ \hline
 2 & \textit{rubert} &  \textbf{Q} & 84.2 & 83.6 \\ \hline
@@ -653,14 +645,12 @@
 2 & \textit{multbert} &  \textbf{Q [SEP] As} & 76.3 & 75.0 \\ \hline
 \end{tabular}
 \end{table}
-\end{minipage}
 
-\begin{minipage}
 \begin{table}[]
 \caption{Запуски для моделей, работавших с полным набором данных.}
-\begin{tabular}{|c|c|c|c|c|} \hline
+\begin{tabular}{|c|c|c|c|c|}
 {\textbf{Запуск}} & {\textbf{Модель}} & \textbf{Режим} & \textbf{Метрики} \\ \hline
-& & & & Точность & f1 \\ \hline \hline
+& & & Точность & f1 \\ \hline \hline
 0 & \textit{rubert} &  \textbf{Q} & 85.0 & 84.6 \\ \hline
 1 & \textit{rubert} &  \textbf{Q} & 85.5 & 84.5 \\ \hline
 2 & \textit{rubert} &  \textbf{Q} & 85.2 & 84.8 \\ \hline
@@ -723,14 +713,13 @@
 2 & \textit{multbert} &  \textbf{Q [SEP] As} & 79.8 & 79.1 \\ \hline
 \end{tabular}
 \end{table}
-\end{minipage}
-
+%TODO ЧЕРЕЗ MINIPAGE , TABLE TABLE* - REFORMAT
 
 \begin{table*}
 \caption{Точность(f1) модели \textit{bert-base-multilingual-cased} на всех языках из набора данных \texttt{MASSIVE}, обучавшейся на версии \textbf{Q} набора данных \texttt{YAQTopics}.\textbf{Код} означает код языка(ISO 639-1), \textbf{N} означает число статей в Википедии на этом языке на 11 октября 2018 года, \textbf{Дистанция} означает лингвистическую дистанцию между этим языком и русским. Все запуски. Часть 1.}
 \centering
     \scalebox{0.6}{
-\begin{tabular}{|c|c|c|c||c|c|c|} \hline
+\begin{tabular}{|c|c|c|c||c|c|c|}
 \multirow{2}{*}{\textbf{Запуск}} & \multirow{2}{*}{\textbf{Язык}}  & \multirow{2}{*}{\textbf{Код}} & \multirow{2}{*}{\textbf{Дистанция}} & \multirow{2}{*}{\textbf{Число статей}}  &  \multicolumn{2}{c|}{\textbf{Метрики}} \\ %\hline
 \cline{5-6}
 & & & & & Точность & Макро-F1 \\ \hline \hline
@@ -817,7 +806,7 @@
 \caption{Точность(f1) модели \textit{bert-base-multilingual-cased} на всех языках из набора данных \texttt{MASSIVE}, обучавшейся на версии \textbf{Q} набора данных \texttt{YAQTopics}.\textbf{Код} означает код языка(ISO 639-1), \textbf{N} означает число статей в Википедии на этом языке на 11 октября 2018 года, \textbf{Дистанция} означает лингвистическую дистанцию между этим языком и русским. Все запуски. Часть 2.}
 \centering
     \scalebox{0.6}{
-\begin{tabular}{|c|c|c|c||c|c|c|} \hline
+\begin{tabular}{|c|c|c|c||c|c|c|}
 \multirow{2}{*}{\textbf{Запуск}} & \multirow{2}{*}{\textbf{Язык}}  & \multirow{2}{*}{\textbf{Код}} & \multirow{2}{*}{\textbf{Дистанция}} & \multirow{2}{*}{\textbf{Число статей}}  &  \multicolumn{2}{c|}{\textbf{Метрики}} \\ %\hline
 \cline{5-6}
 & & & & & Точность & Макро-F1 \\ \hline \hline
@@ -915,7 +904,6 @@
 \caption{Фактоидная классификация}
 \label{appendix:mtl-dream:palbert:factoid}
 \begin{tabular}{|c||c|c|}
-\hline
 класс & \begin{tabular}[c]{@{}l@{}}примеров\\ до псевдоразметки \end{tabular} &  \begin{tabular}[c]{@{}l@{}}примеров\\ после псевдоразметки \end{tabular}\\
 \hline
 \hline
@@ -930,7 +918,6 @@ conversational & 1606 & 259068 \\
 \caption{Классификация тональности}
 \label{appendix:mtl-dream:palbert:sentiment}
 \begin{tabular}{|c||c|c|}
-\hline
 класс & \begin{tabular}[c]{@{}l@{}}примеров\\ до псевдоразметки \end{tabular} &  \begin{tabular}[c]{@{}l@{}}примеров\\ после псевдоразметки \end{tabular}\\
 \hline
 \hline
@@ -948,7 +935,6 @@ negative & 3122 & 137202 \\
 \caption{Классификация токсичности}
 \label{appendix:mtl-dream:palbert:toxic}
 \begin{tabular}{|c||c|c|}
-\hline
 класс & \begin{tabular}[c]{@{}l@{}}примеров\\ до псевдоразметки \end{tabular} &  \begin{tabular}[c]{@{}l@{}}примеров\\ после псевдоразметки \end{tabular}\\
 \hline
 \hline
@@ -976,7 +962,6 @@ severe\_toxic & 28 & 28 \\
 \caption{Классификация эмоций}
 \label{appendix:mtl-dream:palbert:emo}
 \begin{tabular}{|c||c|c|}
-\hline
 класс & \begin{tabular}[c]{@{}l@{}}примеров\\ до псевдоразметки \end{tabular} &  \begin{tabular}[c]{@{}l@{}}примеров\\ после псевдоразметки \end{tabular}\\
 \hline
 \hline
@@ -1002,7 +987,6 @@ surprise & 11966 & 12304 \\
 \caption{Классификация cobot topics}
 \label{appendix:mtl-dream:palbert:ct}
 \begin{tabular}{|c||c|c|}
-\hline
 класс & \begin{tabular}[c]{@{}l@{}}примеров\\ до псевдоразметки \end{tabular} &  \begin{tabular}[c]{@{}l@{}}примеров\\ после псевдоразметки \end{tabular}\\
 \hline
 \hline
@@ -1100,7 +1084,7 @@ Multiple\_GoalsIntent & 40 & 109 \\
 \label{appendix:emo_tr-ag}
 \begin{tabular}{|c||c|c|c|}
 \hline
-класс & тренировочных примеров & валидационных примеров & тестовых примеров
+класс & тренировочных примеров & валидационных примеров & тестовых примеров \\
 \hline
 \hline
 {joy              } &               15172 &               1863 &                1941 \\ \hline
@@ -1111,14 +1095,13 @@ Multiple\_GoalsIntent & 40 & 109 \\
 {disgust          } &                 498 &                 76 &                  61 \\ \hline
 {fear             } &                 541 &                 80 &                  72 \\ \hline
 \end{tabular}
-\end{table}
-
+\end{table}U
+% TODO НУЖЕН ИЛИ НЕ НУЖЕН HLINE ПОСЛЕ BEGIN TABULAR? ЧТОБЫ БЫЛО ОДИНАКОВО
 \begin{table}[]
 \caption{Классификация тональности}
 \label{appendix:sentiment_tr-ag}
 \begin{tabular}{|c||c|c|c|}
-\hline
-класс & тренировочных примеров & валидационных примеров & тестовых примеров
+класс & тренировочных примеров & валидационных примеров & тестовых примеров \\
 \hline
 \hline
 {neutral}& 47524 & 1200 & 1440 \\ \hline 
@@ -1131,8 +1114,7 @@ Multiple\_GoalsIntent & 40 & 109 \\
 \caption{Классификация токсичности}
 \label{appendix:factoid_tr-ag}
 \begin{tabular}{|c||c|c|c|}
-\hline
-класс & тренировочных примеров & валидационных примеров & тестовых примеров
+класс & тренировочных примеров & валидационных примеров & тестовых примеров \\
 \hline
 \hline
 not\_toxic & 149734 & 18722 & 15353 \\ \hline
@@ -1153,8 +1135,7 @@ severe\_toxic & 28 & 4 & 7\\ \hline
 \caption{Классификация фактоидности. Валидационная выборка соответствовала тестовой.}
 \label{appendix:factoid_tr-ag}
 \begin{tabular}{|c||c|c|c|}
-\hline
-класс & тренировочных примеров & валидационных примеров & тестовых примеров
+класс & тренировочных примеров & валидационных примеров & тестовых примеров \\
 \hline
 \hline
 factoid & 2007 & 224 & 224\\ \hline
@@ -1167,8 +1148,7 @@ conversational & 1606 & 179 & 179\\ \hline
 \caption{Тематическая классификация DeepPavlov Topics}
 \label{appendix:dpt_tr-ag}
 \begin{tabular}{|c||c|c|c|}
-\hline
-класс & тренировочных примеров & валидационных примеров & тестовых примеров
+класс & тренировочных примеров & валидационных примеров & тестовых примеров \\
 \hline
 \hline
 %number of samples & 1806797 & 225849 & 225849 \\ \hline 
@@ -1213,7 +1193,7 @@ Sports & 8918 & 1115 & 1115 \\ \hline
 \label{appendix:ct_tr-ag}
 \begin{tabular}{|c||c|c|c|}
 \hline
-класс & тренировочных примеров & валидационных примеров & тестовых примеров
+класс & тренировочных примеров & валидационных примеров & тестовых примеров \\
 \hline
 \hline
 Other          & 32520 & 6952 & 6876 \\ \hline
@@ -1245,7 +1225,7 @@ Fashion        & 500   & 86   & 113  \\ \hline
 \label{appendix:dct_tr-ag}
 \begin{tabular}{|c||c|c|c|}
 \hline
-класс & тренировочных примеров & валидационных примеров & тестовых примеров
+класс & тренировочных примеров & валидационных примеров & тестовых примеров \\
 \hline
 \hline
 Phatic                   & 27777 & 5879 & 5944 \\ \hline
@@ -1266,7 +1246,7 @@ Inappropriate\_Content   & 1861  & 372  & 395  \\ \hline
 \label{appendix:dci_tr-ag}
 \begin{tabular}{|c||c|c|c|}
 \hline
-класс & тренировочных примеров & валидационных примеров & тестовых примеров
+класс & тренировочных примеров & валидационных примеров & тестовых примеров \\
 \hline
 \hline
 Information\_DeliveryIntent & 111687 & 23781 & 23732 \\ \hline

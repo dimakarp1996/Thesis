@@ -138,7 +138,7 @@
 \begin{tabular}{c|c|c|c|c|c|c|c|c}
 \hline
 \multirow{2}{*}{Модель} & \multirow{2}{*}{Режим} & \multirow{2}{*}{Среднее} & Эмоции & Тональность & Токсичность & Интенты & Темы & Число \\
-& & & 39.4k & 80.5k & 127.6k & 11.5k & 11.5k & батчей \\ \hline
+& & & 39.4k & 80.5k & 127.6k & 11.5k & 11.5k & батчей \\ \hline \hline
 \textit{\multirow{2}{*}{distilbert-base-cased}} & S & \textbf{82.9/78.4} & \textbf{70.3/63.1} & 74.7/74.3 & 91.5/81.2 & \textbf{87.4/82.7} & \textbf{91.0/90.6} & 11390 \\
  & M  & 82.1/77.2 & 67.7/60.7 & \textbf{75.2/75.0} & 90.6/79.8 & 86.3/80.4 & 90.8/90.1 & 14000 \\ \hline
 \textit{\multirow{2}{*}{bert-base-cased}} & S & \textbf{83.9/79.7} & \textbf{71.2/64.2} & 76.1/75.8 & \textbf{93.2/83.5} & \textbf{87.9/84.2} & \textbf{91.3/90.7} & 9470 \\
@@ -157,13 +157,14 @@
 \begin{tabular}{c|c|c|c|c|c|c|c|c}
 \hline
 \multirow{2}{*}{Модель} & \multirow{2}{*}{Режим} & \multirow{2}{*}{Среднее} & Эмоции & Тональность & Токсичность & Интенты & Темы & Число \\
-& & & 6.5k & 82.6k & 93.3k & 11.5k & 11.5k & батчей \\ \hline
+& & & 6.5k & 82.6k & 93.3k & 11.5k & 11.5k & батчей \\ \hline \hline
 \textit{DeepPavlov/distilrubert-base-cased-conversational} & S & 86.9/84.1 & 82.2/76.1 & 77.9/78.2 & 97.1/95.4 & 86.7/81.6 & 90.4/89.5 & 8472 \\ \hline
 \textit{DeepPavlov/distilrubert-base-cased-conversational} & M & 86.3/82.6 & 81.0/74.6 & 77.7/77.7 & 96.9/95.0 & 85.2/75.9 & 90.7/89.9 & 8540 \\ \hline
 \textit{DeepPavlov/rubert-base-cased-conversational} & S & 86.5/83.4 & 80.9/75.3 & 78.0/78.2 & 97.2/95.6 & 86.2/79.1 & 90.0/89.0 & 7999 \\ \hline
 \textit{DeepPavlov/rubert-base-cased-conversational} & M & 86.2/82.6 & 80.5/73.8 & 77.6/77.6 & 96.8/95.0 & 85.3/76.9 & 90.5/89.8 & 8113 \\ \hline
  \end{tabular}
  }
+ \end{table*}
 
 \begin{table*}
 \caption{Метрики многозадачной трансформер-агностичной модели для набора задач GLUE. M.Corr означает корреляцию Мэттью, P/S означает корреляцию Пирсона-Спирмена, Acc точность, F1 - f1 метрику. Режим S означает однозадачные модели, режим M означает многозадачные модели. Размер означает размер тренировочного набора данных}
@@ -174,7 +175,7 @@
 \hline
 \multirow{3}{*}{Модель} & \multirow{3}{*}{Режим}  & Среднее & CoLA & SST-2 & MRPC &STS-B &QQP&MNLI & QNLI & RTE & AX & Число \\
        &        & Размер  & 8.6k & 67.3k & 2.5k & 5.7k & 363.8k & 392.7k & 104.7k & 2.5k & как у MNLI & батчей \\ 
-       &        & метрика  & M.Corr & Acc & F1/Acc & P/S Corr & F1/Acc & Acc(m/mm) & Acc & Acc & M.Corr &  \\ \hline
+       &        & метрика  & M.Corr & Acc & F1/Acc & P/S Corr & F1/Acc & Acc(m/mm) & Acc & Acc & M.Corr &  \\ \hline \hline
 Человек & - & 87.1 & 66.4 & 97.8 & 86.3/80.8 & 92.7/92.6 & 59.5/80.4 & 92.0/92.8 & 91.2 & 93.6 & - & -\\ \hline
 %\textit{\multirow{2}{*}{distilbert-base-cased}} & S & 73.1 & \textbf{42.4} & \textbf{92.1} & 85.6/\textbf{80.3} & 78.8/76.8 & \textbf{69.5/88.5} & \textbf{81.3/80.8} & \textbf{87.5} & 49.8 & 29.9 & 70846 \\ 
 \textit{\multirow{2}{*}{distilbert-base-cased}} & S & 73.3 & \textbf{42.4} & \textbf{92.1} & 85.6/\textbf{80.3} & 78.8/76.8 & \textbf{69.5/88.5} & \textbf{81.3/80.8} & \textbf{87.5} & 52.1 & 29.9 & 70861 \\ 
@@ -249,9 +250,6 @@ legend style={nodes={scale=0.7, transform shape}}
 \end{tikzpicture}%
 \end{figure}
 
- 
- %TODO - Italicize all backbones? 
-\end{table*}
 \begin{table*}
 \caption{Точность/ F1 для запусков на части тренировочных данных.  Режим M означает многозадачные модели, режим S означает однозадачные модели, и Доля означает долю использованных тренировочных данных. Базовая модель \textit{distilbert-base-cased}. Усреднено по пяти запускам. }
 \label{tab:mtl_dialog_part}
@@ -260,7 +258,7 @@ legend style={nodes={scale=0.7, transform shape}}
 \hline
  \multirow{2}{*}{Режим} &  \multirow{2}{*}{Доля} &  \\multirow{2}{*}{Среднее} & Эмоции & Тональность & Токсичность & Интенты & Темы & Число \\
 & & & 39.4k & 80.5k & 127.6k & 11.5k & 11.5k & батчей \\
-\hline 
+\hline \hline
 S & 15\% & 78.5/70.9 & 65.8/50.6 & 69.3/68.8 & 92.2/81.2 & 78.7/68.8 & 86.3/85.1 & 2173 \\ \hline
 M & 15\% & 77.4/70.6 & 64.0/55.0 & 68.3/67.7 & 91.6/80.0 & 76.9/64.6 & 86.4/85.4 & 4741 \\ \hline
 S & 10\% & 77.1/68.4 & 64.6/45.0 & 68.3/67.8 & 92.2/81.0 & 75.5/64.7 & 84.8/83.3 & 1579 \\ \hline
@@ -340,10 +338,10 @@ M & 2\% & 64.8/52.1 & 57.6/38.4 & 61.4/60.1 & 90.8/78.0 & 44.2/23.5 & 69.9/60.4 
 В графической форме усредненные по задачам результаты данного эксперимента представлены на графике ~\ref{fig:ru_dialog_part}, а результаты для каждой задачи - на графике ~\ref{fig:ru_dialog_part_n_samples}. 
 %TODO - дописать, что все метрики они для теста если явно не указано иное. И ссылки на свои статьи по аналогии с pseudolabel. 
 
-\begin{figure}[ht]
-    \includegraphics[width=\textwidth]{ru_dialog_part.jpg}
-  \caption{Точность \textit{distilbert-multilingual-base-cased} на русскоязычных данных в однозадачном и многозадачном режиме, при использовании некой доли русскоязычных обучающих данных или добавление к ним полного англоязычного набора данных.}\label{fig:ru_dialog_part}
-\end{figure}
+%\begin{figure}[ht]
+%    \includegraphics[width=\textwidth]{ru_dialog_part.jpg}
+%  \caption{Точность \textit{distilbert-multilingual-base-cased} на русскоязычных данных в однозадачном и многозадачном режиме, при использовании некой доли русскоязычных обучающих данных или добавление к ним полного англоязычного набора данных.}\label{fig:ru_dialog_part}
+%\end{figure}
 
 \label{fig:thresholds_acc}
 \begin{figure}[!htbp]
@@ -427,11 +425,11 @@ RU & S & M & S & M \\
 \end{minipage}
 \caption{Средняя точность на русскоязычных данных для \textit{distilbert-base-multilingual-cased}. S означает однозадачный режим, M означает многозадачный режим, RU доля означает долю русскоязычных обучающих данных, использованных при обучении, RU означает только обучение на этой доле русскоязычных данных, RU+EN означает обучение на этой доле русскоязычных обучающих данных плюс на 100 процентах англоязычных обучающих данных. В таблице~\ref{tab:mult_smalldata_results} приведены более подробные детали.}
 \end{figure}
-\input{Dissertation/largeplot1.tex}
-%\begin{figure}[ht]
-%    \includegraphics[width=\textwidth]{ru_dialog_part_n_samples.jpg}
-%  \caption{Точность \textit{distilbert-multilingual-base-cased} на русскоязычных данных в однозадачном и многозадачном режиме, при использовании некой доли русскоязычных обучающих данных, в зависимости от числа примеров. Для каждой задачи приводится точность, средняя точность также приводится для более удобного сравнения.}\label{fig:ru_dialog_part_n_samples}
-%\end{figure}
+%\input{Dissertation/largeplot1.tex}
+\begin{figure}[ht]
+    \includegraphics[width=\textwidth]{ru_dialog_part_n_samples.jpg}
+  \caption{Точность \textit{distilbert-multilingual-base-cased} на русскоязычных данных в однозадачном и многозадачном режиме, при использовании некой доли русскоязычных обучающих данных, в зависимости от числа примеров. Для каждой задачи приводится точность, средняя точность также приводится для более удобного сравнения.}\label{fig:ru_dialog_part_n_samples}
+\end{figure}
 
 
  \begin{table*}
@@ -482,7 +480,7 @@ M & 3\% & 0\% & RU & 65.9/55.1 & 62.6/41.3 & 69.0/69.2 & 91.2/85.6 & 42.6/24.2 &
  \label{mult_smalldata_results2} 
  \scalebox{0.95}{ 
  \begin{tabular}{|c|c|c|c||c|c|c|c|c|c||c|} \hline 
-Режим & \begin{tabular}[c]{@{}l@{}}RU\\доля\end{tabular} & \begin{tabular}[c]{@{}l@{}}EN\\доля\end{tabular} &\begin{tabular}[c]{@{}l@{}}Валидация\\на\end{tabular} & Среднее & \begin{tabular}[c]{@{}l@{}}Эмоции\end{tabular} & \begin{tabular}[c]{@{}l@{}}Тональность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Токсичность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Интенты\end{tabular} & \begin{tabular}[c]{@{}l@{}}Топики\end{tabular} & \begin{tabular}[c]{@{}l@{}}Число\\ батчей\end{tabular} \hline \hline
+Режим & \begin{tabular}[c]{@{}l@{}}RU\\доля\end{tabular} & \begin{tabular}[c]{@{}l@{}}EN\\доля\end{tabular} &\begin{tabular}[c]{@{}l@{}}Валидация\\на\end{tabular} & Среднее & \begin{tabular}[c]{@{}l@{}}Эмоции\end{tabular} & \begin{tabular}[c]{@{}l@{}}Тональность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Токсичность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Интенты\end{tabular} & \begin{tabular}[c]{@{}l@{}}Топики\end{tabular} & \begin{tabular}[c]{@{}l@{}}Число\\ батчей\end{tabular} \\ \hline \hline
  S & 100\% & 100\% & EN & 85.2/82.1 & 79.0/70.8 & 77.2/77.4 & 96.5/94.5 & 84.5/80.6 & 88.4/87.4 & 15946 \\ \hline
  S & 100\% & 100\% & RU & 85.3/81.9 & 79.2/71.4 & 77.2/77.3 & 96.7/94.7 & 84.6/78.2 & 88.6/87.7 & 29204 \\ \hline 
 M & 100\% & 100\% & EN & 84.4/80.9 & 77.2/70.5 & 75.8/75.8 & 96.4/94.4 & 83.5/76.3 & 88.9/87.8 & 20737 \\ \hline 
