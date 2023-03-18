@@ -25,119 +25,58 @@
 % TODO ВЫБОРКА ТЕСТОВАЯ ВАЛИДАЦИОННАЯ ИЛИ РАЗБИЕНИЕ? singlelabel multilabel перевод) однометочная? многометочная? Формат чисел. DREAM - жирным
 Полученные пары вопрос-ответ (в которых ответ мог быть пустым) были разбиты на тренировочную, валидационную и тестовую выборку в следующем соотношении: 80 процентов в тренировочную выборку, 10 процентов в валидационную и 10 процентов в тестовую. После этого, тренировочный, валидационный и тестовый наборы данных были разбиты на две части. В первую часть(однометочную) попали примеры, в которых вопрос встречается только в одной теме, и при этом либо для этого вопроса ответ не существует, либо суммаризованный ответ можно обнаружить только в той же теме. Все остальные примеры попали в часть 2(многометочную).
 
-Размеры всех частей и разбиений набора данных \texttt{YAQTopics} для любого из классов приведены в Таблице \ref{tab:yaqtopics_size}. 
+Размеры всех частей и разбиений набора данных \texttt{YAQTopics} для любого из классов приведены в Таблице \ref{tab:yaqtopics_size}.
+
+We propose a new Russian topic classification dataset -- \texttt{YAQTopics}. This dataset was obtained from the \texttt{Yandex Que} service raw data\footnote{\url{https://huggingface.co/datasets/its5Q/yandex-q/blob/main/full.jsonl.gz}}. The utterances in this dataset have 76 topics. We have selected the topics to utilize based on the dataset~\cite{dp_topics}. The topic of every question corresponded to its section on "Yandex Que". For every question, we have selected the answer with the best quality (or the first such answer, if there were several ones). For some questions, the answer was empty.
+
+
+% TODO. CHECK THE TOPIC NUMBER. PROVIDE a LINK TO EVERY QUESTION in the final dataset version. 
+
+ We have split the question-answer pairs we obtained into two parts. In part 1 (single-label) we select only those pairs in which the question belongs to only one topic, and the answer to this question either does not exist or can be found solely in this topic after summarization by TextRank~\cite{summarizer}. All other examples belong to part 2 (multi-label). Here and further, we work only with the single-label part of the \texttt{YAQTopics}.
+
+ For all the parsed topics, 532,550 unique questions were parsed, of which 403,904 are answered. The single-label part of the dataset contains 360,572 questions, of which 265,516 are answered. The multi-label part of the dataset contains 172,008 questions, of which 138,388 are answered. 
+
+ Additionally, we have constructed the matched part of the \texttt{YAQTopics} as a subset of the single-label one. If the question is answered, and the summarized version of this answer can be found in only one topic (the same topic as the answer has), the triplets of the question, answer, and summarized answer (matching to each other) were included in the matched part of the dataset. 
+ 
+Sizes of all parts of the \texttt{YAQTopics} for any class can be found in Table~\ref{tab:data_sizes}. 
 
 \begin{table}[t]
-%\centering
-\caption{Размеры набора данных \texttt{YAQTopics}, по классу и разбиению}
-\label{tab:yaqtopics_size}
-\scalebox{0.7}{
-\begin{tabular}{|c||c|c|c||c|c|c||c|c|c||c|c|c|} \hline
-\textbf{тип данных} & \textbf{тренировочные} & \textbf{валидационные} & \textbf{тестовые} & \textbf{тренировочные} & \textbf{валидационные} & \textbf{тестовые} & \textbf{тренировочные} & \textbf{валидационные} & \textbf{тестовые} & \textbf{тренировочные} & \textbf{валидационные} & \textbf{тестовые} \\ \hline
-\textbf{по числу меток}  & \multicolumn{6}{c|}{1 метка} & \multicolumn{6}{c|}{более 1 метки} \\ \hline
-\textbf{класс}  & \multicolumn{3}{c|}{все} & \multicolumn{3}{c|}{отвеченные} & \multicolumn{3}{c|}{все} & \multicolumn{3}{c|}{отвеченные}\\ \hline \hline
-\textbf{Dataset size} & 212,021 & 26,562 & 26,485 & 74,600 & 9,308 & 9,179 & 52,444 & 6,497 & 6,573 & 24,576 & 3,042 & 3,043\\ \hline
-\textbf{PersonalTransport} & 6,873 & 892 & 895 & 1,557 & 200 & 208 & 676 & 107 & 86 & 209 & 45 & 29\\ \hline
-\textbf{Politics} & 6,199 & 758 & 804 & 2,711 & 335 & 352 & 2,119 & 263 & 298 & 1,133 & 153 & 147\\ \hline
-\textbf{Law} & 5,512 & 697 & 687 & 1,831 & 252 & 231 & 2,508 & 299 & 333 & 1,052 & 132 & 134\\ \hline
-\textbf{Sex} & 5,173 & 641 & 622 & 1,869 & 224 & 238 & 2,552 & 284 & 286 & 1,243 & 143 & 142\\ \hline
-\textbf{ForeignLanguages} & 5,112 & 634 & 664 & 2,148 & 268 & 269 & 1,127 & 137 & 141 & 530 & 63 & 68\\ \hline
-\textbf{Smartphones} & 5,064 & 660 & 641 & 806 & 108 & 94 & 924 & 128 & 112 & 204 & 38 & 29\\ \hline
-\textbf{Money} & 4,943 & 579 & 657 & 1,623 & 165 & 216 & 1,615 & 173 & 211 & 807 & 85 & 105\\ \hline
-\textbf{Sport} & 4,834 & 598 & 595 & 1,948 & 228 & 250 & 1,668 & 200 & 202 & 727 & 99 & 84\\ \hline
-\textbf{MovieSeries} & 4,760 & 629 & 624 & 813 & 103 & 98 & 1,083 & 135 & 139 & 360 & 48 & 52\\ \hline
-\textbf{Movies} & 4,602 & 594 & 622 & 1,569 & 214 & 205 & 2,359 & 293 & 296 & 938 & 117 & 134\\ \hline
-\textbf{Religion} & 4,505 & 584 & 591 & 2,408 & 321 & 307 & 2,588 & 312 & 320 & 1,468 & 167 & 164\\ \hline
-\textbf{FoodDrinksCulinary} & 4,472 & 586 & 546 & 1,570 & 196 & 158 & 2,012 & 242 & 272 & 927 & 121 & 119\\ \hline
-\textbf{Technology} & 4,453 & 567 & 595 & 1,238 & 154 & 168 & 3,258 & 389 & 419 & 1,280 & 153 & 157\\ \hline
-\textbf{Music} & 4,442 & 563 & 529 & 1,102 & 145 & 122 & 1,018 & 128 & 118 & 422 & 43 & 48\\ \hline
-\textbf{Literature} & 4,430 & 558 & 531 & 1,535 & 187 & 170 & 2,464 & 351 & 315 & 1,162 & 161 & 144\\ \hline
-\textbf{Videogames} & 4,418 & 528 & 552 & 1,072 & 129 & 138 & 771 & 105 & 110 & 264 & 41 & 40\\ \hline
-\textbf{Animals} & 4,406 & 556 & 557 & 1,495 & 177 & 174 & 2,081 & 271 & 281 & 826 & 114 & 112\\ \hline
-\textbf{Psychology} & 4,368 & 513 & 539 & 2,435 & 295 & 293 & 4,865 & 582 & 586 & 2,862 & 328 & 359\\ \hline
-\textbf{Maths} & 4,353 & 559 & 478 & 1,401 & 189 & 152 & 1,888 & 221 & 227 & 886 & 113 & 104\\ \hline
-\textbf{Space} & 4,323 & 532 & 545 & 1,672 & 211 & 215 & 1,460 & 183 & 164 & 725 & 93 & 75\\ \hline
-\textbf{Love} & 4,236 & 548 & 509 & 1,962 & 237 & 206 & 2,732 & 348 & 347 & 1,480 & 182 & 197\\ \hline
-\textbf{Relationships} & 4,150 & 522 & 505 & 2,055 & 250 & 232 & 4,570 & 557 & 548 & 2,530 & 293 & 320\\ \hline
-\textbf{Health\_Medicine} & 4,032 & 496 & 518 & 1,372 & 167 & 179 & 1,530 & 205 & 192 & 666 & 97 & 83\\ \hline
-\textbf{Science} & 3,997 & 499 & 465 & 1,728 & 218 & 199 & 4,733 & 568 & 604 & 2,406 & 284 & 306\\ \hline
-\textbf{War} & 3,949 & 438 & 495 & 1,397 & 157 & 178 & 1,083 & 128 & 150 & 541 & 63 & 60\\ \hline
-\textbf{History} & 3,924 & 500 & 458 & 2,063 & 245 & 233 & 2,722 & 359 & 372 & 1,479 & 195 & 185\\ \hline
-\textbf{Education} & 3,919 & 506 & 476 & 1,637 & 215 & 186 & 4,542 & 545 & 543 & 2,196 & 275 & 268\\ \hline
-\textbf{Design} & 3,721 & 447 & 482 & 1,442 & 189 & 186 & 1,554 & 202 & 219 & 685 & 89 & 94\\ \hline
-\textbf{Taxes} & 3,681 & 452 & 451 & 1,408 & 191 & 178 & 815 & 106 & 123 & 372 & 50 & 61\\ \hline
-\textbf{Job} & 3,644 & 452 & 447 & 1,553 & 192 & 170 & 2,678 & 322 & 329 & 1,396 & 175 & 176\\ \hline
-\textbf{Travel} & 3,494 & 433 & 402 & 1,508 & 200 & 199 & 2,689 & 355 & 372 & 1,444 & 168 & 175\\ \hline
-\textbf{Family} & 3,447 & 470 & 452 & 1,298 & 164 & 161 & 1,072 & 148 & 143 & 559 & 70 & 82\\ \hline
-\textbf{Physics} & 3,332 & 407 & 416 & 1,390 & 172 & 178 & 3,536 & 451 & 444 & 1,656 & 213 & 221\\ \hline
-\textbf{Philosophy} & 2,955 & 318 & 386 & 1,536 & 162 & 192 & 4,390 & 560 & 535 & 2,506 & 291 & 298\\ \hline
-\textbf{Food} & 2,873 & 340 & 346 & 1,285 & 141 & 163 & 1,844 & 201 & 245 & 943 & 110 & 116\\ \hline
-\textbf{Transport} & 2,864 & 353 & 357 & 590 & 65 & 81 & 702 & 101 & 70 & 218 & 35 & 27\\ \hline
-\textbf{Business\_Management} & 2,811 & 324 & 381 & 1,038 & 121 & 143 & 2,872 & 355 & 335 & 1,313 & 162 & 155\\ \hline
-\textbf{Career} & 2,779 & 325 & 311 & 1,098 & 139 & 106 & 3,572 & 424 & 441 & 1,830 & 208 & 231\\ \hline
-\textbf{Finance} & 2,662 & 326 & 316 & 1,006 & 115 & 124 & 2,348 & 286 & 254 & 1,159 & 143 & 123\\ \hline
-\textbf{Clothes} & 2,570 & 315 & 353 & 595 & 68 & 85 & 862 & 108 & 120 & 301 & 35 & 42\\ \hline
-\textbf{Celebrities} & 2,570 & 294 & 320 & 411 & 50 & 51 & 365 & 44 & 41 & 131 & 14 & 11\\ \hline
-\textbf{Tourism} & 2,498 & 323 & 337 & 829 & 104 & 96 & 1,943 & 260 & 267 & 1,046 & 125 & 128\\ \hline
-\textbf{Television} & 2,344 & 272 & 279 & 380 & 54 & 59 & 589 & 86 & 72 & 143 & 24 & 31\\ \hline
-\textbf{Shopping} & 2,312 & 279 & 290 & 424 & 45 & 39 & 584 & 76 & 67 & 165 & 25 & 13\\ \hline
-\textbf{Gadgets} & 2,171 & 281 & 272 & 407 & 58 & 61 & 846 & 101 & 114 & 237 & 29 & 34\\ \hline
-\textbf{Crime} & 2,043 & 266 & 262 & 626 & 82 & 91 & 404 & 44 & 70 & 170 & 21 & 33\\ \hline
-\textbf{Art\_Culture} & 1,957 & 265 & 249 & 880 & 123 & 111 & 3,796 & 453 & 475 & 1,859 & 206 & 233\\ \hline
-\textbf{Depression} & 1,841 & 211 & 182 & 856 & 98 & 89 & 333 & 34 & 34 & 192 & 19 & 20\\ \hline
-\textbf{Home} & 1,803 & 222 & 249 & 569 & 64 & 73 & 388 & 48 & 58 & 151 & 22 & 26\\ \hline
-\textbf{Garden} & 1,741 & 232 & 244 & 945 & 138 & 125 & 261 & 32 & 27 & 149 & 20 & 15\\ \hline
-\textbf{Electronics} & 1,712 & 222 & 186 & 300 & 37 & 36 & 555 & 58 & 74 & 140 & 23 & 17\\ \hline
-\textbf{Dogs} & 1,707 & 233 & 233 & 561 & 75 & 73 & 1,681 & 232 & 220 & 624 & 86 & 71\\ \hline
-\textbf{Feminism} & 1,656 & 239 & 175 & 741 & 106 & 88 & 425 & 44 & 56 & 173 & 11 & 25\\ \hline
-\textbf{Fashion} & 1,653 & 226 & 198 & 457 & 61 & 50 & 1,145 & 152 & 156 & 414 & 56 & 56\\ \hline
-\textbf{CropProduction} & 1,414 & 175 & 185 & 699 & 91 & 79 & 351 & 40 & 35 & 183 & 29 & 16\\ \hline
-\textbf{Pets} & 1,371 & 185 & 139 & 354 & 43 & 38 & 2,269 & 292 & 272 & 821 & 110 & 93\\ \hline
-\textbf{Cats} & 1,319 & 188 & 152 & 400 & 62 & 58 & 1,600 & 190 & 198 & 588 & 69 & 71\\ \hline
-\textbf{Fitness} & 1,318 & 174 & 185 & 498 & 63 & 73 & 1,072 & 126 & 126 & 454 & 57 & 51\\ \hline
-\textbf{Business} & 1,281 & 188 & 162 & 381 & 65 & 52 & 964 & 126 & 122 & 402 & 57 & 53\\ \hline
-\textbf{Beauty\_Care} & 1,238 & 153 & 143 & 537 & 68 & 58 & 909 & 113 & 101 & 354 & 40 & 42\\ \hline
-\textbf{News} & 1,224 & 151 & 151 & 385 & 49 & 54 & 299 & 42 & 43 & 127 & 17 & 15\\ \hline
-\textbf{Art} & 1,213 & 147 & 164 & 396 & 43 & 59 & 752 & 88 & 87 & 417 & 45 & 51\\ \hline
-\textbf{Reading} & 1,065 & 132 & 136 & 324 & 42 & 45 & 408 & 54 & 51 & 181 & 25 & 22\\ \hline
-\textbf{Cosmetology} & 1,020 & 121 & 113 & 370 & 42 & 55 & 713 & 103 & 82 & 284 & 35 & 37\\ \hline
-\textbf{Weather} & 826 & 113 & 107 & 120 & 17 & 12 & 94 & 6 & 13 & 31 & 3 & 3\\ \hline
-\textbf{Airplanes} & 803 & 105 & 122 & 194 & 25 & 22 & 225 & 37 & 29 & 84 & 13 & 12\\ \hline
-\textbf{MassTransit} & 700 & 90 & 95 & 63 & 6 & 14 & 242 & 26 & 21 & 44 & 5 & 4\\ \hline
-\textbf{BoardGames} & 521 & 65 & 64 & 80 & 16 & 14 & 41 & 5 & 3 & 14 & 2 & 1\\ \hline
-\textbf{MachineLearning} & 516 & 73 & 67 & 191 & 27 & 23 & 401 & 63 & 48 & 135 & 24 & 13\\ \hline
-\textbf{ArtificialIntelligence} & 513 & 62 & 55 & 177 & 19 & 16 & 251 & 27 & 28 & 134 & 17 & 9\\ \hline
-\textbf{Toys} & 341 & 44 & 45 & 65 & 6 & 8 & 49 & 5 & 6 & 10 & 0 & 1\\ \hline
-\textbf{Tablets} & 335 & 48 & 29 & 39 & 3 & 1 & 119 & 17 & 17 & 33 & 4 & 3\\ \hline
-\textbf{SexualEducation} & 307 & 37 & 35 & 103 & 12 & 11 & 397 & 48 & 39 & 161 & 15 & 12\\ \hline
-\textbf{TV} & 196 & 21 & 24 & 17 & 0 & 0 & 110 & 11 & 8 & 24 & 4 & 1\\ \hline
-\textbf{Media\_Communications} & 177 & 23 & 32 & 49 & 5 & 7 & 60 & 7 & 3 & 38 & 6 & 0\\ \hline
-\textbf{Disasters} & 33 & 3 & 4 & 8 & 0 & 1 & 4 & 2 & 1 & 2 & 0 & 0\\ \hline
+\centering
+\scalebox{0.8}{
+\begin{tabular}{|c||c|c|c|c|c|} \hline
+\textbf{тип данных}  & \multicolumn{2}{c|}{\textbf{однометочные}} & \multicolumn{2}{c|}{\textbf{многометочные}} & \multirow{2}{*}{\textbf{равноразмерные}} \\
+\cline{1-5}
+\textbf{класс}  & \multicolumn{1}{c|}{все} & \multicolumn{1}{c|}{отвеченные} & \multicolumn{1}{c|}{все} & \multicolumn{1}{c|}{субсэмплированные} & \\\hline \hline
+\textbf{Размер набора данных} & 360,572 & 265,516 & 172,008 & 138,388 & 139,751\\ \hline
+\textbf{Размер шестиклассового поднабора данных} & 23,992 & 16,857 & 22,238 & 20,610 & 7,335\\ \hline
+\textit{Новости} & 945 & 605 & 912 & 718 & 354\\ \hline
+\textit{Музыка} & 9,504 & 5,793 & 4,466 & 3,296 & 2,412\\ \hline
+\textit{Еда, напитки и кулинария} & 5,729 & 4,734 & 14,117 & 11,101 & 2,503\\ \hline
+\textit{Погода} & 889 & 480 & 218 & 143 & 179\\ \hline
+\textit{Транспорт} & 2,432 & 1,622 & 1,936 & 1,391 & 655\\ \hline
+\textit{Медиа и коммуникации} & 4,493 & 2,628 & 5,589 & 3,961 & 1,232\\ \hline
 \end{tabular}
 }
+\caption{Размеры набора данных \texttt{YAQTopics} по классу и разбиению}
+%\centering
+\label{tab:data_sizes}
 \end{table}
 
 
 %TODO. Разделе - заглавными буквами? macro-average единообразно - замечание на этапе диссера что макро усредненное f1 обозначается как f1
 В качестве базовой модели, использовалась модель\textit{sbert\_large\_nlu\_ru}~\cite{sbert_large_nlu_ru}.Все гиперпараметры при дообучении данной модели были аналогичными описанным в Разделе \ref{ch:tr-ag:settings}. Модель была обучена и протестирована на всех вариантах набора данных \texttt{YAQTopics}, упомянутых в Таблице \ref{tab:versions}, но на всех 76 классах. Результаты данной модели представлены в Таблице~\ref{tab:rubaseline}. В этой таблице, как и во всех таблицах этого раздела макро-усредненное f1 обозначается как f1.
 
-\begin{table*}
-\centering
-\caption{Точность (f1) \textit{sbert\_large\_nlu\_ru} для разных методов предобработки набора данных \texttt{YAQTopics}. \textbf{Q} означает использование только вопросов, \textbf{A} означает использование только ответов, \textbf{Q and A} означает использование вопросов и ответов как отдельных примеров, и \textbf{Q [SEP] A} означает использование конкатенации каждого вопроса с соответствующим ему ответом при помощи токена [SEP](если такой ответ существует, иначе просто использование вопроса). Для каждого метода точность вычислялась на соответствующем тестовом разбиении \texttt{YAQTopics}, полученном с использовании этого метода.}
-\scalebox{0.8}{
-\label{tab:rubaseline}
-\begin{tabular}{|c|c|c|c|c|}
-\hline
-\textbf{Училось и тестировалось на} & \multicolumn{2}{c|}{\textbf{Для примеров с одной меткой}} & \multicolumn{2}{c|}{\textbf{Для всех примеров}} \\ \hline
- & & Точность & f1 & Точность & f1  \\
-\hline \hline
-\textbf{Q}              & 65.2 & 59.5 & 39.5 & 58.9 \\ \hline
-\textbf{A}              & 47.6 & 37.4 & 24.2 & 37.6 \\ \hline
-\textbf{Q [SEP] A}        & 65.8 & 59.9 & 39.4 & 59.5 \\ \hline
-\textbf{Q and A}          & 61.1 & 55.8 & 35.7 & 55.4 \\ \hline
-\end{tabular}
-}
-\end{table*}
+
+
+
+We note that, as some \texttt{YAQTopics} classes are similar to each other, the applied utilization of this dataset might require merging some classes (e.g. \textit{Food} and \textit{FoodDrinksCulinary}). 
+
+%TODO. DISCUSS WITH VASILY -- WHAT SHOULD BE THE BASELINE MODEL?? 
+For our experiments on this dataset, we have trained the Transformer-like models with the hyperparameters and backbones described in the next section.
+While training all models described in this work, we used the following hyperparameters: batch size 160, optimizer AdamW~\cite{adam}, betas (0.9,0.99), initial learning rate 2e-5, learning rate drops by 2 times if accuracy does not improve for 2 epochs, validation patience 3 epochs, max 100 training epochs. The max sequence length is 128 tokens. We performed three random restarts for all experiments and averaged the metrics.
+
+We performed the experiments on multiple backbones from HuggingFace \texttt{Transformers} library~\cite{huggingface_transformers}, which all have similar BERT-like architecture:  \textit{bert-base-multilingual-cased}~\cite{multilingual_bert}, \textit{DeepPavlov/distilrubert-tiny-cased-conversational}~\cite{alina}, \textit{sberbank-ai/ruBert-base}~\cite{sbert_base} and \textit{DeepPavlov/rubert-base-conversational-cased}~\cite{rubert}. The former two models are similar, but they have a slightly different number of parameters because of different tokenization.
+
 
 Стоит ответить, что, так как некоторые классы из \texttt{YAQTopics} похожи друг на друга, результаты из Таблицы~\ref{tab:rubaseline} могут быть улучшены при помощи объединения некоторых классов, например, \textit{Food} и \textit{FoodDrinksCulinary}). Результаты, приведенные в таблице, верны только для оригинального набора данных без объединения классов. Тем не менее, даже на этом наборе классов \textit{sbert\_large\_nlu\_ru} может показывать точность выше 65 \%.
 
@@ -154,7 +93,7 @@
 Этот метод оценки подробнее раскрыт в Разделе \ref{comparison_model}.
 
 \subsection{Обучение модели для сравнения}\label{comparison_model}
-Здесь и далее, для оценки набора данных \texttt{YAQTopics}, обучалась модель типа \textit{bert-base-multilingual-cased} с параметрами, аналогичными разделу \ref{ch:tr-ag:settings}. Подобный тип нейросетевых моделей позволяет как быстро проводить эксперименты, так и исследовать перенос знаний между языками. Результаты для каждого эксперимента с участием этой модели усреднялись по трем запускам.Результаты для каждого запуска представлены в Разделе~\ref{appendix:rutopics:allruns}.
+Здесь и далее, для оценки набора данных \texttt{YAQTopics}, обучалась модель типа \textit{bert-base-multilingual-cased} с параметрами, аналогичными разделу \ref{ch:tr-ag:settings}. Подобный тип нейросетевых моделей позволяет как быстро проводить эксперименты, так и исследовать перенос знаний между языками. Результаты для каждого эксперимента с участием этой модели усреднялись по трем запускам.
 
 При сравнении набора данных \texttt{YAQTopics} с набором данных \texttt{MASSIVE}, можно видеть, что только шесть классов из \texttt{MASSIVE} можно поставить в соответствие классам из  \texttt{YAQTopics}. Следовательно, нейросетевая модель в данных экспериментах обучалась только для шести соответствующих классов \texttt{YAQTopics}: \textit{FoodDrinksCulinary} (соответствует классу \textit{cooking} из \texttt{MASSIVE}), \textit{News} (соответствует классу \textit{news} из \texttt{MASSIVE} ), \textit{Transport} (соответствует классу \textit{transport} из \texttt{MASSIVE}), \textit{Music} (соответствует классу \textit{music} из \texttt{MASSIVE}),\textit{MediaCommunications} (соответствует классу \textit{social} из \texttt{MASSIVE}) и \textit{Weather} (соответствует классу \textit{weather} из \texttt{MASSIVE} class). После завершения обучения моделей, эти модели были протестированы на подвыборке всех примеров из вышеупомянутых классов набора данных \texttt{MASSIVE}(тренировочные+тестовые+валидационные). Этот метод позволяет проверить пригодность набора данных \texttt{YAQTopics} для тематической классификации в разговорной речи - по крайней мере на этих шести классов. Впрочем, так как примеры для всех классов \texttt{YAQTopics} собирались одинаково, похожие результаты можно ожидатьь и для других классов.
 
@@ -162,48 +101,103 @@
 Результаты оценки обучения модели для сравнения на русскоязычном наборе данных \texttt{MASSIVE} в Таблице~\ref{tab:versions}. Из этой таблицы видно, что классификация конкатенации вопросов и ответов приводит к небольшому ухудшению метрик на разговорных данных относительно классификации только вопросов, и использование ответов как дополнительных примеров лишь дополнительно ухудшает эти метрики. Использование в качестве обучающей выборки одних только ответов приводит к серьезному падению метрик.
 % TODO. LANGUAGE OF TABLES - RU ONLY. набор данных датасет
 
-\begin{table*}
-\centering
-\caption{Точность(макро-f1) модели \textit{bert-base-multilingual-cased} на русскоязычном наборе данных MASSIVE , обучающихся на предобработаннымх разными методами данных из \texttt{YAQTopics}. Обозначения методов:\textbf{Q} означает использование только вопросов, \textbf{A} означает использование только ответов, \textbf{Q and A} означает использование вопросов и ответов как отдельных примеров, и \textbf{Q [SEP] A} означает использование конкатенации каждого вопроса с соответствующим ему ответом при помощи токена [SEP](если такой ответ существует, иначе просто использование вопроса). Backbone: \textit{bert-base-multilingual-cased}. }
-\scalebox{0.8}{
-\label{tab:versions}
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
-\hline
-{\textbf{Обучалось на}}  &  \multicolumn{2}{c|}{\textbf{Для всех классов}} &  \multicolumn{2}{c|}{\textbf{music}} &  \multicolumn{2}{c|}{\textbf{cooking}} &  \multicolumn{2}{c|}{\textbf{news}} &  \multicolumn{2}{c|}{\textbf{transport}} &  \multicolumn{2}{c|}{\textbf{weather}} &  \multicolumn{2}{c|}{\textbf{social}} \\ \hline
-Точность & f1 & Точность & f1 & Точность & f1 & Точность & f1 & Точность & f1 & Точность & f1 & Точность & f1 \\ \hline \hline
-\hline 
-\textbf{Q}              & 76.0 & 72.1 & 94.9 & 17.3 & 98.9 & 27.6 & 78.5 & 14.7 & 89.6 & 16.8 & 76.5 & 15.4 & 23.8 & 6.4 \\ \hline
-\textbf{A}              & 61.9 & 56.1 & 97.9 & 27.5 & 95.4 & 25.5 & 52.6 & 12.1 & 82.0 & 18.0 & 58.4 & 14.7 & 0.7 & 0.2\\ \hline
-\textbf{Q [SEP] A}        & 74.9 & 70.9 & 95.4 & 20.1 & 98.8 & 27.6 & 77.4 & 14.5 & 87.6 & 16.6 & 74.4 & 15.2 & 23.4 & 6.3\\ \hline
-\textbf{Q and A}              & 73.8 & 69.0 & 95.7 & 22.8 & 99.3 & 38.8 & 77.6 & 14.6 & 87.0 & 17.6 & 73.5 & 15.1 & 17.5 & 4.9 \\ \hline
-\end{tabular}
-}
-\end{table*}
-% TODO. ALL TABLES TO RUSSIAN AND ALL ALLRUNS TO APPENDIX
-
-
-\subsection {Действительно ли вопросы информативнее ответов?} 
-Можно возразить, что Таблица~\ref{tab:rutopics:versions} не является окончательным доказательством того, что средний вопрос из \texttt{YAQTopics} несет больше информации, чем средней ответ, так как число вопросов и ответов в \texttt{YAQTopics} сильно отличается. Чтобы провести честное сравнение между вопросными и ответными данными из \texttt{YAQTopics},из данных, обучение на которых проводилось для Таблицы~\ref{tab:rutopics_versions} были выбраны только те из вопросов, у которых есть уникальные суммаризованные ответы(не попадающиеся ни в каком другом вопросе)\footnote{В результате чего пришлось исключить около 200 примеров} и которые при этом принадлежат только к одной теме. Эти версии YAQTopics в статье обозначаются как "субсэмплированные"
-Сравнение обучения на вопросах и на ответах приведено в Таблице \ref{tab:rutopics:subsampled}. 
-\begin{table*}
-\centering
-\caption{Точность(макро-f1) модели \textit{bert-base-multilingual-cased} на русскоязычном наборе данных MASSIVE , обучающихся на предобработаннымх разными методами данных из \texttt{YAQTopics}. Обозначения методов:\textbf{Qs} означает субсэмплированные вопросы, \textbf{As} означает субсэмплированные ответы.}
-\scalebox{0.8}{
-\label{tab:rutopics:subsampled}
-\begin{tabular}{|c||c|c|c|c|c|c|c|c|c|c|c|c|c|c|} \hline
-{\textbf{Обучалось на}}  &  \multicolumn{2}{c|}{\textbf{Для всех классов}} &  \multicolumn{2}{c|}{\textbf{music}} &  \multicolumn{2}{c|}{\textbf{cooking}} &  \multicolumn{2}{c|}{\textbf{news}} &  \multicolumn{2}{c|}{\textbf{transport}} &  \multicolumn{2}{c|}{\textbf{weather}} &  \multicolumn{2}{c|}{\textbf{social}} \\ \hline
-Точность & f1 & Точность & f1 & Точность & f1 & Точность & f1 & Точность & f1 & Точность & f1 & Точность & f1 \\ \hline \hline
-\textbf{Q}  & 72.3 & 65.5 & 94.3 & 22.6 & 98.6 & 21.5 & 81.7 & 16.0 & 88.3 & 17.7 & 73.2 & 16.9 & 3.1 & 1.0\\ \hline
-\textbf{A} & 62.0 & 56.6 & 98.4 & 23.1 & 94.3 & 38.8 & 57.0 & 12.8 & 80.2 & 19.3 & 57.5 & 14.5 & 0.1 & 0.0\\ \hline
-\end{tabular}
-}
-\end{table*}
 
 Из таблицы можно видеть, что вопросы из \texttt{YAQTopics} действительно более информативны для разговорных задач, чем суммаризованные ответы, и в общем и целом подходят для разговорных задач достаточно хорошо. Поэтому в следующем разделе исследовался перенос знаний с моделей, обученных только на вопросах из \texttt{YAQTopics}.
 %TO ARTICLE - - OF THE QUESTIONS FROM
 %Ответы - суммаризованные ответы? Что to article? And only Q to the next section - written? And Russian MASSIVE unless otherwise
 %
 %.
+\begin{table*}
+\centering
+\scalebox{0.8}{
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\multirow{1}{*}{\textbf{Модель}} & \multirow{1}{*}{\textbf{Сокращение}}  & \textbf{Многоязычность} &  \multicolumn{1}{c|}{\textbf{Число слоев}} & \textbf{Parameters}\\ \hline
+\textit{DeepPavlov/distilrubert-tiny-cased-conversational}~\cite{alina} & \textit{rubert-tiny} & нет & 2 & 107M\\ \hline
+\textit{DeepPavlov/rubert-base-cased-conversational}~\cite{rubert} & \textit{rubert} & нет & 12 & 177.9M\\ \hline
+\textit{bert-base-multilingual-cased}~\cite{multilingual_bert} & \textit{multbert} & да & 12 & 177.9M \\ \hline
+\textit{sberbank-ai/ruBert-base}~\cite{sbert_base} & \textit{ru-sbert} & да & 12 & 178.3M\\ \hline
+\end{tabular}
+}
+\caption{Параметры различных базовых моделей, рассмотренных в этой главе}
+\label{tab:backbones}
+\end{table*}
+
+\begin{table*}
+\centering
+\scalebox{0.9}{
+\begin{tabular}{|c|c||c|c|}
+\hline
+\multirow{2}{*}{\textbf{Модель}} & \multirow{2}{*}{\textbf{Режим}}  &  \multicolumn{2}{c|}{\textbf{Метрики} \\ 
+\cline{3-4}
+& & Точность & Макро-F1   \\ \hline \hline
+\textit{rubert} & \textbf{Q} & 83.8 & 83.0 \\ \hline% & 85.2 & 84.6 \\ \hline
+\textit{rubert} &  \textbf{A} & 80.1 & 79.1\\ \hline% & 79.7 & 78.1\\ \hline
+\textit{rubert} &  \textbf{Q [SEP] A} & 83.8 & 83.8\\ \hline% & 85.3 & 84.5\\ \hline
+\textit{rubert} &  \textbf{As} & 75.0 & 74.3\\ \hline% & 75.5 & 74.5 \\ \hline
+\textit{rubert} &  \textbf{Q [SEP] As} & \textbf{84.9} & \textbf{84.6}\\ \hline \hline% & 85.2 & 84.5 \\ \hline
+\textit{ru-sbert} &  \textbf{Q} & \textbf{84.0} & \textbf{83.0}\\ \hline% & 85.8 & 85.4 \\ \hline
+\textit{ru-sbert} &  \textbf{A} & 81.6 & 81.0\\ \hline% & 81.4 & 80.0 \\ \hline
+\textit{ru-sbert} &  \textbf{Q [SEP] A} & 82.9 & 82.8\\ \hline% & 85.1 & 84.1  \\ \hline
+\textit{ru-sbert} &  \textbf{As} & 78.8 & 77.9\\ \hline% & 78.1 & 77.2 \\ \hline
+\textit{ru-sbert} &  \textbf{Q [SEP] As} & 83.5 & \textbf{83.0}\\ \hline \hline% & 85.8 & 85.2\\ \hline
+\textit{rubert-tiny} &  \textbf{Q} & 83.6 & 82.7 \\ \hline%& 85.7 & 85.2\\ \hline
+\textit{rubert-tiny} &  \textbf{A} & 78.3 & 77.1\\ \hline% & 82.6 & 81.3\\ \hline
+\textit{rubert-tiny} &  \textbf{Q [SEP] A} & 81.5 & 80.7\\ \hline% & 85.3 & 84.6 \\ \hline
+\textit{rubert-tiny} &  \textbf{As} & 78.2 & 77.0\\ \hline% & 76.2 & 74.6\\ \hline
+\textit{rubert-tiny} &  \textbf{Q [SEP] As} & \textbf{84.5} & \textbf{84.0}\\ \hline \hline% & 85.4 & 84.8 \\ \hline
+\textit{multbert} &  \textbf{Q} & \textbf{78.8} & \textbf{77.5}\\ \hline% & 79.8 & 78.8\\ \hline \hline
+\textit{multbert} &  \textbf{A} & 71.8 & 71.2\\ \hline% & 76.0 & 74.7 \\ \hline \hline
+\textit{multbert} &  \textbf{Q [SEP] A} & 76.9 & 76.1\\ \hline% & 79.9 & 79.4 \\ \hline \hline
+\textit{multbert} &  \textbf{As} & 66.8 & 63.9\\ \hline%  & 67.4 & 64.6 \\ \hline \hline
+\textit{multbert} &  \textbf{Q [SEP] As} & 77.2 & 76.1\\ \hline% & 79.7 & 78.9\\ \hline \hline
+\end{tabular}
+}
+\caption{
+ Accuracy (F1) of different kinds of backbones on the custom test set of Russian \texttt{MASSIVE}.
+The models were trained on the \texttt{YAQTopics} 6-class \textbf{matched} subsets preprocessed using different preprocessing modes described in Section~\ref{prepr}. Backbones are abbreviated as in Table~\ref{tab:backbones}. Averaged by three runs.}
+\label{tab:matched}
+\end{table*}
+
+
+
+
+
+We needed to identify the best method of \texttt{YAQTopics} preprocessing for the best performance on conversational tasks. We could utilize only answers from \texttt{YAQTopics}, utilize only questions, or concatenate (with [SEP] token) questions to answers where answers exist. Additionally, as answers in the \textit{YAQTopics} are long, we could see to what extent the extraction summarization of these answers (obtained by the TextRank~\cite{summarizer} could alter the results. To benchmark the performance of models trained on our datasets on the conversational tasks, we utilized the \texttt{MASSIVE} dataset for evaluation.
+
+
+While comparing our dataset with the \texttt{MASSIVE}, we saw that only six \texttt{MASSIVE} classes can be directly mapped to the \texttt{YAQTopics}. Therefore, we trained all described models only on the six corresponding classes from the single-label subset of \texttt{YAQTopics}: \textit{food, drinks, and cooking}  (corresponds to the \textit{cooking} \texttt{MASSIVE} class), \textit{news} (corresponds to the \textit{news} \texttt{MASSIVE} class), \textit{transport} (corresponds to the \textit{transport} \texttt{MASSIVE} class), \textit{music} (corresponds to the \textit{music} \texttt{MASSIVE} class), \textit{media and communication} (corresponds to the \textit{social} \texttt{MASSIVE} class) and \textit{weather} (corresponds to the \textit{weather} \texttt{MASSIVE} class). We did not merge \texttt{YAQTopics} classes even though it could have additionally improved the results for \textit{cooking} and \textit{transport} \texttt{MASSIVE} classes.
+
+We have compared five different methods of preprocessing the \texttt{YAQTopics} dataset. We name them as "modes" in Table~\ref{tab:matched}. In these modes:
+\begin{itemize}
+    \item \textbf{Q} means using only questions.
+    \item \textbf{A} means using only answers.
+    \item \textbf{As} means using summarized answers.
+    \item \textbf{Q [SEP] A} means using the concatenation of every question with the corresponding answer using [SEP] token.
+    \item \textbf{Q [SEP] As} means analogous concatenation with the summarized answer. 
+\end{itemize}
+
+For all of these preprocessing methods, we performed training on the matched version of the \texttt{YAQTopics} (column "matched" from Table~\ref{tab:data_sizes}). This training mode allows making the apple-to-apple comparison between features obtained by different preprocessing methods, as the number of training samples in this method is the same regardless of how we preprocess the data. We present the results obtained by this method in Table~\ref{tab:matched}.
+
+
+We validated all models on the Russian \texttt{MASSIVE} validation 6-class subset, and tested them on the concatenation of train and test 6-class subsets of \texttt{MASSIVE}. Here and further, we denote this subset concatenation as a "custom test set".
+
+This method allows testing the suitability of the dataset for conversational topic classification -- at least on a subset of classes. However, as examples for all classes were collected similarly, we expect that other classes from the \texttt{YAQTopics} are as suitable for the conversational topic classification as these six ones. 
+
+As one can see from Table~\ref{tab:matched}, the question-only setting yields larger scores than the answer-only setting, and the answer-only setting yields larger scores than the summarized answer-only setting. This conclusion holds for all considered backbone models, proving that the questions are the most informative feature in the \texttt{YAQTopics} dataset.
+If we concatenate questions to answers or summarized answers, the scores do not change significantly compared to the question-only setting.
+
+Overall, all Russian models show similar results, and the multilingual model expectedly trails behind them all.
+
+All these conclusions are also valid for the experiments on the full 6-class subset. For this training mode, 
+ \textit{rubert} backbone with the \textbf{Q} preprocessing mode shows accuracy 85.2\% with macro-averaged f1 84.6\%.
+
+For the experiments in the next section, we chose the \textbf{Q} preprocessing mode, as all other modes are either too complicated and give no better results (\textbf{Q [SEP] A}, \textbf{Q [SEP] As}), or show worse results (\textbf{A}, \textbf{As}).
+
+
+
+
+
 \section{Перенос знаний между языками}
 После выбора наилучшего метода использования набора данных \texttt{YAQTopics}, были поставлены следующие задачи:
 \begin{itemize}
@@ -217,71 +211,80 @@
 Соответственно, в качестве приближения размера Википедии для каждого языка, был выбрано число статей Википедии для этого языка на 11 октября 2018 года(дату выпуска модели BERT), возведенное в степень 0.7.  Число статей Википедии для каждого языка на эту дату также представлено в Таблице \ref{crosslingual}.
 %TODO. Значения таблиц и корреляции (edited) 
 
+
+After we had selected the best setting, the following questions emerged: how effectively does the knowledge from this setting transfer across multiple languages? And what influences the efficiency of this transfer? To answer these questions, we pre-trained \textit{bert-base-multilingual-cased}, which allows effective cross-lingual transfer learning on different NLP tasks~\cite{ner,squad}, on the data from \textbf{full} validation 6-class \texttt{YAQTopics} subset, which are preprocessed by the \textbf{Q} preprocessing mode. In this stage, we infer this model not only on the Russian \texttt{MASSIVE} but also on all other languages it contains\footnote{We use \texttt{MASSIVE} version 1.1, which contains the Catalan language. For the Chinese language, we have utilized both sets of characters as \texttt{MASSIVE} has two Chinese versions.}.
+
+An interesting research question is the correlation of the model quality for different languages with the pretraining sample size for that language. The authors of the \textit{bert-base-multilingual-cased} claim~\cite{multilingual_bert} that the learning sample for every utilized language was comprised of the Wikipedia texts for that language, and that they performed an exponential smoothing of the training sample with the factor of 0.7 to balance the languages. Therefore, as a proxy of the Wikipedia size for every language, we used the number of articles in the Wikipedia of this language at the time of the BERT article's release, smoothed by the factor of 0.7. 
+
+We present the metrics obtained by the evaluation of the multilingual BERT on the custom \texttt{MASSIVE} test subset for all languages in Table~\ref{crosslingual}. We also provide the original Wikipedia sizes we used in the same table.
+% TODO. INSERT TABLE VALUES AND CORRELATIONS
+
+
 \begin{table*}
+\caption{Точность(f1) модели \textit{bert-base-multilingual-cased} на всех языках из набора данных \texttt{MASSIVE}, обучавшейся на версии \textbf{Q} набора данных \texttt{YAQTopics}.\textbf{Код} означает код языка(ISO 639-1), \textbf{N} означает число статей в Википедии на этом языке на 11 октября 2018 года, \textbf{Дистанция} означает лингвистическую дистанцию между этим языком и русским Усреднено по трем запускам.}
 \centering
-\caption{Точность(f1) модели \textit{bert-base-multilingual-cased} на всех языках из набора данных \texttt{MASSIVE}, обучавшейся на версии \textbf{Q} набора данных \texttt{YAQTopics}.\textbf{Код} означает код языка(ISO 639-1), \textbf{N} означает число статей в Википедии на этом языке на 11 октября 2018 года. Усреднено по трем запускам. }
-\scalebox{0.8}{
-\label{crosslingual}
-\begin{tabular}{|c|c|c||c|c|c|c|c|c|c|c|c|c|c|c|c|c|} \hline
-{\textbf{Язык}}  & \textbf{Код} & \textbf{Число статей}  &  \multicolumn{2}{c|}{\textbf{Для всех классов}} &  \multicolumn{2}{c|}{\textbf{music}} &  \multicolumn{2}{c|}{\textbf{cooking}} &  \multicolumn{2}{c|}{\textbf{news}} &  \multicolumn{2}{c|}{\textbf{transport}} &  \multicolumn{2}{c|}{\textbf{weather}} &  \multicolumn{2}{c|}{\textbf{social}} \\ \hline
-& & & Точность & f1 & Точность & f1 & Точность & f1 & Точность & f1 & Точность & f1 & Точность & f1 & Точность & f1 \\ \hline \hline
-русский & ru & 1,501,878 & 76.0 & 72.0 & 95.0 & 17.3 & 98.9 & 27.6 & 78.5 & 14.7 & 89.5 & 16.8 & 76.5 & 15.4 & 23.7 & 6.4\\ \hline
-китайский (Тайвань) & zh-TW & 1,025,366 & 72.9 & 71.0 & 96.3 & 24.5 & 99.4 & 38.8 & 59.9 & 12.3 & 85.1 & 15.3 & 71.9 & 14.8 & 38.5 & 9.2\\ \hline
-китайский & zh & 1,025,366 & 70.4 & 68.3 & 95.2 & 22.8 & 97.6 & 27.5 & 57.8 & 12.0 & 85.8 & 16.4 & 67.5 & 13.4 & 32.4 & 8.1\\ \hline
-английский & en & 5,731,625 & 70.4 & 68.6 & 96.8 & 23.0 & 98.7 & 35.9 & 54.1 & 11.5 & 84.3 & 16.2 & 67.0 & 13.4 & 38.2 & 9.8\\ \hline
-японский & ja & 1,124,097 & 69.5 & 66.9 & 92.8 & 24.1 & 92.8 & 38.5 & 52.2 & 11.2 & 87.1 & 15.5 & 71.1 & 16.6 & 31.3 & 7.9\\ \hline
-шведский & sv & 3,763,579 & 64.1 & 62.5 & 92.7 & 19.8 & 93.6 & 25.3 & 50.7 & 11.1 & 84.3 & 16.3 & 48.1 & 13.9 & 35.7 & 8.7\\ \hline
-итальянский & it & 1,466,064 & 63.3 & 61.3 & 94.7 & 21.1 & 98.8 & 35.9 & 44.7 & 9.9 & 89.2 & 16.8 & 39.7 & 9.9 & 38.8 & 9.3\\ \hline
-испанский & es & 1,480,965 & 63.0 & 61.4 & 93.7 & 19.9 & 98.9 & 35.9 & 51.1 & 11.2 & 83.9 & 16.2 & 43.4 & 9.9 & 31.9 & 8.0\\ \hline
-польский & pl & 1,303,297 & 60.7 & 59.0 & 92.2 & 22.4 & 85.3 & 19.0 & 40.3 & 9.1 & 76.6 & 16.4 & 56.2 & 12.8 & 30.4 & 7.8\\ \hline
-нидерландский & nl & 1,944,129 & 60.6 & 58.7 & 91.5 & 20.7 & 94.8 & 24.4 & 44.7 & 10.0 & 86.3 & 16.5 & 35.2 & 8.5 & 36.9 & 9.0\\ \hline
-малайский & ms & 320,631 & 60.6 & 59.5 & 90.8 & 26.4 & 96.9 & 35.6 & 29.2 & 7.3 & 74.4 & 15.1 & 58.1 & 13.9 & 37.9 & 9.1\\ \hline
-индонезийский & id & 440,952 & 60.0 & 59.0 & 92.7 & 34.7 & 97.4 & 30.2 & 30.7 & 7.6 & 75.4 & 15.2 & 55.3 & 12.6 & 33.2 & 8.9\\ \hline
-норвежский букмол & nb & 495,395 & 58.7 & 57.5 & 95.0 & 30.7 & 85.6 & 21.6 & 46.3 & 10.4 & 77.6 & 17.0 & 32.6 & 8.0 & 41.2 & 9.7\\ \hline
-датский & da & 240,436 & 58.5 & 57.6 & 95.7 & 29.8 & 86.3 & 21.7 & 48.6 & 10.8 & 75.6 & 15.3 & 30.0 & 7.5 & 42.8 & 10.0\\ \hline
-персидский & fa & 643,750 & 58.2 & 56.6 & 88.1 & 24.5 & 95.3 & 23.9 & 41.6 & 9.6 & 73.2 & 15.0 & 55.8 & 12.6 & 15.3 & 4.7\\ \hline
-португальский & pt & 1,007,323 & 57.6 & 56.7 & 94.7 & 27.0 & 96.9 & 18.6 & 37.2 & 8.7 & 62.0 & 13.6 & 45.2 & 10.9 & 41.9 & 9.8\\ \hline
-французский & fr & 2,046,793 & 57.5 & 55.2 & 93.9 & 19.9 & 96.3 & 21.8 & 28.8 & 7.2 & 84.0 & 17.7 & 36.4 & 8.8 & 35.3 & 8.7\\ \hline
-словенский & sl & 162,453 & 57.3 & 55.4 & 87.8 & 18.1 & 95.0 & 20.1 & 24.7 & 6.2 & 80.5 & 16.8 & 51.4 & 12.8 & 27.3 & 7.6\\ \hline
-венгерский & hu & 437,984 & 56.3 & 54.8 & 92.9 & 20.8 & 96.9 & 23.0 & 31.9 & 7.6 & 77.0 & 14.5 & 35.3 & 9.1 & 35.2 & 8.7\\ \hline
-каталанский & ca & 591,783 & 56.2 & 54.2 & 94.9 & 21.1 & 96.0 & 25.6 & 35.1 & 8.4 & 83.3 & 16.1 & 29.1 & 7.8 & 30.2 & 7.8\\ \hline
-корейский & ko & 429,369 & 54.3 & 53.2 & 91.1 & 24.8 & 94.4 & 35.1 & 34.5 & 8.2 & 70.9 & 13.8 & 31.5 & 7.8 & 36.7 & 10.7\\ \hline
-турецкий & tr & 316,969 & 54.0 & 53.2 & 89.9 & 29.8 & 94.2 & 32.5 & 15.4 & 4.3 & 72.1 & 14.9 & 45.3 & 13.2 & 36.7 & 10.7\\ \hline
-хинди & hi & 127,044 & 53.8 & 53.0 & 88.2 & 20.3 & 94.8 & 24.4 & 21.7 & 5.7 & 58.8 & 13.1 & 60.9 & 14.6 & 24.3 & 6.4\\ \hline
-вьетнамский & vi & 1,190,187 & 53.3 & 53.0 & 75.8 & 18.6 & 96.9 & 30.1 & 38.3 & 9.0 & 69.9 & 16.0 & 32.8 & 8.7 & 35.8 & 10.0\\ \hline
-азербайджанский & az & 138,538 & 53.2 & 54.3 & 91.2 & 32.7 & 96.5 & 33.9 & 31.9 & 7.6 & 48.2 & 14.6 & 53.0 & 14.9 & 30.8 & 8.9\\ \hline
-иврит & he & 231,868 & 53.1 & 51.0 & 88.3 & 26.0 & 90.8 & 18.0 & 25.8 & 6.6 & 67.2 & 13.4 & 54.2 & 12.5 & 14.4 & 4.2\\ \hline
-румынский & ro & 388,896 & 52.8 & 51.3 & 88.9 & 23.6 & 92.0 & 19.2 & 11.5 & 3.3 & 75.4 & 15.3 & 35.5 & 9.2 & 45.8 & 12.6\\ \hline
-арабский & ar & 619,692 & 50.7 & 50.4 & 84.4 & 19.8 & 96.0 & 28.3 & 28.4 & 7.1 & 58.9 & 13.2 & 47.9 & 12.5 & 17.2 & 4.9\\ \hline
-каннада & kn & 23,844 & 50.7 & 48.9 & 86.4 & 26.8 & 89.3 & 21.0 & 11.8 & 3.4 & 58.3 & 12.3 & 58.6 & 15.9 & 24.7 & 6.6\\ \hline
-филиппинский & tl & 80,992 & 49.6 & 48.5 & 74.7 & 22.1 & 91.7 & 24.1 & 2.9 & 0.9 & 61.8 & 15.7 & 51.9 & 15.8 & 42.2 & 9.9\\ \hline
-телугу & te & 69,354 & 49.3 & 46.6 & 85.2 & 20.4 & 89.9 & 22.1 & 5.7 & 1.8 & 58.0 & 13.0 & 61.0 & 15.5 & 20.6 & 5.9\\ \hline
-урду & ur & 140,939 & 49.2 & 49.3 & 68.5 & 16.4 & 88.4 & 18.4 & 38.5 & 9.0 & 39.4 & 10.6 & 57.7 & 14.9 & 25.1 & 6.6\\ \hline
-немецкий & de & 2,227,483 & 48.9 & 47.1 & 94.0 & 19.4 & 84.0 & 20.4 & 22.7 & 5.8 & 63.5 & 13.8 & 29.3 & 7.6 & 33.3 & 8.3\\ \hline
-африкаанс & af & 62,963 & 48.5 & 45.5 & 91.5 & 22.3 & 93.4 & 23.7 & 9.7 & 2.8 & 75.2 & 15.2 & 30.0 & 8.0 & 25.4 & 6.7\\ \hline
-финский & fi & 445,606 & 48.5 & 47.3 & 91.8 & 22.3 & 91.9 & 18.1 & 25.1 & 6.3 & 65.8 & 14.1 & 23.7 & 6.7 & 29.4 & 7.6\\ \hline
-бирманский & my & 39,823 & 46.8 & 45.4 & 87.0 & 22.7 & 92.2 & 22.5 & 19.2 & 5.0 & 57.4 & 12.9 & 40.7 & 10.2 & 16.1 & 4.6\\ \hline
-албанский & sq & 74,871 & 46.7 & 44.3 & 91.4 & 23.9 & 92.2 & 22.4 & 5.2 & 1.6 & 80.5 & 18.3 & 13.4 & 4.1 & 37.5 & 9.1\\ \hline
-тамильский & ta & 118,119 & 46.1 & 44.3 & 89.1 & 24.6 & 88.2 & 18.3 & 22.4 & 5.7 & 72.8 & 16.4 & 15.5 & 4.6 & 23.8 & 6.3\\ \hline
-латышский & lv & 88,189 & 43.9 & 44.3 & 89.1 & 26.0 & 91.6 & 19.7 & 26.3 & 6.5 & 49.6 & 13.3 & 20.2 & 5.6 & 29.0 & 8.4\\ \hline
-греческий & el & 153,855 & 42.6 & 41.8 & 94.0 & 22.6 & 89.4 & 24.8 & 15.0 & 4.2 & 37.3 & 9.6 & 28.9 & 8.6 & 35.7 & 8.8\\ \hline
-армянский & hy & 246,571 & 42.2 & 42.7 & 92.2 & 23.4 & 82.3 & 19.6 & 25.9 & 6.5 & 33.8 & 8.2 & 20.9 & 5.6 & 42.2 & 9.8\\ \hline
-малаялам & ml & 59,305 & 39.9 & 39.4 & 78.4 & 25.3 & 92.4 & 21.4 & 8.4 & 2.5 & 30.2 & 7.7 & 49.9 & 12.8 & 15.8 & 4.4\\ \hline
-бенгальский & bn & 61,294 & 39.5 & 39.5 & 88.3 & 23.4 & 86.7 & 18.6 & 14.1 & 4.0 & 47.8 & 10.8 & 22.7 & 6.7 & 17.3 & 4.9\\ \hline
-тайский & th & 127,010 & 37.9 & 34.9 & 91.7 & 31.9 & 86.9 & 26.9 & 7.2 & 2.2 & 60.1 & 12.5 & 9.4 & 2.7 & 15.4 & 5.7\\ \hline
-яванский & jv & 54,964 & 33.9 & 33.1 & 87.3 & 21.7 & 89.7 & 39.6 & 7.1 & 2.2 & 20.0 & 5.5 & 22.4 & 7.8 & 28.1 & 8.2\\ \hline
-монгольский & mn & 18,353 & 30.8 & 30.9 & 87.3 & 21.7 & 90.2 & 26.5 & 7.3 & 2.2 & 18.3 & 6.0 & 12.2 & 4.3 & 25.0 & 7.8\\ \hline
-грузинский & ka & 124,694 & 30.3 & 29.0 & 87.8 & 22.8 & 91.0 & 20.7 & 11.8 & 3.4 & 16.2 & 5.3 & 20.9 & 5.9 & 5.2 & 1.7\\ \hline
-исландский & is & 45,873 & 25.9 & 26.5 & 62.9 & 18.8 & 86.5 & 20.8 & 12.4 & 3.5 & 11.0 & 3.7 & 10.1 & 3.2 & 22.7 & 6.2\\ \hline
-суахили & sw & 45,806 & 25.7 & 24.8 & 71.6 & 25.3 & 86.5 & 33.9 & 1.8 & 0.6 & 22.3 & 6.4 & 3.8 & 1.3 & 20.1 & 6.4\\ \hline
-валлийский & cy & 101,472 & 25.3 & 23.4 & 74.6 & 35.3 & 86.9 & 31.4 & 5.7 & 1.7 & 9.8 & 3.1 & 4.5 & 1.4 & 27.2 & 8.7\\ \hline
-кхмерский & km & 6,741 & 9.1 & 3.6 & 1.6 & 1.6 & 99.7 & 61.0 & 0.2 & 0.1 & 0.2 & 0.1 & 0.0 & 0.0 & 1.0 & 0.4\\ \hline
-амхарский & am & 14,375 & 9.1 & 3.5 & 0.0 & 0.0 & 100.0 & 100.0 & 0.2 & 0.2 & 0.0 & 0.0 & 0.0 & 0.0 & 2.2 & 1.5\\ \hline
+    \scalebox{0.7}{
+\begin{tabular}{|c|c|c||c|c|c|} \hline
+\multirow{2}{*}{\textbf{Язык}}  & \multirow{2}{*}{\textbf{Код}} & \multirow{2}{*}{\textbf{Дистанция}} & \multirow{2}{*}{\textbf{Число статей}}  &  \multicolumn{2}{c|}{\textbf{Метрики}} \\ %\hline
+\cline{5-6}
+& & & & Точность & Макро-F1 \\ \hline \hline
+русский & ru & 0 & 1,501,878 & 79.9 & 78.9\\ \hline
+китайский (Тайвань) & zh-TW & 92.2 & 1,025,366 & 74.7 & 73.7\\ \hline
+китайский & zh & 92.2 & 1,025,366 & 73.6 & 72.6\\ \hline
+английский & en & 60.3 & 5,731,625 & 70.7 & 70.2\\ \hline
+японский & ja & 93.3 & 1,124,097 & 67.5 & 64.8\\ \hline
+словенский & sl & 4.2 & 162,453 & 64.9 & 63.1\\ \hline
+индонезийский & id & 91.2 & 440,952 & 64.3 & 62.1\\ \hline
+итальянский & it & 45.8 & 1,466,064 & 64.2 & 62.5\\ \hline
+малайский & ms & n/c & 320,631 & 63.9 & 61.7\\ \hline
+шведский & sv & 59.5 & 3,763,579 & 63.9 & 63.4\\ \hline
+нидерландский & nl & 64.6 & 1,944,129 & 63.5 & 63.0\\ \hline
+испанский & es & 51.7 & 1,480,965 & 62.0 & 61.3\\ \hline
+датский & da & 66.2 & 240,436 & 61.9 & 60.8\\ \hline
+португальский & pt & 61.6 & 1,007,323 & 61.7 & 61.3\\ \hline
+турецкий & tr & 86.2 & 316,969 & 61.1 & 58.3\\ \hline
+персидский & fa & 72.4 & 643,750 & 60.8 & 58.9\\ \hline
+вьетнамский & vi & 95.0 & 1,190,187 & 60.7 & 60.2\\ \hline
+азербайджанский & az & 87.7 & 138,538 & 60.6 & 59.7\\ \hline
+французский & fr & 61.0 & 2,046,793 & 60.4 & 58.9\\ \hline
+норвежский букмол & nb & 67.2 & 495,395 & 59.7 & 59.1\\ \hline
+хинди & hi & 69.8 & 127,044 & 59.4 & 57.1\\ \hline
+венгерский & hu & 87.2 & 437,984 & 58.2 & 56.8\\ \hline
+польский & pl & 5.1 & 1,303,297 & 57.4 & 54.6\\ \hline
+корейский & ko & 89.5 & 429,369 & 57.1 & 55.6\\ \hline
+каталанский & ca & 60.3 & 591,783 & 56.6 & 54.2\\ \hline
+иврит & he & 88.9 & 231,868 & 55.5 & 53.8\\ \hline
+румынский & ro & 55.0 & 388,896 & 55.0 & 51.5\\ \hline
+филиппинский & tl & 91.9 & 80,992 & 55.0 & 51.1\\ \hline
+каннада & kn & 90.8 & 23,844 & 54.1 & 50.9\\ \hline
+урду & ur & 66.7 & 140,939 & 53.6 & 52.9\\ \hline
+арабский & ar & 86.5 & 619,692 & 52.6 & 51.8\\ \hline
+телугу & te & 96.7 & 69,354 & 51.5 & 47.2\\ \hline
+албанский & sq & 69.4 & 74,871 & 51.4 & 46.6\\ \hline
+финский & fi & 88.9 & 445,606 & 50.8 & 47.9\\ \hline
+африкаанс & af & 64.8 & 62,963 & 50.7 & 48.3\\ \hline
+бирманский & my & 86.0 & 39,823 & 49.9 & 47.1\\ \hline
+немецкий & de & 64.5 & 2,227,483 & 48.9 & 47.4\\ \hline
+тамильский & ta & 94.7 & 118,119 & 47.4 & 44.1\\ \hline
+латышский & lv & 49.1 & 88,189 & 47.2 & 45.6\\ \hline
+малаялам & ml & 96.7 & 59,305 & 45.4 & 43.0\\ \hline
+бенгальский & bn & 66.3 & 61,294 & 45.2 & 43.2\\ \hline
+армянский & hy & 77.8 & 246,571 & 45.0 & 44.8\\ \hline
+греческий & el & 75.3 & 153,855 & 43.9 & 42.4\\ \hline
+тайский & th & 89.5 & 127,010 & 42.6 & 40.0\\ \hline
+яванский & jv & 95.4 & 54,964 & 37.7 & 34.9\\ \hline
+монгольский & mn & 86.2 & 18,353 & 35.2 & 31.7\\ \hline
+грузинский & ka & 96.0 & 124,694 & 34.4 & 32.4\\ \hline
+суахили & sw & 95.1 & 45,806 & 32.0 & 29.0\\ \hline
+исландский & is & 68.9 & 45,873 & 31.5 & 29.0\\ \hline
+валлийский & cy & 75.5 & 101,472 & 27.6 & 24.0\\ \hline
+амхарский & am & 86.6 & 14,375 & 13.6 & 5.7\\ \hline
+кхмерский & km & 97.1 & 6,741 & 13.5 & 5.3\\ \hline
 \end{tabular}
 }
 \end{table*}
-% two chinese languages - specify what?
-Корреляция Спирмена размера Википедии для языка, возведенного в степень 0.7, с точностью модели на этом языке, составляет 0.817(пи-значение 1.47e-13).
+
+The Spearman correlation of the total accuracy with the smoothed Wikipedia size is 0.741 (p-value 5.02e-10). At the same time, the Spearman correlation of the total accuracy with the genealogical distance to the Russian is -0.299 (p-value 0.035).  If we take into account the smoothed Wikipedia size as the confounding variable, the partial correlation of the total accuracy with the genealogical distance to the Russian becomes 0.032 with a p-value of 0.387, which is statistically insignificant.
 
 
 \section{Обсуждение и анализ результатов} 
@@ -300,5 +303,16 @@
 
 Это приводит к выводу, что основной фактор, определяющий качество переноса знаний между языками в многоязычных моделях типа BERT - это размер выборки на предобучении для этого языка\footnote{Вероятно, для языков, которые являются очень лингвистически близкими, лингвистическая близость также влияет на качество переноса знаний, но оценка этого фактора требует дополнительных исследований.}.С учетом выводов Главы \ref{ch:tr-ag}, данный вывод может быть расширен и на многозадачные модели. 
 
+As one can see, the \texttt{YAQTopics} dataset overall suits fairly well for the conversational topic classification. In the case of question classification, different Russian-only baseline models trained on the \texttt{YAQTopics} 6-class subset obtain an accuracy of above 85.0\% on the subset of the same 6 classes from the Russian  \texttt{MASSIVE}. 
+
+We obtain such accuracy only if we utilize questions from \texttt{YAQTopics} in the training features (either by themselves or in concatenation with answers/ summarized answers), which proves that the questions are the most informative features in this dataset. Such results support the claim about the importance of labeled short examples in the topical datasets. Another fact supporting this claim is that concatenating summarized answers to questions is almost universally better than concatenating answers to questions.
+
+Surprisingly, switching between different Russian-only baseline models, including distilled ones, did not significantly alter the results. That proves that the distilled conversational models considered in the article also suit well for conversational tasks, especially in case of constrained computational resources.
+
+In the case of evaluation of the multilingual BERT (trained on the \texttt{YAQTopics} question subset) on all languages included in the \texttt{MASSIVE} dataset, the accuracy by language closely correlates with the approximated size of the BERT pretraining dataset for that language (Spearman correlation 0.741 with p-value 5.02e-10). We have approximated the dataset size by exponentiation of the language-wise number of Wikipedia size as of 11-10-2018 (date of release of the~\cite{bert}) by 0.7, analogously to the original article. 
+
+ Such correlation was obtained even though an average Wikipedia article in different languages has a different number of tokens and sentences. We suppose that if we had the precise number of training samples for every language that the original multilingual model received at the pretraining stage, the correlation would have been even higher; but the authors of the original BERT article provided neither the original training sample nor its language-wise size. 
+
+ At the same time, the correlation of the model scores with the genealogical distance to the Russian is statistically insignificant. This leads to the conclusion that the main factor determining the quality of knowledge transfer between different languages in the multilingual BERT-like models is, by far, the size of the pretraining sample for this language. We can suppose that for the case of languages that are very linguistically close (e.g. Russian and Belarusian) such closeness also impacts knowledge transfer, but examining the importance of this factor requires additional research. 
 
 
