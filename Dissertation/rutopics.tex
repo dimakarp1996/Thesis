@@ -128,7 +128,7 @@ We performed the experiments on multiple backbones from HuggingFace \texttt{Tran
 \scalebox{0.9}{
 \begin{tabular}{|c|c||c|c|}
 \hline
-\multirow{2}{*}{\textbf{Модель}} & \multirow{2}{*}{\textbf{Режим}}  &  \multicolumn{2}{c|}{\textbf{Метрики} \\ 
+\multirow{2}{*}{\textbf{Модель}} & \multirow{2}{*}{\textbf{Режим}}  &  \multicolumn{2}{c|}{\textbf{Метрики}} \\ 
 \cline{3-4}
 & & Точность & Макро-F1   \\ \hline \hline
 \textit{rubert} & \textbf{Q} & 83.8 & 83.0 \\ \hline% & 85.2 & 84.6 \\ \hline
@@ -158,8 +158,6 @@ We performed the experiments on multiple backbones from HuggingFace \texttt{Tran
 The models were trained on the \texttt{YAQTopics} 6-class \textbf{matched} subsets preprocessed using different preprocessing modes described in Section~\ref{prepr}. Backbones are abbreviated as in Table~\ref{tab:backbones}. Averaged by three runs.}
 \label{tab:matched}
 \end{table*}
-
-
 
 
 
@@ -314,5 +312,4 @@ In the case of evaluation of the multilingual BERT (trained on the \texttt{YAQTo
  Such correlation was obtained even though an average Wikipedia article in different languages has a different number of tokens and sentences. We suppose that if we had the precise number of training samples for every language that the original multilingual model received at the pretraining stage, the correlation would have been even higher; but the authors of the original BERT article provided neither the original training sample nor its language-wise size. 
 
  At the same time, the correlation of the model scores with the genealogical distance to the Russian is statistically insignificant. This leads to the conclusion that the main factor determining the quality of knowledge transfer between different languages in the multilingual BERT-like models is, by far, the size of the pretraining sample for this language. We can suppose that for the case of languages that are very linguistically close (e.g. Russian and Belarusian) such closeness also impacts knowledge transfer, but examining the importance of this factor requires additional research. 
-
 
