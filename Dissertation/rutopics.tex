@@ -8,45 +8,37 @@
     \item[*] Часть таких наборов данных является слишком специфичными и хорошо подходят для классификации узкоспециализированных вопросов, но не подходят для классификации широкого спектра тем из-за специфичной номенклатуры классов.  Примерами таких наборов данных являются~\cite{healthcare_facilities_reviews} и  ~\cite{pstu}
     \item[*] Некоторые наборы данных для тематической классификации лишены этих проблем, но либо имеют слишком маленькое число примеров~\cite{chatbotru}, либо имеют номенклатуру классов, далекую от покрытия всех потребностей диалоговой системы~\cite{massive}.
 \end{itemize}
-Данные вопросы были подробно освещены в статье \cite{yaqtopics}, по мотивам которой написана данная глава. В этой главе представляется новый тематический набор данных - \texttt{YAQTopics}. Приводятся метрики базовых моделей на этом наборе данных, доказывается пригодность набора данных \texttt{YAQTopics} для разговорной тематической классификации и исследуется перенос знаний с этого набора данных на 50 разных языков для многоязычной нейросетевой модели типа Трансформер.
+Данные вопросы были подробно освещены в статье \cite{yaqtopics}, по мотивам которой написана данная глава. В этой главе представляется новый тематический набор данных - \texttt{YAQTopics}. Приводятся метрики базовых моделей на этом наборе данных, доказывается пригодность набора данных \texttt{YAQTopics} для разговорной тематической классификации и исследуется перенос знаний с этого набора данных на 50 разных языков для многоязычной нейросетевой модели типа Трансформер. %TODO - везде 50?
 
 \section{Набор данных \texttt{YAQTopics}} 
 
-В работе предлагается новый русскоязычный набор данных для тематической классификацииt - \texttt{YAQTopics}. Этот набор данных был спарсен из сервиса "Яндекс.Кью"~\cite{yandex_q} с разрешения администрации этого сервиса.\footnote{Стоит также упомянуть про другой набор данных \url{https://huggingface.co/datasets/its5Q/yandex-q}, который тоже одержит вопросы и ответы из "Яндекс.Кью". Но он не содержит темы оттуда.}
-%TODO - уточнить этот footnote в соответствии с оригинальной статьей
+В работе предлагается новый русскоязычный набор данных для тематической классификацииt - \texttt{YAQTopics}. Этот набор данных с сервиса "Яндекс.Кью"~\cite{yandex_q} был получен по данной ссылке:\url{https://huggingface.co/datasets/its5Q/yandex-q/blob/main/full.jsonl.gz}.
 
 В данный датасет были спарсены примеры из 76 разных тем. Выбор тем осуществлялся, основываясь на наборе данных \texttt{DeepPavlov Topics} и потребностях диалоговой платформы \textbf{DREAM}. Тема каждого вопроса соответствовала теме этого вопроса из "Яндекс.Кью". Некоторые из выбранных тем могут быть похожими друг на друга, как и реальные темы из "Яндекс.Кью" - следовательно, прикладное использование набора данных \texttt{YAQTopics} может требовать объединения некоторых тем. 
 
-
-Для всех выбранных тем из этого сервиса, было получено 330,582 уникальных вопросов, из которых 123,748 были отвечены. Чтобы ответы не были слишком длинными и, следовательно, лучше подходили для тематической классификации, в набор данных добавлялись не сами ответы, а их версии, суммаризованные в одно предложение алгоритмом \texttt{TextRank}. В любом случае, все ответы предоставляются вместе со ссылками, так что полные версии ответов можно получить с сервиса Яндекса.
-
-Из всех вопросов, 265,068 принадлежат только одной теме, а остальные 65,514 - нескольким темам. Из всех суммаризованных ответов, 93,087 принадлежат только одной теме, а остальные 30,661 - нескольким темам.
+ Для каждого вопроса, выбирался также ответ наилучшего качества (или первый из таких ответов, если их было несколько). Для части вопросов ответ был пустым. 
+ 
 
 % TODO ВЫБОРКА ТЕСТОВАЯ ВАЛИДАЦИОННАЯ ИЛИ РАЗБИЕНИЕ? singlelabel multilabel перевод) однометочная? многометочная? Формат чисел. DREAM - жирным
-Полученные пары вопрос-ответ (в которых ответ мог быть пустым) были разбиты на тренировочную, валидационную и тестовую выборку в следующем соотношении: 80 процентов в тренировочную выборку, 10 процентов в валидационную и 10 процентов в тестовую. После этого, тренировочный, валидационный и тестовый наборы данных были разбиты на две части. В первую часть(однометочную) попали примеры, в которых вопрос встречается только в одной теме, и при этом либо для этого вопроса ответ не существует, либо суммаризованный ответ можно обнаружить только в той же теме. Все остальные примеры попали в часть 2(многометочную).
-
-Размеры всех частей и разбиений набора данных \texttt{YAQTopics} для любого из классов приведены в Таблице \ref{tab:yaqtopics_size}.
-
-We propose a new Russian topic classification dataset -- \texttt{YAQTopics}. This dataset was obtained from the \texttt{Yandex Que} service raw data\footnote{\url{https://huggingface.co/datasets/its5Q/yandex-q/blob/main/full.jsonl.gz}}. The utterances in this dataset have 76 topics. We have selected the topics to utilize based on the dataset~\cite{dp_topics}. The topic of every question corresponded to its section on "Yandex Que". For every question, we have selected the answer with the best quality (or the first such answer, if there were several ones). For some questions, the answer was empty.
-
 
 % TODO. CHECK THE TOPIC NUMBER. PROVIDE a LINK TO EVERY QUESTION in the final dataset version. 
+Полученные пары вопрос-ответ были разбиты на две части. В часть 1 (однометочную) попали только те пары, в которых вопрос принадлежит только к одной теме, и при этом ответ на этот вопрос либо не существует, либо после суммаризации алгоритмом TextRank~\cite{summarizer} может быть найден только в этой же теме. Все остальные примеры принадлежат части 2 (многометочной). Все эксперименты, описанные в данной главе, проводились только с примерами из однометочной части \texttt{YAQTopics}.
 
- We have split the question-answer pairs we obtained into two parts. In part 1 (single-label) we select only those pairs in which the question belongs to only one topic, and the answer to this question either does not exist or can be found solely in this topic after summarization by TextRank~\cite{summarizer}. All other examples belong to part 2 (multi-label). Here and further, we work only with the single-label part of the \texttt{YAQTopics}.
+Для всех тем, было выбрано 532,550 уникальных вопросов, из которых 403,904 было отвечено. При этом однометочная часть набора данных содержит 360,572 вопросов, из которых 265,516 было отвечено. Многометочная часть, в свою очередь, содержит 172,008 вопросов, из которых 138,388 было отвечено.
+%todo - YAQTOPICS одними и теми же буквами как в статтк
 
- For all the parsed topics, 532,550 unique questions were parsed, of which 403,904 are answered. The single-label part of the dataset contains 360,572 questions, of which 265,516 are answered. The multi-label part of the dataset contains 172,008 questions, of which 138,388 are answered. 
-
- Additionally, we have constructed the matched part of the \texttt{YAQTopics} as a subset of the single-label one. If the question is answered, and the summarized version of this answer can be found in only one topic (the same topic as the answer has), the triplets of the question, answer, and summarized answer (matching to each other) were included in the matched part of the dataset. 
+Помимо этого, из однометочной части \texttt{YAQTopics} была дополнительно выделена равноразмерная часть данного набора данных. Если вопрос отвечен и суммаризованная версия вопроса при этом встречается только в одной теме (той же, что и тема ответа), то данный вопрос вместе с ответом и суммаризованным ответом включается не только в однометочную часть \texttt{YAQTopics}, но и в равноразмерную часть этого набора данных. 
  
-Sizes of all parts of the \texttt{YAQTopics} for any class can be found in Table~\ref{tab:data_sizes}. 
+Размеры всех частей \texttt{YAQTopics} как для всего набора данных, так и для каждого из классов, с которыми проводились описанные в данной главе эксперименты, включены в Таблицу~\ref{tab:rutopics:sizes}. 
 
+%TODO
 \begin{table}[t]
 \centering
 \scalebox{0.8}{
 \begin{tabular}{|c||c|c|c|c|c|} \hline
 \textbf{тип данных}  & \multicolumn{2}{c|}{\textbf{однометочные}} & \multicolumn{2}{c|}{\textbf{многометочные}} & \multirow{2}{*}{\textbf{равноразмерные}} \\
 \cline{1-5}
-\textbf{класс}  & \multicolumn{1}{c|}{все} & \multicolumn{1}{c|}{отвеченные} & \multicolumn{1}{c|}{все} & \multicolumn{1}{c|}{субсэмплированные} & \\\hline \hline
+\textbf{класс}  & \multicolumn{1}{c|}{все} & \multicolumn{1}{c|}{отвеченные} & \multicolumn{1}{c|}{все} & \multicolumn{1}{c|}{} & \\\hline \hline
 \textbf{Размер набора данных} & 360,572 & 265,516 & 172,008 & 138,388 & 139,751\\ \hline
 \textbf{Размер шестиклассового поднабора данных} & 23,992 & 16,857 & 22,238 & 20,610 & 7,335\\ \hline
 \textit{Новости} & 945 & 605 & 912 & 718 & 354\\ \hline
@@ -59,54 +51,36 @@ Sizes of all parts of the \texttt{YAQTopics} for any class can be found in Table
 }
 \caption{Размеры набора данных \texttt{YAQTopics} по классу и разбиению}
 %\centering
-\label{tab:data_sizes}
+\label{tab:rutopics:sizes}
 \end{table}
 
 
-%TODO. Разделе - заглавными буквами? macro-average единообразно - замечание на этапе диссера что макро усредненное f1 обозначается как f1
-В качестве базовой модели, использовалась модель\textit{sbert\_large\_nlu\_ru}~\cite{sbert_large_nlu_ru}.Все гиперпараметры при дообучении данной модели были аналогичными описанным в Разделе \ref{ch:tr-ag:settings}. Модель была обучена и протестирована на всех вариантах набора данных \texttt{YAQTopics}, упомянутых в Таблице \ref{tab:versions}, но на всех 76 классах. Результаты данной модели представлены в Таблице~\ref{tab:rubaseline}. В этой таблице, как и во всех таблицах этого раздела макро-усредненное f1 обозначается как f1.
+\section{Выбор представления набора данных \texttt{YAQTopics}}\label{rutopics:prepr} 
+
+После получения набора данных \texttt{YAQTopics}, было необходимо выбрать метод предобработки данного набора данных, показывающий наилучшие результаты на разговорных задачах. Проводилось сравнение следующих пяти методов предобработки:
+
+\begin{itemize}
+    \item \textbf{Q} означает использование только вопросов.
+    \item \textbf{A} означает использование только ответов.
+    \item \textbf{As} означает использоватние только \textbf{суммаризованных} ответов.
+    \item \textbf{Q [SEP] A} означает, что если ответ на вопрос существует, используется конкатенация вопроса с ответом на этот вопрос при помощи токена [SEP]. Иначе используется просто вопрос. 
+    \item \textbf{Q [SEP] As} означает, что если ответ на вопрос существует, используется конкатенация вопроса с \textbf{суммаризованным} ответом на этот вопрос при помощи токена [SEP]. Иначе используется просто вопрос. 
+\end{itemize}
+
+Для всех методов предобработки, обучение проводилось на равноразмерной версии \texttt{YAQTopics}(колонка "равноразмерные" из Таблицы~\ref{tab:rutopics:sizes}).
+Такой режим обучения позволяет проводить честное сравнение между признаками, полученными разными методами предобработки, так как количество тренировочных примеров при данном режиме то же самое безотносительно способа предобработки данных. Результаты сравнения вышеупомянутых методов предобработки приводятся в Таблице~\ref{tab:rutopics:matched}. В этой таблице и всех таблицах этого раздела макро-усредненное f1 обозначается как f1.
+ 
+Для оценки любого из упомянутых выше методов предобработки набора данных, модель для сравнения обучалась на тренировочных примерах из \texttt{YAQTopics}, принадлежащих любому из соответствующих набору данных \texttt{MASSIVE} шести классов и полученных в соответствии с этим методом. Валидация производилась на примерах из валидационной части MASSIVE, принадлежащих вышеупомянутым шести классам. После завершения обучения, данная модель оценивалась на поднаборе тренировочных+тестовых примеров из русского \texttt{MASSIVE}, принадлежащих соответствующим шести классам из этого набора данных. Этот поднабор обозначается как "объединенные тестовые данные". 
+
+При сравнении набора данных \texttt{YAQTopics} с набором данных \texttt{MASSIVE}, можно видеть, что только шесть классов из \texttt{MASSIVE} можно поставить в соответствие классам из  \texttt{YAQTopics}. Следовательно, нейросетевая модель в данных экспериментах обучалась только для шести соответствующих классов \texttt{YAQTopics}: \textit{Еда, напитки и кулинария} (соответствует классу \textit{cooking} из \texttt{MASSIVE}), \textit{Новости} (соответствует классу \textit{news} из \texttt{MASSIVE} ), \textit{Транспорт} (соответствует классу \textit{transport} из \texttt{MASSIVE}), \textit{Музыка} (соответствует классу \textit{music} из \texttt{MASSIVE}),\textit{Медиа и коммуникации} (соответствует классу \textit{social} из \texttt{MASSIVE}) и \textit{Погода} (соответствует классу \textit{weather} из \texttt{MASSIVE} class). Классы из набора данных \texttt{YAQTopics} никак не объединялись, хотя это предположительно могло бы дополнительно улучшить результаты на классах \textit{cooking} и \textit{transport} из набора данных \texttt{MASSIVE}. 
+
+Этот метод позволяет проверить пригодность набора данных \texttt{YAQTopics} для разговорной тематической классификации - по крайней мере, на выбранных шести классах. Впрочем, так как примеры для всех шести классов были получены похожим образом, можно ожидать, что другие классы из \texttt{YAQTopics} настолько же хорошо подходят для разговорной тематической классификации. 
 
 
+Эксперименты, описанные в Таблице~\ref{tab:rutopics:matched}, проводились на различных базовых моделях из библиотеки \texttt{Transformers}~\cite{huggingface_transformers} от HuggingFace : \textit{bert-base-multilingual-cased}~\cite{multilingual_bert}, \textit{DeepPavlov/distilrubert-tiny-cased-conversational}~\cite{alina}, \textit{sberbank-ai/ruBert-base}~\cite{sbert_base}  \textit{DeepPavlov/rubert-base-conversational-cased}~\cite{rubert}. Все эти модели имеют архитектуру типа BERT. Последние 2 модели очень похожи, но имеют несколько отличающееся число параметров, так как в них применяются разные методы токенизации. 
 
+Подробное сравнение всех базовых моделей приведено в Таблице~\ref{tab:rutopics:backbones}.
 
-We note that, as some \texttt{YAQTopics} classes are similar to each other, the applied utilization of this dataset might require merging some classes (e.g. \textit{Food} and \textit{FoodDrinksCulinary}). 
-
-%TODO. DISCUSS WITH VASILY -- WHAT SHOULD BE THE BASELINE MODEL?? 
-For our experiments on this dataset, we have trained the Transformer-like models with the hyperparameters and backbones described in the next section.
-While training all models described in this work, we used the following hyperparameters: batch size 160, optimizer AdamW~\cite{adam}, betas (0.9,0.99), initial learning rate 2e-5, learning rate drops by 2 times if accuracy does not improve for 2 epochs, validation patience 3 epochs, max 100 training epochs. The max sequence length is 128 tokens. We performed three random restarts for all experiments and averaged the metrics.
-
-We performed the experiments on multiple backbones from HuggingFace \texttt{Transformers} library~\cite{huggingface_transformers}, which all have similar BERT-like architecture:  \textit{bert-base-multilingual-cased}~\cite{multilingual_bert}, \textit{DeepPavlov/distilrubert-tiny-cased-conversational}~\cite{alina}, \textit{sberbank-ai/ruBert-base}~\cite{sbert_base} and \textit{DeepPavlov/rubert-base-conversational-cased}~\cite{rubert}. The former two models are similar, but they have a slightly different number of parameters because of different tokenization.
-
-
-Стоит ответить, что, так как некоторые классы из \texttt{YAQTopics} похожи друг на друга, результаты из Таблицы~\ref{tab:rubaseline} могут быть улучшены при помощи объединения некоторых классов, например, \textit{Food} и \textit{FoodDrinksCulinary}). Результаты, приведенные в таблице, верны только для оригинального набора данных без объединения классов. Тем не менее, даже на этом наборе классов \textit{sbert\_large\_nlu\_ru} может показывать точность выше 65 \%.
-
-%TODO. никаких мы
-
-Далее в этой главе диссертации используются только примеры, принадлежащие только к одной теме, для упрощения оценки моделей на наборе данных \texttt{MASSIVE}.
-
-\section{Выбор представления набора данных \texttt{YAQTopics}} 
-
-Следующей задачей, которую требуется решить, является выбор наилучшего метода использования набора данных \texttt{YAQTopics} для получения наилучших результатов на разговорных задачей. Было проведено сравнение следующих методов использования этого набора данных - использование только ответов из \texttt{YAQTopics}, только вопросов из этого набора данных, использование ответов и вопросов из этого набора данных как отдельных примеров или же конкатенация ответов к вопросам ( при помощи токена [SEP]) для отвеченных вопросов.
-
-Для оценки любого из этих методов предобработки набора данных, модель для сравнения обучалась на тренировочных примерах из \texttt{YAQTopics}, принадлежащих любому из соответствующих набору данных \texttt{MASSIVE} шести классов и полученных в соответствии с этим методом. После завершения обучения, данная модель оценивалась на поднаборе примеров из русского \texttt{MASSIVE}, принадлежащих соответствующим шести классам из этого набора данных.
-
-Этот метод оценки подробнее раскрыт в Разделе \ref{comparison_model}.
-
-\subsection{Обучение модели для сравнения}\label{comparison_model}
-Здесь и далее, для оценки набора данных \texttt{YAQTopics}, обучалась модель типа \textit{bert-base-multilingual-cased} с параметрами, аналогичными разделу \ref{ch:tr-ag:settings}. Подобный тип нейросетевых моделей позволяет как быстро проводить эксперименты, так и исследовать перенос знаний между языками. Результаты для каждого эксперимента с участием этой модели усреднялись по трем запускам.
-
-При сравнении набора данных \texttt{YAQTopics} с набором данных \texttt{MASSIVE}, можно видеть, что только шесть классов из \texttt{MASSIVE} можно поставить в соответствие классам из  \texttt{YAQTopics}. Следовательно, нейросетевая модель в данных экспериментах обучалась только для шести соответствующих классов \texttt{YAQTopics}: \textit{FoodDrinksCulinary} (соответствует классу \textit{cooking} из \texttt{MASSIVE}), \textit{News} (соответствует классу \textit{news} из \texttt{MASSIVE} ), \textit{Transport} (соответствует классу \textit{transport} из \texttt{MASSIVE}), \textit{Music} (соответствует классу \textit{music} из \texttt{MASSIVE}),\textit{MediaCommunications} (соответствует классу \textit{social} из \texttt{MASSIVE}) и \textit{Weather} (соответствует классу \textit{weather} из \texttt{MASSIVE} class). После завершения обучения моделей, эти модели были протестированы на подвыборке всех примеров из вышеупомянутых классов набора данных \texttt{MASSIVE}(тренировочные+тестовые+валидационные). Этот метод позволяет проверить пригодность набора данных \texttt{YAQTopics} для тематической классификации в разговорной речи - по крайней мере на этих шести классов. Впрочем, так как примеры для всех классов \texttt{YAQTopics} собирались одинаково, похожие результаты можно ожидатьь и для других классов.
-
-
-Результаты оценки обучения модели для сравнения на русскоязычном наборе данных \texttt{MASSIVE} в Таблице~\ref{tab:versions}. Из этой таблицы видно, что классификация конкатенации вопросов и ответов приводит к небольшому ухудшению метрик на разговорных данных относительно классификации только вопросов, и использование ответов как дополнительных примеров лишь дополнительно ухудшает эти метрики. Использование в качестве обучающей выборки одних только ответов приводит к серьезному падению метрик.
-% TODO. LANGUAGE OF TABLES - RU ONLY. набор данных датасет
-
-
-Из таблицы можно видеть, что вопросы из \texttt{YAQTopics} действительно более информативны для разговорных задач, чем суммаризованные ответы, и в общем и целом подходят для разговорных задач достаточно хорошо. Поэтому в следующем разделе исследовался перенос знаний с моделей, обученных только на вопросах из \texttt{YAQTopics}.
-%TO ARTICLE - - OF THE QUESTIONS FROM
-%Ответы - суммаризованные ответы? Что to article? And only Q to the next section - written? And Russian MASSIVE unless otherwise
-%
-%.
 \begin{table*}
 \centering
 \scalebox{0.8}{
@@ -120,7 +94,7 @@ We performed the experiments on multiple backbones from HuggingFace \texttt{Tran
 \end{tabular}
 }
 \caption{Параметры различных базовых моделей, рассмотренных в этой главе}
-\label{tab:backbones}
+\label{tab:rutopics:backbones}
 \end{table*}
 
 \begin{table*}
@@ -154,72 +128,42 @@ We performed the experiments on multiple backbones from HuggingFace \texttt{Tran
 \end{tabular}
 }
 \caption{
- Accuracy (F1) of different kinds of backbones on the custom test set of Russian \texttt{MASSIVE}.
-The models were trained on the \texttt{YAQTopics} 6-class \textbf{matched} subsets preprocessed using different preprocessing modes described in Section~\ref{prepr}. Backbones are abbreviated as in Table~\ref{tab:backbones}. Averaged by three runs.}
-\label{tab:matched}
+ Точность (макро-F1) различных типов базовых моделей на объединенных тестовых данных \texttt{MASSIVE} для русского языка.
+Модели были обучены на шестиклассовой \textbf{равноразмерной} подвыборке \texttt{YAQTopics}, предобработанной при помощи одного из нескольких режимов, описанных в Разделе~\ref{rutopics:prepr}. Условные обозначения моделей - как в  Таблице~\ref{tab:rutopics:backbones}. Усреднено по трем запускам.}
+\label{tab:rutopics:matched}
 \end{table*}
 
+Как можно видеть из Таблицы~\ref{tab:matched}, модели, учиышиеся только на ответах, показывают лучшие результаты, чем учившиеся только на вопросах, а учившиеся только на ответах или только на суммаризованных ответах. Это верно для всех рассмотренных базовых моделях, что доказывает: вопросы - самый информативный элемент набора данных {YAQTopics}. 
 
+Конкатенация вопросов к ответам или суммаризованным ответам не дает стойкого улучшения по сравнению с использованием только лишь вопросов. 
 
-We needed to identify the best method of \texttt{YAQTopics} preprocessing for the best performance on conversational tasks. We could utilize only answers from \texttt{YAQTopics}, utilize only questions, or concatenate (with [SEP] token) questions to answers where answers exist. Additionally, as answers in the \textit{YAQTopics} are long, we could see to what extent the extraction summarization of these answers (obtained by the TextRank~\cite{summarizer} could alter the results. To benchmark the performance of models trained on our datasets on the conversational tasks, we utilized the \texttt{MASSIVE} dataset for evaluation.
+В общем и целом, все русскоязычные модели показывают похожие результаты, а многоязычная модель ожидаемо показывает результаты хуже, чем любая из русскоязычных. 
 
+Все эти выводы также справедливы для экспериментов, в которых использовались все данные из части 1 набора данных \texttt{YAQTopics}, принадлежащие вышеупомянутым шести классам. Для данных настроек обучения, базовая модель \textit{rubert} с режимом предобработки данных \textbf{Q} показывает точность 85.2\% и макро-F1 84.6\%.
 
-While comparing our dataset with the \texttt{MASSIVE}, we saw that only six \texttt{MASSIVE} classes can be directly mapped to the \texttt{YAQTopics}. Therefore, we trained all described models only on the six corresponding classes from the single-label subset of \texttt{YAQTopics}: \textit{food, drinks, and cooking}  (corresponds to the \textit{cooking} \texttt{MASSIVE} class), \textit{news} (corresponds to the \textit{news} \texttt{MASSIVE} class), \textit{transport} (corresponds to the \textit{transport} \texttt{MASSIVE} class), \textit{music} (corresponds to the \textit{music} \texttt{MASSIVE} class), \textit{media and communication} (corresponds to the \textit{social} \texttt{MASSIVE} class) and \textit{weather} (corresponds to the \textit{weather} \texttt{MASSIVE} class). We did not merge \texttt{YAQTopics} classes even though it could have additionally improved the results for \textit{cooking} and \textit{transport} \texttt{MASSIVE} classes.
-
-We have compared five different methods of preprocessing the \texttt{YAQTopics} dataset. We name them as "modes" in Table~\ref{tab:matched}. In these modes:
-\begin{itemize}
-    \item \textbf{Q} means using only questions.
-    \item \textbf{A} means using only answers.
-    \item \textbf{As} means using summarized answers.
-    \item \textbf{Q [SEP] A} means using the concatenation of every question with the corresponding answer using [SEP] token.
-    \item \textbf{Q [SEP] As} means analogous concatenation with the summarized answer. 
-\end{itemize}
-
-For all of these preprocessing methods, we performed training on the matched version of the \texttt{YAQTopics} (column "matched" from Table~\ref{tab:data_sizes}). This training mode allows making the apple-to-apple comparison between features obtained by different preprocessing methods, as the number of training samples in this method is the same regardless of how we preprocess the data. We present the results obtained by this method in Table~\ref{tab:matched}.
-
-
-We validated all models on the Russian \texttt{MASSIVE} validation 6-class subset, and tested them on the concatenation of train and test 6-class subsets of \texttt{MASSIVE}. Here and further, we denote this subset concatenation as a "custom test set".
-
-This method allows testing the suitability of the dataset for conversational topic classification -- at least on a subset of classes. However, as examples for all classes were collected similarly, we expect that other classes from the \texttt{YAQTopics} are as suitable for the conversational topic classification as these six ones. 
-
-As one can see from Table~\ref{tab:matched}, the question-only setting yields larger scores than the answer-only setting, and the answer-only setting yields larger scores than the summarized answer-only setting. This conclusion holds for all considered backbone models, proving that the questions are the most informative feature in the \texttt{YAQTopics} dataset.
-If we concatenate questions to answers or summarized answers, the scores do not change significantly compared to the question-only setting.
-
-Overall, all Russian models show similar results, and the multilingual model expectedly trails behind them all.
-
-All these conclusions are also valid for the experiments on the full 6-class subset. For this training mode, 
- \textit{rubert} backbone with the \textbf{Q} preprocessing mode shows accuracy 85.2\% with macro-averaged f1 84.6\%.
-
-For the experiments in the next section, we chose the \textbf{Q} preprocessing mode, as all other modes are either too complicated and give no better results (\textbf{Q [SEP] A}, \textbf{Q [SEP] As}), or show worse results (\textbf{A}, \textbf{As}).
+Для экспериментов в следующей секции, был выбран режим предобработки \textbf{Q}, так как остальные режимы либо сложнее и при этом дают результаты не лучше, чем у \textbf{Q} (\textbf{Q [SEP] A}, \textbf{Q [SEP] As}), либо показывают результаты хуже, чем у \textbf{Q} (\textbf{A}, \textbf{As}).
 
 
 
 
 
 \section{Перенос знаний между языками}
-После выбора наилучшего метода использования набора данных \texttt{YAQTopics}, были поставлены следующие задачи:
+После выбора наилучшего метода использования набора данных \texttt{YAQTopics}, необходимо было ответить на следующие вопросы:
 \begin{itemize}
 \item[*]Как эффективно знания из \texttt{YAQTopics} переносятся между несколькими языками?
 \item[*]Что влияет на эффективность этого переноса?
 \end{itemize}
-Чтобы ответить на эти вопросы, были получены предсказания модели \texttt{bert-base-multilingual-cased}(режим \textbf{Q} из Таблицы \ref{tab:rutopics:multsettings} не только для руссского языка, но и для всех языков из набора данных \texttt{MASSIVE}. Для данных экспериментов использовалась версия 1.1 \texttt{MASSIVE}, содержащая каталанский язык. Так как \texttt{MASSIVE} и содержит как современную, так и традиционную версию китайской письменности, учитывались обе. Как и в Таблице \ref{tab:rutopics:multsettings}, полученные результаты были усреднены пл трем запускам.
+Чтобы ответить на эти вопросы, были получены предсказания модели \texttt{bert-base-multilingual-cased не только для руссского языка, но и для всех языков из набора данных \texttt{MASSIVE}. Данная модель обучалась в режиме \textbf{Q} из Таблицы \ref{tab:rutopics:multsettings}, на всех данных из шести выбранных в предыдущем разделе классов \texttt{YAQTopics}, имеющих только одну метку. 
+
+Для данных экспериментов использовалась версия 1.1 \texttt{MASSIVE}, содержащая каталанский язык. Так как \texttt{MASSIVE} и содержит как современную, так и традиционную версию китайской письменности, учитывались обе. Как и в Таблице \ref{tab:rutopics:multsettings}, полученные результаты были усреднены по трем запускам.
 %To article - точно work claims?
 Полученные результаты представлены в Таблице \ref{tab:rutopics:crosslingual}. Исходя из данной таблицы, можно сделать вывод о корреляции качества многоязычной модели BERT для разных языков с размером обучающей выборки для этих языков. Авторы модели \textit{bert-base-multilingual-cased} утверждают\footnote{\url{https://github.com/google-research/bert/blob/master/multilingual.md}}, что тренировочной выборкой модели \textit{bert-base-multilingual-cased} для каждого языка являлся размер Википедии для этого языка, при этом для обучающей выборки было применено экспоненциальное сглаживание со степенью 0.7 для балансировки языков.
 %TO ARTICLE - pretraining sample size. %Smoothing of training sample - expressions as in the url.
-Соответственно, в качестве приближения размера Википедии для каждого языка, был выбрано число статей Википедии для этого языка на 11 октября 2018 года(дату выпуска модели BERT), возведенное в степень 0.7.  Число статей Википедии для каждого языка на эту дату также представлено в Таблице \ref{crosslingual}.
-%TODO. Значения таблиц и корреляции (edited) 
+Соответственно, в качестве приближения размера Википедии для каждого языка, был выбрано число статей Википедии для этого языка на 11 октября 2018 года(дату выпуска модели BERT), возведенное в степень 0.7.  Число статей Википедии для каждого языка на эту дату также представлено в Таблице~\ref{crosslingual}. Помимо этого, в Таблице~\ref{crosslingual} также представлена генеалогическая близость каждого языка к русскому, вычисленная в соответствии с работой~\cite{lang_sim}. 
 
-
-After we had selected the best setting, the following questions emerged: how effectively does the knowledge from this setting transfer across multiple languages? And what influences the efficiency of this transfer? To answer these questions, we pre-trained \textit{bert-base-multilingual-cased}, which allows effective cross-lingual transfer learning on different NLP tasks~\cite{ner,squad}, on the data from \textbf{full} validation 6-class \texttt{YAQTopics} subset, which are preprocessed by the \textbf{Q} preprocessing mode. In this stage, we infer this model not only on the Russian \texttt{MASSIVE} but also on all other languages it contains\footnote{We use \texttt{MASSIVE} version 1.1, which contains the Catalan language. For the Chinese language, we have utilized both sets of characters as \texttt{MASSIVE} has two Chinese versions.}.
-
-An interesting research question is the correlation of the model quality for different languages with the pretraining sample size for that language. The authors of the \textit{bert-base-multilingual-cased} claim~\cite{multilingual_bert} that the learning sample for every utilized language was comprised of the Wikipedia texts for that language, and that they performed an exponential smoothing of the training sample with the factor of 0.7 to balance the languages. Therefore, as a proxy of the Wikipedia size for every language, we used the number of articles in the Wikipedia of this language at the time of the BERT article's release, smoothed by the factor of 0.7. 
-
-We present the metrics obtained by the evaluation of the multilingual BERT on the custom \texttt{MASSIVE} test subset for all languages in Table~\ref{crosslingual}. We also provide the original Wikipedia sizes we used in the same table.
-% TODO. INSERT TABLE VALUES AND CORRELATIONS
-
-
+% TODO UPDATE ALL RUNS
 \begin{table*}
-\caption{Точность(f1) модели \textit{bert-base-multilingual-cased} на всех языках из набора данных \texttt{MASSIVE}, обучавшейся на версии \textbf{Q} набора данных \texttt{YAQTopics}.\textbf{Код} означает код языка(ISO 639-1), \textbf{N} означает число статей в Википедии на этом языке на 11 октября 2018 года, \textbf{Дистанция} означает лингвистическую дистанцию между этим языком и русским Усреднено по трем запускам.}
+\caption{Точность(f1) модели \textit{bert-base-multilingual-cased} на объединенном тестовом наборе данных \texttt{MASSIVE} для всех языков. Модель обучалась на версии \textbf{Q} набора данных \texttt{YAQTopics}.\textbf{Код} означает код языка(ISO 639-1), \textbf{N} означает число статей в Википедии на этом языке на 11 октября 2018 года, \textbf{Дистанция} означает лингвистическую дистанцию между этим языком и русским, посчитанную в соответствии с работой~\cite{lang_sim}. Усреднено по трем запускам.}
 \centering
     \scalebox{0.7}{
 \begin{tabular}{|c|c|c||c|c|c|}
@@ -281,35 +225,28 @@ We present the metrics obtained by the evaluation of the multilingual BERT on th
 \end{tabular}
 }
 \end{table*}
-
-The Spearman correlation of the total accuracy with the smoothed Wikipedia size is 0.741 (p-value 5.02e-10). At the same time, the Spearman correlation of the total accuracy with the genealogical distance to the Russian is -0.299 (p-value 0.035).  If we take into account the smoothed Wikipedia size as the confounding variable, the partial correlation of the total accuracy with the genealogical distance to the Russian becomes 0.032 with a p-value of 0.387, which is statistically insignificant.
+%TODO p-value p-значение
+Корреляция Спирмена точности для каждого языка с экспоненциально сглаженным размером Википедии равняется 0.741 (p-значение 5.02e-10). При этом корреляция точности с генеалогической дистанцией до русского равна -0.299 (p-значение 0.035). Если же принять в расчёт при подсчете этой корреляции экспоненциально сглаженный размер Википедии как третью переменную, то частичная корреляция точности с генеалогической дистанцией до русского языка становится равной 0.032 с пи-значением 0.387, что не является статистически значимым.
 
 
 \section{Обсуждение и анализ результатов} 
 
-В данной главе предлагается новый русскоязычный набор данных для разговорной тематической классификации - \texttt{YAQTopics}. Этот тематический датасет объединяет большое количество примеров (265,068 принадлежащих одному классу, 65,514 -2 классам и более) с обширным охватом классов (76 классов). Этот набор данных сгруппирован по темам из «Яндекс.Кью»; для каждого вопроса приводится суммаризованный вариант ответа, ссылка на полный ответ и темы вопросов и ответов в «Яндекс.Кью».
+В данной главе предлагается новый русскоязычный набор данных для разговорной тематической классификации - \texttt{YAQTopics}. Этот тематический датасет объединяет большое количество примеров (360,572 - принадлежащих одному классу, 172,008 - 2 классам и более) с обширным охватом классов (76 классов). Этот набор данных сгруппирован по темам из «Яндекс.Кью»; для каждого вопроса приводится суммаризованный вариант ответа, ссылка на полный ответ и темы вопросов и ответов в «Яндекс.Кью».
 
-Как можно видеть, набор данных \texttt{YAQTopics} подходит достаточно хорошо для разговорной тематической классификации. Так, для классификации вопросов, модель \textit{bert-base-multilingual-cased}, обученная на шестиклассовой подвыборке \texttt{YAQTopics}, показывает точность 76.0 и макро-f1 72.1 на подвыборке соответствующих 6 классов из русскоязычного \texttt{MASSIVE}(Таблица \ref{tab:rutopics:versions}). 
-% todo metric names
+Как можно видеть, набор данных \texttt{YAQTopics} подходит достаточно хорошо для разговорной тематической классификации. Так, для классификации вопросов, русскоязычные модели типа BERT, обученные на шестиклассовой подвыборке \texttt{YAQTopics}, показывают точность свыше 85.0\% на подвыборке соответствующих 6 классов из русскоязычного \texttt{MASSIVE}(Таблица \ref{tab:rutopics:versions}). 
 
- На удивление, конкатенация суммаризованных ответов к вопросов не улучшает эти цифры, и даже их несколько ухудшает. А классификация одних только суммаризованных ответов дает существенно более низкие результаты на русскоязычном \texttt{MASSIVE}, чем классификация одних только вопросов, даже при одниаковом размере обучающей выборки. Более того, даже простое добавление суммаризованных ответов к обучающей выборке также несколько ухудшает результаты. Это показывает ограниченную полезность суммаризованных ответов на вопросы для задачи классификации разговорных реплик, а значит, показывает, что использование одних только вопросов  из \texttt{YAQTopics} для классификации разговорных реплик полностью оправдано. 
+Русскоязычные модели показывают данные результаты, только если вопросы из  \texttt{YAQTopics} используются в тренировочных примера (сами по себе или в конкатенации с ответами/суммаризованными ответами). Это доказывает, что вопросы - самая информативная часть данного набора данных. 
 
-Также в данной главе показано, что в случае оценки модели  \textit{bert-base-multilingual-cased}, обученной на шестиклассовой подвыборке \texttt{YAQTopics}, на подвыборке соответствующих 6 классов из \texttt{MASSIVE} для всех 51 поддерживаемых в \texttt{MASSIVE} языков, точность для каждого языка сильно коррелирует с аппроксимированном набором обучающей выборки для этого языка ( корреляция Спирмена 0.817 c p-значением 1.47е-13). Размер обучающей выборки был аппроксимирован при помощи возведения числа статей в Википедии для каждого языка на 11 октября 2018 года(дата выпуска статьи \cite{bert}) в степень 0.7, по аналогии с оригинальной статьей. 
+В общем случае, данные результаты показывают важность размеченных коротких примеров в тематических датасетах. Эти результаты также доказываются тем, что конкатенация вопросов и суммаризованных ответов практически всегда лучше чяем конкатенация вопросов и ответов. 
+
+На удивление, результаты на наборе данных \texttt{MASSIVE} практически не меняются для различных русскоязычных базовых моделей. Это показывает, что дистиллированные модели хорошо подходят для разговорных задач, особенно в условиях ограниченных вычислительных ресурсов. 
+
+Также в данной главе показано, что в случае оценки модели  \textit{bert-base-multilingual-cased}, обученной на шестиклассовой подвыборке вопросов из \texttt{YAQTopics}, на подвыборке соответствующих 6 классов из \texttt{MASSIVE} для всех 51 поддерживаемых в \texttt{MASSIVE} языков, точность для каждого языка сильно коррелирует с аппроксимированном набором обучающей выборки для этого языка ( корреляция Спирмена 0.741 c p-значением 5.02e-10). Размер обучающей выборки был аппроксимирован при помощи возведения числа статей в Википедии для каждого языка на 11 октября 2018 года(дата выпуска статьи \cite{bert}) в степень 0.7, по аналогии с оригинальной статьей. 
 %TODO - Спирмен, пи-значение, как пишется?
 
 Данная корреляция была получена даже несмотря на то, что средняя статья в Википедии на разных языках имеет разное число токенов и предложений. Это приводит к предположению о том, что если бы для каждого языка имелось в явном виде число тренировочных примеров, которое модель \textit{bert-base-multilingual-cased} получала на этапе предобучения, корреляция была бы еще выше - но авторы оригинальной статьи не предоставили ни оригинальную обучающую выборку, ни её размер по языкам. 
 
-Это приводит к выводу, что основной фактор, определяющий качество переноса знаний между языками в многоязычных моделях типа BERT - это размер выборки на предобучении для этого языка\footnote{Вероятно, для языков, которые являются очень лингвистически близкими, лингвистическая близость также влияет на качество переноса знаний, но оценка этого фактора требует дополнительных исследований.}.С учетом выводов Главы \ref{ch:tr-ag}, данный вывод может быть расширен и на многозадачные модели. 
+При этом корреляция результатов модели на том или ином языке с генеалогическим расстоянием между этим языком и русским не является статистически значимой. Это приводит к выводу, что основной фактор, определяющий качество переноса знаний между языками в многоязычных моделях типа BERT - это размер выборки на предобучении для этого языка\footnote{Вероятно, для языков, которые являются очень лингвистически близкими, лингвистическая близость также влияет на качество переноса знаний, но оценка этого фактора требует дополнительных исследований.}.С учетом выводов Главы \ref{ch:tr-ag}, данный вывод может быть расширен и на многозадачные модели. 
 
-As one can see, the \texttt{YAQTopics} dataset overall suits fairly well for the conversational topic classification. In the case of question classification, different Russian-only baseline models trained on the \texttt{YAQTopics} 6-class subset obtain an accuracy of above 85.0\% on the subset of the same 6 classes from the Russian  \texttt{MASSIVE}. 
 
-We obtain such accuracy only if we utilize questions from \texttt{YAQTopics} in the training features (either by themselves or in concatenation with answers/ summarized answers), which proves that the questions are the most informative features in this dataset. Such results support the claim about the importance of labeled short examples in the topical datasets. Another fact supporting this claim is that concatenating summarized answers to questions is almost universally better than concatenating answers to questions.
-
-Surprisingly, switching between different Russian-only baseline models, including distilled ones, did not significantly alter the results. That proves that the distilled conversational models considered in the article also suit well for conversational tasks, especially in case of constrained computational resources.
-
-In the case of evaluation of the multilingual BERT (trained on the \texttt{YAQTopics} question subset) on all languages included in the \texttt{MASSIVE} dataset, the accuracy by language closely correlates with the approximated size of the BERT pretraining dataset for that language (Spearman correlation 0.741 with p-value 5.02e-10). We have approximated the dataset size by exponentiation of the language-wise number of Wikipedia size as of 11-10-2018 (date of release of the~\cite{bert}) by 0.7, analogously to the original article. 
-
- Such correlation was obtained even though an average Wikipedia article in different languages has a different number of tokens and sentences. We suppose that if we had the precise number of training samples for every language that the original multilingual model received at the pretraining stage, the correlation would have been even higher; but the authors of the original BERT article provided neither the original training sample nor its language-wise size. 
-
- At the same time, the correlation of the model scores with the genealogical distance to the Russian is statistically insignificant. This leads to the conclusion that the main factor determining the quality of knowledge transfer between different languages in the multilingual BERT-like models is, by far, the size of the pretraining sample for this language. We can suppose that for the case of languages that are very linguistically close (e.g. Russian and Belarusian) such closeness also impacts knowledge transfer, but examining the importance of this factor requires additional research. 
-
+ 
