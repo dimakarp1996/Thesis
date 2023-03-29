@@ -120,7 +120,7 @@
 \end{table*}
 \begin{table*}
 \caption{Точность/ F1 для запусков на части тренировочных данных.  Режим M означает многозадачные модели, режим S означает однозадачные модели, и Доля означает долю использованных тренировочных данных. Базовая модель \textit{distilbert-base-cased}. Все запуски. Часть 3. }% do need they?
-\label{appendix:model_results2}
+\label{appendix:model_results3}
 \begin{tabular}{|c|c|c||c|c|c|c|c|c||c|} \hline
  \multirow{2}{*}{Запуск} & \multirow{2}{*}{Режим} &  \multirow{2}{*}{Доля} &\multirow{2}{*}{Среднее} & Эмоции & Тональность & Токсичность & Интенты & Темы & Число \\
 & & & & 39.4k & 80.5k & 127.6k & 11.5k & 11.5k & батчей \\ \hline \hline
@@ -242,7 +242,7 @@
 \begin{table*}
 \caption{Точность/ f1-макро на русскоязычных данных для трансформер-агностичного \textit{distilbert-base-multilingual-cased}. Число батчей означает число батчей, которые видела модель в процессе своего обучения, режим S означает однозадачное обучение, режим M - многозадачное обучение. RU доля - доля тренировочных примеров, взятых из каждого русскоязычного тренировочного набора данных, и EN  доля - доля примеров, взятых из каждого англоязычного тренировочного набора данных. Все запуски. Часть 1.}
 \label{appendix:mult_smalldata_results_all}
-\begin{tabular}{|c|c|c|c|c||c|c|c|c|c|c||c|} \hline
+ \begin{tabular}{|c|c|c|c|c||c|c|c|c|c|c||c|} 
 Запуск & Режим & \begin{tabular}[c]{@{}l@{}}RU\\доля\end{tabular} & \begin{tabular}[c]{@{}l@{}}EN\\доля\end{tabular} &\begin{tabular}[c]{@{}l@{}}Валидация\\на\end{tabular} & Среднее & \begin{tabular}[c]{@{}l@{}}Эмоции\end{tabular} & \begin{tabular}[c]{@{}l@{}}Тональность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Токсичность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Интенты\end{tabular} & \begin{tabular}[c]{@{}l@{}}Топики\end{tabular} & \begin{tabular}[c]{@{}l@{}}Число\\ батчей\end{tabular} \\ \hline \hline
 0 & S & 100\% & 100\% & EN & 85.2/82.1 & 78.9/71.5 & 77.3/77.5 & 96.6/94.7 & 84.3/79.1 & 88.7/87.7 & 8889 \\ \hline
 1 & S & 100\% & 100\% & EN & 85.3/82.5 & 79.4/71.4 & 77.0/77.1 & 96.6/94.7 & 85.0/82.0 & 88.3/87.3 & 20563 \\ \hline
@@ -305,7 +305,7 @@
 \begin{table*}
 \caption{Точность/ f1-макро на русскоязычных данных для трансформер-агностичного \textit{distilbert-base-multilingual-cased}. Число батчей означает число батчей, которые видела модель в процессе своего обучения, режим S означает однозадачное обучение, режим M - многозадачное обучение. RU доля - доля тренировочных примеров, взятых из каждого русскоязычного тренировочного набора данных, и EN  доля - доля примеров, взятых из каждого англоязычного тренировочного набора данных. Все запуски. Часть 2.}
 \label{appendix:mult_smalldata_results_all_2}
-\begin{tabular}{|c|c|c|c|c||c|c|c|c|c|c||c|} \hline
+ \begin{tabular}{|c|c|c|c|c||c|c|c|c|c|c||c|} 
 Запуск & Режим & \begin{tabular}[c]{@{}l@{}}RU\\доля\end{tabular} & \begin{tabular}[c]{@{}l@{}}EN\\доля\end{tabular} &\begin{tabular}[c]{@{}l@{}}Валидация\\на\end{tabular} & Среднее & \begin{tabular}[c]{@{}l@{}}Эмоции\end{tabular} & \begin{tabular}[c]{@{}l@{}}Тональность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Токсичность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Интенты\end{tabular} & \begin{tabular}[c]{@{}l@{}}Топики\end{tabular} & \begin{tabular}[c]{@{}l@{}}Число\\ батчей\end{tabular}  \\ \hline \hline
 0 & S & 100\% & 0\% & RU & 84.5/80.5 & 77.1/67.3 & 77.0/77.2 & 96.8/94.9 & 83.2/76.3 & 88.3/86.9 & 10581 \\ \hline
 1 & S & 100\% & 0\% & RU & 84.4/80.0 & 76.0/63.4 & 77.5/77.7 & 96.8/94.8 & 83.7/76.9 & 88.0/87.0 & 13806 \\ \hline
@@ -370,9 +370,9 @@
 
 \begin{table*}
 \caption{Точность/ f1-макро на русскоязычных данных для трансформер-агностичного \textit{distilbert-base-multilingual-cased}. Число батчей означает число батчей, которые видела модель в процессе своего обучения, режим S означает однозадачное обучение, режим M - многозадачное обучение. RU доля - доля тренировочных примеров, взятых из каждого русскоязычного тренировочного набора данных, и EN  доля - доля примеров, взятых из каждого англоязычного тренировочного набора данных.Все запуски. Часть 3.}
-\label{appendix:mult_smalldata_results_all_2}
+\label{appendix:mult_smalldata_results_all_3}
 \scalebox{0.8}{
- \begin{tabular}{|c|c|c|c||c|c|c|c|c|c||c|} \hline 
+ \begin{tabular}{|c|c|c|c|c||c|c|c|c|c|c||c|} 
 Запуск & Режим & \begin{tabular}[c]{@{}l@{}}RU\\доля\end{tabular} & \begin{tabular}[c]{@{}l@{}}EN\\доля\end{tabular} &\begin{tabular}[c]{@{}l@{}}Валидация\\на\end{tabular} & Среднее & \begin{tabular}[c]{@{}l@{}}Эмоции\end{tabular} & \begin{tabular}[c]{@{}l@{}}Тональность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Токсичность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Интенты\end{tabular} & \begin{tabular}[c]{@{}l@{}}Топики\end{tabular} & \begin{tabular}[c]{@{}l@{}}Число\\ батчей\end{tabular} \\ \hline \hline
 0 & S & 100\% & 100\% & RU & 85.0/81.1 & 78.8/70.2 & 76.7/76.8 & 96.8/94.9 & 84.3/76.3 & 88.2/87.5 & 35408 \\ \hline
 1 & S & 100\% & 100\% & RU & 85.5/82.4 & 79.5/72.4 & 77.4/77.6 & 96.6/94.6 & 84.8/79.0 & 89.2/88.4 & 23869 \\ \hline
@@ -427,7 +427,7 @@
 \end{table*}
 
 \section{Размеры наборов данных, на которых тестировался перенос знаний в многозадачных моделях для диалоговых задач}
-\label{tr-ag-sizes}
+\label{appendix:sizes_tr-ag}
 \begin{table}[t]
 \label{emo_sizes_tr-ag}
 %\centering
@@ -1112,7 +1112,7 @@ Multiple\_GoalsIntent & 40 & 109 \\
 
 \begin{table}[]
 \caption{Классификация токсичности}
-\label{appendix:factoid_tr-ag}
+\label{appendix:toxic_tr-ag}
 \begin{tabular}{|c||c|c|c|}
 класс & тренировочных примеров & валидационных примеров & тестовых примеров \\
 \hline
@@ -1152,18 +1152,18 @@ conversational & 1606 & 179 & 179\\ \hline
 \hline
 \hline
 %number of samples & 1806797 & 225849 & 225849 \\ \hline 
-Movies&Tv & 80000 & 10000 & 10000 \\ \hline 
+Movies\&Tv & 80000 & 10000 & 10000 \\ \hline 
 Space & 80000 & 10000 & 10000 \\ \hline 
-Animals&Pets & 80000 & 10000 & 10000 \\ \hline 
+Animals\&Pets & 80000 & 10000 & 10000 \\ \hline 
 Gadgets & 80000 & 10000 & 10000 \\ \hline 
-Books&Literature & 80000 & 10000 & 10000 \\ \hline 
-Toys&Games & 80000 & 10000 & 10000 \\ \hline 
+Books\&Literature & 80000 & 10000 & 10000 \\ \hline 
+Toys\&Games & 80000 & 10000 & 10000 \\ \hline 
 Garden & 80000 & 10000 & 10000 \\ \hline 
 Clothes & 80000 & 10000 & 10000 \\ \hline 
-Art&Hobbies & 80000 & 10000 & 10000 \\ \hline 
+Art\&Hobbies & 80000 & 10000 & 10000 \\ \hline 
 Music & 80000 & 10000 & 9999 \\ \hline 
 Leisure & 80000 & 10000 & 10000 \\ \hline 
-Home&Design & 80000 & 10000 & 10000 \\ \hline 
+Home\&Design & 80000 & 10000 & 10000 \\ \hline 
 Videogames & 80000 & 10000 & 10000 \\ \hline 
 Food & 80000 & 9999 & 10000 \\ \hline 
 Beauty & 80000 & 10000 & 10000 \\ \hline 
@@ -1171,16 +1171,16 @@ PersonalTransport & 80000 & 10000 & 10000 \\ \hline
 Religion & 79999 & 10000 & 10000 \\ \hline 
 Depression & 66429 & 8304 & 8303 \\ \hline 
 Travel & 59515 & 7440 & 7439 \\ \hline 
-Health&Medicine & 49014 & 6127 & 6127 \\ \hline 
-Science&Technology & 41595 & 5199 & 5200 \\ \hline 
+Health\&Medicine & 49014 & 6127 & 6127 \\ \hline 
+Science\&Technology & 41595 & 5199 & 5200 \\ \hline 
 News & 38490 & 4811 & 4812 \\ \hline 
 Job & 36342 & 4543 & 4543 \\ \hline 
 Disasters & 32922 & 4115 & 4115 \\ \hline 
 Politics & 16726 & 2090 & 2091 \\ \hline 
-Celebrities&Events & 16498 & 2063 & 2062 \\ \hline 
+Celebrities\&Events & 16498 & 2063 & 2062 \\ \hline 
 Psychology & 16369 & 2046 & 2046 \\ \hline 
 ArtificialIntelligence & 13670 & 1709 & 1709 \\ \hline 
-Family&Relationships & 13550 & 1693 & 1694 \\ \hline 
+Family\&Relationships & 13550 & 1693 & 1694 \\ \hline 
 Finance & 13444 & 1681 & 1680 \\ \hline 
 Education & 13338 & 1667 & 1667 \\ \hline 
 MassTransit & 9978 & 1247 & 1247 \\ \hline 
