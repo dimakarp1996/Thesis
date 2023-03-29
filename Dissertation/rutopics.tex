@@ -79,7 +79,7 @@
 Этот метод позволяет проверить пригодность набора данных \texttt{YAQTopics} для разговорной тематической классификации - по крайней мере, на выбранных шести классах. Впрочем, так как примеры для всех шести классов были получены похожим образом, можно ожидать, что другие классы из \texttt{YAQTopics} настолько же хорошо подходят для разговорной тематической классификации. 
 
 
-Эксперименты, описанные в Таблице~\ref{tab:rutopics:matched}, проводились на различных базовых моделях из библиотеки \texttt{Transformers}~\cite{huggingface_transformers} от HuggingFace : \textit{bert-base-multilingual-cased}~\cite{multilingual_bert}, \textit{DeepPavlov/distilrubert-tiny-cased-conversational}~\cite{alina}, \textit{sberbank-ai/ruBert-base}~\cite{sbert_base}  \textit{DeepPavlov/rubert-base-conversational-cased}~\cite{rubert}. Все эти модели имеют архитектуру типа BERT. Последние 2 модели очень похожи, но имеют несколько отличающееся число параметров, так как в них применяются разные методы токенизации. 
+Эксперименты, описанные в Таблице~\ref{tab:rutopics:matched}, проводились на различных базовых моделях из библиотеки \texttt{Transformers}~\cite{huggingface_transformers} от HuggingFace : \textit{bert-base-multilingual-cased}~\cite{multilingual_bert}, \textit{DeepPavlov/distilrubert-tiny-cased-conversational}~\cite{distilrubert}, \textit{sberbank-ai/ruBert-base}~\cite{sbert_base}  \textit{DeepPavlov/rubert-base-conversational-cased}~\cite{rubert}. Все эти модели имеют архитектуру типа BERT. Последние 2 модели очень похожи, но имеют несколько отличающееся число параметров, так как в них применяются разные методы токенизации. 
 
 Подробное сравнение всех базовых моделей приведено в Таблице~\ref{tab:rutopics:backbones}.
 
@@ -89,7 +89,7 @@
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 \multirow{1}{*}{\textbf{Модель}} & \multirow{1}{*}{\textbf{Сокращение}}  & \textbf{Многоязычность} &  \multicolumn{1}{c|}{\textbf{Число слоев}} & \textbf{Parameters}\\ \hline
-\textit{DeepPavlov/distilrubert-tiny-cased-conversational}~\cite{alina} & \textit{rubert-tiny} & нет & 2 & 107M\\ \hline
+\textit{DeepPavlov/distilrubert-tiny-cased-conversational}~\cite{distilrubert} & \textit{rubert-tiny} & нет & 2 & 107M\\ \hline
 \textit{DeepPavlov/rubert-base-cased-conversational}~\cite{rubert} & \textit{rubert} & нет & 12 & 177.9M\\ \hline
 \textit{bert-base-multilingual-cased}~\cite{multilingual_bert} & \textit{multbert} & да & 12 & 177.9M \\ \hline
 \textit{sberbank-ai/ruBert-base}~\cite{sbert_base} & \textit{ru-sbert} & да & 12 & 178.3M\\ \hline
