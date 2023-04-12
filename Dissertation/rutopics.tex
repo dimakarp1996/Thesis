@@ -282,13 +282,14 @@
 
 Можно сделать предположение, что набор данных \texttt{YAQTopics} подходит также для вопросно-ответной классификации, однако проверка этого предположения требует дополнительных исследований.
 
-For training models on all 76 classes of the \texttt{YAQTopics} in the question-only setting, the Russian non-distilled backbones show accuracy on 73.7-74.0\%, whereas the Russian distilled backbones fares slightly worse (72.2\% accuracy). The multilingual backbone expectably trails slightly behind these backbones by this measure (71.4\% accuracy). This shows that the topical classes in the dataset can be distinguished from each other with sufficiently high accuracy.
-
+For training models on all 76 classes of the \texttt{YAQTopics} in the question-only setting, all backbones show accuracy above 70\%. That shows that topical classes in the dataset can be distinguished from each other with sufficiently high accuracy.
 Русскоязычные модели показывают данные результаты, только если вопросы из  \texttt{YAQTopics} используются в тренировочных примерах (сами по себе или в конкатенации с ответами/суммаризованными ответами). Это доказывает, что вопросы - самая информативная часть данного набора данных. 
 
 В общем случае, данные результаты показывают важность размеченных коротких примеров в тематических наборах данных. 
 
 На удивление, результаты на наборе данных \texttt{MASSIVE} практически не меняются для различных русскоязычных базовых моделей. Это показывает, что дистиллированные модели хорошо подходят для разговорных задач, особенно в условиях ограниченных вычислительных ресурсов. 
+
+При обучении моделей на всех 76 классах из \texttt{YAQTopics} и использовании в примерах только вопросов, все базовые модели показывают точность выше 70 процентов, несмотря на схожесть некоторых классов в данном наборе данных. Это показывает, что набор данных \texttt{YAQTopics} подходит для решения задачи классификации целиком, а не только своими шестью классами.
 
 Также в данной главе показано, что в случае оценки модели  \textit{bert-base-multilingual-cased}, обученной на шестиклассовой подвыборке вопросов из \texttt{YAQTopics}, на подвыборке соответствующих 6 классов из \texttt{MASSIVE} для всех 51 поддерживаемых в \texttt{MASSIVE} языков, точность для каждого языка сильно коррелирует с аппроксимированном набором обучающей выборки для этого языка ( корреляция Спирмена 0.773 c p-значением 2.997e-11). Размер обучающей выборки был аппроксимирован при помощи возведения числа статей в Википедии для каждого языка на 11 октября 2018 года(дата выпуска статьи \cite{bert}) в степень 0.7, по аналогии с оригинальной статьей. 
 %TODO - Спирмен, пи-значение, как пишется?
