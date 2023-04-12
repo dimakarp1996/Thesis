@@ -189,6 +189,7 @@ Another task is to figure out how well the classes on \texttt{YAQTopics} can be 
 \end{table*}
 
 
+The results could have been additionally improved by merging some classes from similar \enquote{Yandex. Que} topics. But even without that, for training models on all 76 classes of the \texttt{YAQTopics} in the question-only setting, the Russian non-distilled backbones show accuracy on 73.7-74.0\%, whereas the Russian distilled backbones fares slightly worse (72.2\% accuracy). The multilingual backbone expectably trails slightly behind these backbones by this measure (71.4\% accuracy). This shows that the topical classes in the dataset can be distinguished from each other with sufficiently high accuracy.
 
 \section{Перенос знаний между языками}
 После выбора наилучшего метода использования набора данных \texttt{YAQTopics}, необходимо было ответить на следующие вопросы:
@@ -281,7 +282,7 @@ Another task is to figure out how well the classes on \texttt{YAQTopics} can be 
 
 Можно сделать предположение, что набор данных \texttt{YAQTopics} подходит также для вопросно-ответной классификации, однако проверка этого предположения требует дополнительных исследований.
 
-For training models on all 76 classes of the \texttt{YAQTopics} in the question-only setting, the Russian non-distilled backbones show accuracy on 73.7-74.0\%, whereas the Russian distilled backbones fares slightly worse(72.2\% accuracy). The multilingual backbone expectably trails slightly behind these backbones by this measure (71.4\% accuracy). This shows that the topical classes in the dataset can be distinguished from each other with sufficiently high accuracy.
+For training models on all 76 classes of the \texttt{YAQTopics} in the question-only setting, the Russian non-distilled backbones show accuracy on 73.7-74.0\%, whereas the Russian distilled backbones fares slightly worse (72.2\% accuracy). The multilingual backbone expectably trails slightly behind these backbones by this measure (71.4\% accuracy). This shows that the topical classes in the dataset can be distinguished from each other with sufficiently high accuracy.
 
 Русскоязычные модели показывают данные результаты, только если вопросы из  \texttt{YAQTopics} используются в тренировочных примерах (сами по себе или в конкатенации с ответами/суммаризованными ответами). Это доказывает, что вопросы - самая информативная часть данного набора данных. 
 
