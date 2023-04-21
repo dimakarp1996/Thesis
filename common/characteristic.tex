@@ -107,7 +107,7 @@
 
 
 {\probation}
-Все основные результаты по теме диссертации обсуждались и докладывались на конференциях En\&T 2018~\cite{Болотин_Карпов_Рашков_Шкурак_2019}, Диалог-2021~\cite{pseudolabel} и AINL-2023~\cite{rutopics}.%, Computational Linguistics and Information Technologies~\cite{pseudolabel,rumtl},Proceedings of Alexa Prize 3~\cite{dream1},Proceedings of Alexa Prize 4~\cite{dream2}, Труды МФТИ~\cite{dream1_trudy},  Proceedings of InterSpeech 2023~\cite{enmtl}, Proceedings of ACL Systems Workshop~\cite{dp_topics}. Помимо этого, разработки, описанные в данной диссертации, были внедрены в находящуюся в открытом доступе диалоговую платформу DREAM, активно используемую в конкурсах Alexa Prize 3, Alexa Prize 4 и после них. Также на разработки, основанные на результатах работы, было получено свидетельство о регистрации ПО~\cite{Дуплякин_Дмитрий_Ондар_Ушаков_2021}.
+Все основные результаты по теме диссертации обсуждались и докладывались на конференциях En\&T 2018~\cite{Болотин_Карпов_Рашков_Шкурак_2019}, Диалог-2021~\cite{pseudolabel} и AINL-2023~\cite{rutopics}.%, Computational Linguistics and Information Technologies~\cite{pseudolabel,rumtl},Proceedings of Alexa Prize 3~\cite{dream1},Proceedings of Alexa Prize 4~\cite{dream2}, Труды МФТИ~\cite{dream1_trudy},  Proceedings of InterSpeech 2023~\cite{enmtl}, Proceedings of ACL Systems Workshop~\cite{dp_2023}. Помимо этого, разработки, описанные в данной диссертации, были внедрены в находящуюся в открытом доступе диалоговую платформу DREAM, активно используемую в конкурсах Alexa Prize 3, Alexa Prize 4 и после них. Также на разработки, основанные на результатах работы, было получено свидетельство о регистрации ПО~\cite{Дуплякин_Дмитрий_Ондар_Ушаков_2021}.
 
 
 {\contribution} В работе~\cite{Болотин_Карпов_Рашков_Шкурак_2019} автор отвечал за ряд важных компонент диалоговой системы, включающих в себя алгоритм для перефразировки реплик. Исследование, разработка и сравнительный анализ методов псевдоразметки данных, описанных в работе~\cite{pseudolabel}, были выполнены автором самостоятельно. В работах~\cite{dream1,dream1_trudy,dream2} автор отвечал за ряд важных компонент диалоговой системы - навыки обсуждения книг, эмоций, коронавируса, слухов, навык для обоснования диалога, классификаторы эмоций,интентов,момента остановки диалога,навык для выбора наиболее подходящего ответа с использованием алгоритма TF-IDF, генеративный навык и многозадачную нейросетевую модель. Технические решения для работы с естественным языком, использованные в \cite{dream1,dream1_trudy,dream2}, использовались также в~\cite{Дуплякин_Дмитрий_Ондар_Ушаков_2021}. В работах~\cite{rumtl,enmtl,rutopics} все исследования также были выполнены автором самостоятельно. В работе~\cite{dp_2023} автор отвечал за эксперименты с многозадачными трансформер-агностичными моделями для библиотеки DeepPavlov и их описание.
@@ -191,24 +191,24 @@
 в файл \verb!biblio/author.bib!. Для правильного подсчёта работ в~различных
 системах цитирования требуется использовать поля:
 \begin{itemize}
-        \item \texttt{authorvak} если публикация индексирована ВАК,
-        \item \texttt{authorscopus} если публикация индексирована Scopus,
-        \item \texttt{authorwos} если публикация индексирована Web of Science,
-        \item \texttt{authorconf} для докладов конференций,
-        \item \texttt{authorother} для других публикаций.
+        \item {authorvak} если публикация индексирована ВАК,
+        \item {authorscopus} если публикация индексирована Scopus,
+        \item {authorwos} если публикация индексирована Web of Science,
+        \item {authorconf} для докладов конференций,
+        \item {authorother} для других публикаций.
 \end{itemize}
 Для подсчёта используются счётчики:
 \begin{itemize}
-        \item \texttt{citeauthorvak} для работ, индексируемых ВАК,
-        \item \texttt{citeauthorscopus} для работ, индексируемых Scopus,
-        \item \texttt{citeauthorwos} для работ, индексируемых Web of Science,
-        \item \texttt{citeauthorvakscopuswos} для работ, индексируемых одной из трёх баз,
-        \item \texttt{citeauthorscopuswos} для работ, индексируемых Scopus или Web of~Science,
-        \item \texttt{citeauthorconf} для докладов на конференциях,
-        \item \texttt{citeauthorother} для остальных работ,
-        \item \texttt{citeauthor} для суммарного количества работ.
+        \item {citeauthorvak} для работ, индексируемых ВАК,
+        \item {citeauthorscopus} для работ, индексируемых Scopus,
+        \item {citeauthorwos} для работ, индексируемых Web of Science,
+        \item {citeauthorvakscopuswos} для работ, индексируемых одной из трёх баз,
+        \item {citeauthorscopuswos} для работ, индексируемых Scopus или Web of~Science,
+        \item {citeauthorconf} для докладов на конференциях,
+        \item {citeauthorother} для остальных работ,
+        \item {citeauthor} для суммарного количества работ.
 \end{itemize}
-% Счётчик \texttt{citeexternal} используется для подсчёта процитированных публикаций.
+% Счётчик {citeexternal} используется для подсчёта процитированных публикаций.
 
 Для добавления в список публикаций автора работ, которые не были процитированы в
 автореферате требуется их~перечислить с использованием команды \verb!\nocite! в
