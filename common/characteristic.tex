@@ -1,5 +1,14 @@
 {\actuality} 
-Актуальность темы обоснована стремительным развитием нейросетевых моделей. В последнее время нейросетевые модели на основе трансформеров, типа BERT, стали чаще применяться в различных областях, в том числе в диалоговых системах. Это связано с тем, что они показывают более высокие результаты, чем иные методы машинного обучения. В то же самое время, такие модели требуют вычислительных ресурсов, которые могут быть дорогостоящими. В связи с этим развитие получает идея многозадачного обучения - использование одной и той же модели для решения нескольких задач машинного обучения. Однако перенос данных в многозадачных нейросетевых моделях между задачами и языками, особенно для задач, применимых в диалоговых системах, всё еще не изучены до конца. Наборов данных в открытом доступе для задач диалоговых систем, таких, как тематическая классификация, также недостаточно.
+Актуальность темы обоснована стремительным развитием нейросетевых моделей.
+В последнее время нейросетевые модели на основе трансформеров, типа BERT, стали чаще применяться в различных областях, в том числе в диалоговых системах. Это связано с тем, что они показывают более высокие результаты, чем иные методы машинного обучения. 
+
+В то же самое время, такие модели требуют вычислительных ресурсов, которые могут быть дорогостоящими.
+
+В связи с этим развитие получает идея многозадачного обучения - использование одной и той же модели для решения нескольких задач машинного обучения. 
+
+Однако перенос знаний в многозадачных нейросетевых моделях между задачами и языками, особенно для задач, применимых в диалоговых системах, всё еще не изучены до конца. 
+
+Наборов данных в открытом доступе для задач диалоговых систем, таких, как тематическая классификация, также недостаточно.
 
 
 {\aim} данной работы является определение закономерностей, влияющих на перенос знаний между языками и задачами в многозадачных нейросетевых моделях на различных архитектурах, а также влияющих на особенности прикладного применения этих моделей в диалоговых платформах.
@@ -84,10 +93,10 @@
 {\influence}
 %Практическая значимость заключается в следующем:
 \begin{enumerate}
-    \item Впервые в России была создана диалоговая платформа мирового уровня, вышедшая в полуфинал престижных мировых конкурсов Alexa Prize 3 и Alexa Prize 4 (в конкурсах было 10 и 9 участников соответственно, из более чем 300 кандидатов). Эта диалоговая платформа имеет полностью открытый код, что дает возможность легкого переиспользования любой части проделанной над ней работы. Были также разработаны сценарные навыки ля этой платформы.
-    \item В данной диалоговой платформе были применены многозадачные нейросетевые модели: многозадачная нейросетевая модель с одним линейным слоем, многозадачная нейросетевая модель на основе архитектуры PAL-BERT и многозадачная трансформер-агностичная нейросетевая модель. 
-    \item Программный код для реализации многозадачной трансформер-агностичной нейросетевой модели встроен в библиотеку DeepPavlov, имеющую более 500000 скачиваний на март 2023 года.
-    \item По результатам этой работы оформлено также свидетельство о депонировании~\cite{Дуплякин_Дмитрий_Ондар_Ушаков_2021}. % Как написать подробнее
+   \item Впервые в России была создана диалоговая платформа мирового уровня, вышедшая в полуфинал престижных мировых конкурсов Alexa Prize 3 и Alexa Prize 4 (в конкурсах было 10 и 9 участников соответственно, из более чем 300 кандидатов). Эта диалоговая платформа имеет полностью открытый код, что дает возможность легкого переиспользования любой части проделанной над ней работы. Были также разработаны сценарные навыки ля этой платформы.
+   \item В данной диалоговой платформе были применены многозадачные нейросетевые модели: многозадачная нейросетевая модель с одним линейным слоем, многозадачная нейросетевая модель на основе архитектуры PAL-BERT и многозадачная трансформер-агностичная нейросетевая модель. 
+   \item Программный код для реализации многозадачной трансформер-агностичной нейросетевой модели встроен в библиотеку DeepPavlov, имеющую более 500000 скачиваний на март 2023 года.
+   \item По результатам этой работы оформлено также свидетельство о депонировании~\cite{Дуплякин_Дмитрий_Ондар_Ушаков_2021}. % Как написать подробнее
 \end{enumerate}
 
 {\methods}
@@ -107,9 +116,9 @@
 
 {\probation}
 \begin{itemize}
-    \item[*] En\&T 2018, доклад «Разработка диалоговой системы с интеграцией профиля личности», Даниил Болотин, Дмитрий Карпов, Григорий Рашков, Иван Шкурак, 15-16 ноября 2018 года, Москва;
-    \item[*] Диалог-2021, доклад «Data pseudo-labeling while adapting BERT for multitask approaches», Dmitry Karpov, Mikhail Burtsev, 16-19 июня 2021 года, Москва;
-    \item[*] AINL-2023, доклад «YAQTopics: Russian Conversational Topic Dataset», Dmitry Karpov, Mikhail Burtsev, Alexander Popov, 20-22 апреля 2023 года, Ереван, Армения;
+   \item[*] En\&T 2018, доклад «Разработка диалоговой системы с интеграцией профиля личности», Даниил Болотин, Дмитрий Карпов, Григорий Рашков, Иван Шкурак, 15-16 ноября 2018 года, Москва;
+   \item[*] Диалог-2021, доклад «Data pseudo-labeling while adapting BERT for multitask approaches», Dmitry Karpov, Mikhail Burtsev, 16-19 июня 2021 года, Москва;
+   \item[*] AINL-2023, доклад «YAQTopics: Russian Conversational Topic Dataset», Dmitry Karpov, Mikhail Burtsev, Alexander Popov, 20-22 апреля 2023 года, Ереван, Армения;
 \end{itemize}%, Computational Linguistics and Information Technologies~\cite{pseudolabel,rumtl},Proceedings of Alexa Prize 3~\cite{dream1},Proceedings of Alexa Prize 4~\cite{dream2}, Труды МФТИ~\cite{dream1_trudy},  Proceedings of InterSpeech 2023~\cite{enmtl}, Proceedings of ACL Systems Workshop~\cite{dp_topics}. Помимо этого, разработки, описанные в данной диссертации, были внедрены в находящуюся в открытом доступе диалоговую платформу DREAM, активно используемую в конкурсах Alexa Prize 3, Alexa Prize 4 и после них. Также на разработки, основанные на результатах работы, было получено свидетельство о регистрации ПО~\cite{Дуплякин_Дмитрий_Ондар_Ушаков_2021}.
 
 
@@ -117,99 +126,99 @@
 
 \ifnumequal{\value{bibliosel}}{0}
 {%%% Встроенная реализация с загрузкой файла через движок bibtex8. (При желании, внутри можно использовать обычные ссылки, наподобие `\cite{vakbib1,vakbib2}`).
-    {\publications} 
+   {\publications} 
 
 }%
 {%%% Реализация пакетом biblatex через движок biber
-    \begin{refsection}[bl-author]
-        % Это refsection=1.
-        % Процитированные здесь работы:
-        %  * подсчитываются, для автоматического составления фразы "Основные результаты ..."
-        %  * попадают в авторскую библиографию, при usefootcite==0 и стиле `\insertbiblioauthor` или `\insertbiblioauthorgrouped`
-        %  * нумеруются там в зависимости от порядка команд `\printbibliography` в этом разделе.
-        %  * при использовании `\insertbiblioauthorgrouped`, порядок команд `\printbibliography` в нём должен быть тем же (см. biblio/biblatex.tex)
-        %
-        % Невидимый библиографический список для подсчёта количества публикаций:
-        \printbibliography[heading=nobibheading, section=1, env=countauthorvak,          keyword=biblioauthorvak]%
-        \printbibliography[heading=nobibheading, section=1, env=countauthorwos,          keyword=biblioauthorwos]%
-        \printbibliography[heading=nobibheading, section=1, env=countauthorscopus,       keyword=biblioauthorscopus]%
-        \printbibliography[heading=nobibheading, section=1, env=countauthorconf,         keyword=biblioauthorconf]%
-        \printbibliography[heading=nobibheading, section=1, env=countauthorother,        keyword=biblioauthorother]%
-        \printbibliography[heading=nobibheading, section=1, env=countauthor,             keyword=biblioauthor]%
-        \printbibliography[heading=nobibheading, section=1, env=countauthorvakscopuswos, filter=vakscopuswos]%
-        \printbibliography[heading=nobibheading, section=1, env=countauthorscopuswos,    filter=scopuswos]%
-        %
-        \nocite{*}%
-        %
-        {\publications} Основные результаты по теме диссертации изложены в~{9}~печатных изданиях,{1} из которых издано в журналах, рекомендованных ВАК, {2} в~периодических научных журналах, индексируемых Web of~Science и Scopus, {3} в~тезисах докладов.\footnote{Цифры будут уточнены после принятия всех статей.}
+   \begin{refsection}[bl-author]
+      % Это refsection=1.
+      % Процитированные здесь работы:
+      %  * подсчитываются, для автоматического составления фразы "Основные результаты ..."
+      %  * попадают в авторскую библиографию, при usefootcite==0 и стиле `\insertbiblioauthor` или `\insertbiblioauthorgrouped`
+      %  * нумеруются там в зависимости от порядка команд `\printbibliography` в этом разделе.
+      %  * при использовании `\insertbiblioauthorgrouped`, порядок команд `\printbibliography` в нём должен быть тем же (см. biblio/biblatex.tex)
+      %
+      % Невидимый библиографический список для подсчёта количества публикаций:
+      \printbibliography[heading=nobibheading, section=1, env=countauthorvak,        keyword=biblioauthorvak]%
+      \printbibliography[heading=nobibheading, section=1, env=countauthorwos,        keyword=biblioauthorwos]%
+      \printbibliography[heading=nobibheading, section=1, env=countauthorscopus,      keyword=biblioauthorscopus]%
+      \printbibliography[heading=nobibheading, section=1, env=countauthorconf,       keyword=biblioauthorconf]%
+      \printbibliography[heading=nobibheading, section=1, env=countauthorother,      keyword=biblioauthorother]%
+      \printbibliography[heading=nobibheading, section=1, env=countauthor,          keyword=biblioauthor]%
+      \printbibliography[heading=nobibheading, section=1, env=countauthorvakscopuswos, filter=vakscopuswos]%
+      \printbibliography[heading=nobibheading, section=1, env=countauthorscopuswos,   filter=scopuswos]%
+      %
+      \nocite{*}%
+      %
+      {\publications} Основные результаты по теме диссертации изложены в~{9}~печатных изданиях,{1} из которых издано в журналах, рекомендованных ВАК, {2} в~периодических научных журналах, индексируемых Web of~Science и Scopus, {3} в~тезисах докладов.\footnote{Цифры будут уточнены после принятия всех статей.}
 
-        \iffalse % This is a default template. And I do by hands
-        {\publications} Основные результаты по теме диссертации изложены в~\arabic{citeauthor}~печатных изданиях,
-        \arabic{citeauthorvak} из которых изданы в журналах, рекомендованных ВАК\sloppy%
-        \ifnum \value{citeauthorscopuswos}>0%
-            , \arabic{citeauthorscopuswos} "--- в~периодических научных журналах, индексируемых Web of~Science и Scopus\sloppy%
-        \fi%
-        \ifnum \value{citeauthorconf}>0%
-            , \arabic{citeauthorconf} "--- в~тезисах докладов.
-        \else%
-            .
-        \fi
-        \fi
-    \end{refsection}%
-    \begin{refsection}[bl-author]
-        % Это refsection=2.
-        % Процитированные здесь работы:
-        %  * попадают в авторскую библиографию, при usefootcite==0 и стиле `\insertbiblioauthorimportant`.
-        %  * ни на что не влияют в противном случае
-        \nocite{Болотин_Карпов_Рашков_Шкурак_2019}%vak
-        \nocite{dream1}%vak
-        \nocite{dream2}%vak
-        \nocite{pseudolabel}
-        \nocite{dream1_trudy}%vak
-        \nocite{Дуплякин_Дмитрий_Ондар_Ушаков_2021}%vak
-        \nocite{rumtl}
-        \nocite{rutopics}
-        \nocite{enmtl}
-        \nocite{dp_2023}
-    \end{refsection}%
-        %
-        % Всё, что вне этих двух refsection, это refsection=0,
-        %  * для диссертации - это нормальные ссылки, попадающие в обычную библиографию
-        %  * для автореферата:
-        %     * при usefootcite==0, ссылка корректно сработает только для источника из `external.bib`. Для своих работ --- напечатает "[0]" (и даже Warning не вылезет).
-        %     * при usefootcite==1, ссылка сработает нормально. В авторской библиографии будут только процитированные в refsection=0 работы.
-        %
-        % Невидимый библиографический список для подсчёта количества внешних публикаций
-        % Используется, чтобы убрать приставку "А" у работ автора, если в автореферате нет
-        % цитирований внешних источников.
-        % Замедляет компиляцию
-    \ifsynopsis
-    \ifnumequal{\value{draft}}{0}{
-      \printbibliography[heading=nobibheading, section=0, env=countexternal,          keyword=biblioexternal]%
-    }{}
-    \fi
+      \iffalse % This is a default template. And I do by hands
+      {\publications} Основные результаты по теме диссертации изложены в~\arabic{citeauthor}~печатных изданиях,
+      \arabic{citeauthorvak} из которых изданы в журналах, рекомендованных ВАК\sloppy%
+      \ifnum \value{citeauthorscopuswos}>0%
+         , \arabic{citeauthorscopuswos} "--- в~периодических научных журналах, индексируемых Web of~Science и Scopus\sloppy%
+      \fi%
+      \ifnum \value{citeauthorconf}>0%
+         , \arabic{citeauthorconf} "--- в~тезисах докладов.
+      \else%
+         .
+      \fi
+      \fi
+   \end{refsection}%
+   \begin{refsection}[bl-author]
+      % Это refsection=2.
+      % Процитированные здесь работы:
+      %  * попадают в авторскую библиографию, при usefootcite==0 и стиле `\insertbiblioauthorimportant`.
+      %  * ни на что не влияют в противном случае
+      \nocite{Болотин_Карпов_Рашков_Шкурак_2019}%vak
+      \nocite{dream1}%vak
+      \nocite{dream2}%vak
+      \nocite{pseudolabel}
+      \nocite{dream1_trudy}%vak
+      \nocite{Дуплякин_Дмитрий_Ондар_Ушаков_2021}%vak
+      \nocite{rumtl}
+      \nocite{rutopics}
+      \nocite{enmtl}
+      \nocite{dp_2023}
+   \end{refsection}%
+      %
+      % Всё, что вне этих двух refsection, это refsection=0,
+      %  * для диссертации - это нормальные ссылки, попадающие в обычную библиографию
+      %  * для автореферата:
+      %    * при usefootcite==0, ссылка корректно сработает только для источника из `external.bib`. Для своих работ --- напечатает "[0]" (и даже Warning не вылезет).
+      %    * при usefootcite==1, ссылка сработает нормально. В авторской библиографии будут только процитированные в refsection=0 работы.
+      %
+      % Невидимый библиографический список для подсчёта количества внешних публикаций
+      % Используется, чтобы убрать приставку "А" у работ автора, если в автореферате нет
+      % цитирований внешних источников.
+      % Замедляет компиляцию
+   \ifsynopsis
+   \ifnumequal{\value{draft}}{0}{
+     \printbibliography[heading=nobibheading, section=0, env=countexternal,        keyword=biblioexternal]%
+   }{}
+   \fi
 }
 \iffalse
 При использовании пакета \verb!biblatex! будут подсчитаны все работы, добавленные
 в файл \verb!biblio/author.bib!. Для правильного подсчёта работ в~различных
 системах цитирования требуется использовать поля:
 \begin{itemize}
-        \item {authorvak} если публикация индексирована ВАК,
-        \item {authorscopus} если публикация индексирована Scopus,
-        \item {authorwos} если публикация индексирована Web of Science,
-        \item {authorconf} для докладов конференций,
-        \item {authorother} для других публикаций.
+      \item {authorvak} если публикация индексирована ВАК,
+      \item {authorscopus} если публикация индексирована Scopus,
+      \item {authorwos} если публикация индексирована Web of Science,
+      \item {authorconf} для докладов конференций,
+      \item {authorother} для других публикаций.
 \end{itemize}
 Для подсчёта используются счётчики:
 \begin{itemize}
-        \item {citeauthorvak} для работ, индексируемых ВАК,
-        \item {citeauthorscopus} для работ, индексируемых Scopus,
-        \item {citeauthorwos} для работ, индексируемых Web of Science,
-        \item {citeauthorvakscopuswos} для работ, индексируемых одной из трёх баз,
-        \item {citeauthorscopuswos} для работ, индексируемых Scopus или Web of~Science,
-        \item {citeauthorconf} для докладов на конференциях,
-        \item {citeauthorother} для остальных работ,
-        \item {citeauthor} для суммарного количества работ.
+      \item {citeauthorvak} для работ, индексируемых ВАК,
+      \item {citeauthorscopus} для работ, индексируемых Scopus,
+      \item {citeauthorwos} для работ, индексируемых Web of Science,
+      \item {citeauthorvakscopuswos} для работ, индексируемых одной из трёх баз,
+      \item {citeauthorscopuswos} для работ, индексируемых Scopus или Web of~Science,
+      \item {citeauthorconf} для докладов на конференциях,
+      \item {citeauthorother} для остальных работ,
+      \item {citeauthor} для суммарного количества работ.
 \end{itemize}
 % Счётчик {citeexternal} используется для подсчёта процитированных публикаций.
 
