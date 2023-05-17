@@ -1,4 +1,68 @@
 
+\begin{frame}{Энкодер-агностичные модели: сравнение с однозадачными, GLUE}
+\begin{table}{htbp}
+\caption{Метрики многозадачной энкодер-агностичной модели для набора задач GLUE. M.Corr означает корреляцию Мэттью, P/S означает корреляцию Пирсона-Спирмена, Acc точность, F1 - макро-F1. Режим S означает однозадачные модели, режим M означает многозадачные модели. Размер означает размер тренировочного набора данных.}
+%\resizebox{\textwidth}{!}
+\scalebox{0.52}{
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\multirow{3}{*}{Модель} & \multirow{3}{*}{Режим}  & Среднее & CoLA & SST-2 & MRPC &STS-B &QQP&MNLI & QNLI & RTE & AX  \\
+\cline{3-11}
+   &  & Размер  & 8.6k & 67.3k & 2.5k & 5.7k & 363.8k & 392.7k & 104.7k & 2.5k & как у MNLI  \\ 
+\cline{3-11}   
+   &  & метрика  & M.Corr & Acc & F1/Acc & P/S Corr & F1/Acc & Acc (m/mm) & Acc & Acc & M.Corr \\ \hline \hline
+Человек & - & 87.1 & 66.4 & 97.8 & 86.3/80.8 & 92.7/92.6 & 59.5/80.4 & 92.0/92.8 & 91.2 & 93.6 & - \\ \hline
+\textit{\multirow{2}{*}{distilbert}} & S & 73.3 & \textbf{42.4} & \textbf{92.1} & 85.6/\textbf{80.3} & 78.8/76.8 & \textbf{69.5/88.5} & \textbf{81.3/80.8} & \textbf{87.5} & 52.1 & 29.9  \\ 
+ & M & \textbf{74.5} & 36.0 & 91.0 & \textbf{85.7}/79.9 & \textbf{82.6/81.6} & 68.4/87.4 & 80.4/80.3 & 86.0 & \textbf{69.5} & \textbf{30.1} \\  \hline
+\textit{\multirow{2}{*}{bert}} & S & 77.3 & \textbf{53.7} & \textbf{93.2} & \textbf{87.7/82.8} & 83.8/82.2 & \textbf{70.3/88.9} & \textbf{83.8/83.1} & \textbf{90.6} & 62.1 & 32.1 \\ 
+ & M & \textbf{77.8} & 45.8 & 92.9 & 86.8/82.2 & \textbf{85.3/84.7} & 70.2/88.6 & 83.5/82.6 & 90.1 & \textbf{74.5} & \textbf{32.8} \\  \hline
+\textit{\multirow{2}{*}{bert-large}} & S & \textbf{79.5} & \textbf{59.2} & \textbf{94.9} & 85.0/80.6 & \textbf{85.8/84.5} & 70.5/89.1 & \textbf{86.7/85.6} & 92.2 & 70.1 & \textbf{39.4} \\ 
+ & M & \textbf{79.5} & 50.8 & 94.1 & \textbf{87.3/82.8} & 83.8/83.9 & \textbf{71.0/89.2} & 85.9/85.0 & \textbf{92.4} & \textbf{78.5} & 38.5 \\  \hline
+\end{tabular}}
+\end{table}
+%\end{table*}
+\end{frame}
+
+\begin{frame}{Энкодер-агностичные модели: перенос знаний между языками}
+%\resizebox{\textwidth}{!}
+\scalebox{0.48}{
+\begin{tabular}{|c|c|c||c|c|c|c|c|c|} \hline
+Модель & \begin{tabular}[c]{@{}l@{}}Тренировочные\\данные\end{tabular} & Режим & Среднее & \begin{tabular}[c]{@{}l@{}}Эмоции\end{tabular} & \begin{tabular}[c]{@{}l@{}}Тональность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Токсичность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Интенты\end{tabular} & \begin{tabular}[c]{@{}l@{}}Темы\end{tabular} \\
+\hline \hline
+\textit{distilbert-mult} & RU & S & 84.7 & 77.4 & 77.7 & 96.7 & 83.5 & 88.1 \\ %\hline
+\textit{distilbert-mult} & RU & M & 84.3 & 78.1 & 76.8 & 96.5 & 81.9 & 88.2  \\ \hline
+\textit{distilbert-mult} & \begin{tabular}[c]{@{}l@{}}RU+EN,\\объединенные\end{tabular} & S & 85.2 & 78.9 & 77.4 & 96.8 & 84.7 & 88.4 \\ %\hline
+\textit{distilbert-mult} & \begin{tabular}[c]{@{}l@{}}RU+EN,\\объединенные\end{tabular} & M & 84.5 & 77.9 & 76.6 & 96.5 & 82.9 & 88.4 \\ \hline
+\textit{distilbert-mult} & \begin{tabular}[c]{@{}l@{}}RU+EN,\\отдельные\end{tabular} & M & 84.4 & 77.6 & 76.8 & 96.5 & 82.4 & 88.3 \\ \hline
+\textit{bert-mult} & RU & S & 84.7 & 76.6 & 77.8 & 96.9 & 83.9 & 88.4 \\ %\hline
+\textit{bert-mult} & RU & M & 84.8 & 78.4 & 76.3 & 96.8 & 83.7 & 89.0 \\ \hline
+\textit{bert-mult} & \begin{tabular}[c]{@{}l@{}}RU+EN,\\объединенные\end{tabular} & S & 85.6 & 78.9 & 77.6 & 96.9 & 85.0 & 89.4 \\ %\hline
+\textit{bert-mult} & \begin{tabular}[c]{@{}l@{}}RU+EN,\\объединенные\end{tabular} & M & 85.2 & 79.2 & 76.4 & 96.7 & 84.3 & 89.4 \\ \hline
+\textit{bert-mult} & \begin{tabular}[c]{@{}l@{}}RU+EN,\\отдельные\end{tabular} & M & 85.0 & 78.3 & 77.1 & 96.7 & 84.0 & 89.1 \\ \hline
+\end{tabular}}
+
+\end{frame}
+
+\begin{frame}{Точность при кросс-валидации}
+\scalebox{0.5}{
+\label{tab:crossvalidation}
+\begin{tabular}{|c||c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\multirow{2}{*}{\textbf{Модель}} & \multicolumn{2}{c|}{\textbf{Среднее}} & \multicolumn{2}{c|}{\textbf{Разб. 1}} & \multicolumn{2}{c|}{\textbf{Разб. 2}} &\multicolumn{2}{c|}{\textbf{Разб. 3}} & \multicolumn{2}{c|}{\textbf{Разб. 4}} & \multicolumn{2}{c|}{\textbf{Разб. 5}} \\ 
+\cline{2-13}
+& Точность & Макро-F1 & Точность & Макро-F1 & Точность & Макро-F1 & Точность & Макро-F1   & Точность & Макро-F1 & Точность & Макро-F1 \\ \hline
+%\textit{rusber} & 74.0 & 53.4 \\ \hline
+%\textit{ru} & 73.7 & 52.5 \\ \hline
+%\textit{rutiny} & 72.2 & 50.9 \\ \hline
+%\textit{mult} & 71.4 & 51.9 \\ \hline
+\textit{rusber} & 74.0 & 53.4 & 73.7 & 54.3 & 73.8 & 52.8 & 73.9 & 53.0 & 74.1 & 54.2 & 74.2 & 52.9\\
+\textit{ru} & 73.7 & 52.5 & 73.5 & 52.9 & 73.7 & 51.9 & 73.6 & 52.3 & 73.9 & 53.1 & 73.9 & 52.3\\
+\textit{rutiny} & 72.2 & 50.9 & 72.0 & 49.7 & 72.2 & 50.9 & 72.0 & 51.4 & 72.4 & 51.1 & 72.3 & 51.6\\
+\textit{mult} & 71.4 & 51.9 & 71.2 & 52.4 & 71.5 & 51.9 & 71.5 & 51.4 & 71.2 & 51.6 & 71.7 & 52.1\\ \hline
+\end{tabular}
+}
+\end{frame}
+
 \begin{frame}{Энкодер-агностичные модели - эффект уменьшения размера выборки по задачам}
 
 
@@ -527,25 +591,4 @@ legend style={nodes={scale=0.5, transform shape}}
 \caption{Однозадачная и многозадачная точность для каждой задачи. Русский язык.}
 \label{fig:tr-ag:ru_dialog_part_n_samples}
 \end{figure}
-\end{frame}
-
-
-\begin{frame}{Точность при кросс-валидации}
-\scalebox{0.5}{
-\label{tab:crossvalidation}
-\begin{tabular}{|c||c|c|c|c|c|c|c|c|c|c|c|c|}
-\hline
-\multirow{2}{*}{\textbf{Модель}} & \multicolumn{2}{c|}{\textbf{Среднее}} & \multicolumn{2}{c|}{\textbf{Разб. 1}} & \multicolumn{2}{c|}{\textbf{Разб. 2}} &\multicolumn{2}{c|}{\textbf{Разб. 3}} & \multicolumn{2}{c|}{\textbf{Разб. 4}} & \multicolumn{2}{c|}{\textbf{Разб. 5}} \\ 
-\cline{2-13}
-& Точность & Макро-F1 & Точность & Макро-F1 & Точность & Макро-F1 & Точность & Макро-F1   & Точность & Макро-F1 & Точность & Макро-F1 \\ \hline
-%\textit{rusber} & 74.0 & 53.4 \\ \hline
-%\textit{ru} & 73.7 & 52.5 \\ \hline
-%\textit{rutiny} & 72.2 & 50.9 \\ \hline
-%\textit{mult} & 71.4 & 51.9 \\ \hline
-\textit{rusber} & 74.0 & 53.4 & 73.7 & 54.3 & 73.8 & 52.8 & 73.9 & 53.0 & 74.1 & 54.2 & 74.2 & 52.9\\
-\textit{ru} & 73.7 & 52.5 & 73.5 & 52.9 & 73.7 & 51.9 & 73.6 & 52.3 & 73.9 & 53.1 & 73.9 & 52.3\\
-\textit{rutiny} & 72.2 & 50.9 & 72.0 & 49.7 & 72.2 & 50.9 & 72.0 & 51.4 & 72.4 & 51.1 & 72.3 & 51.6\\
-\textit{mult} & 71.4 & 51.9 & 71.2 & 52.4 & 71.5 & 51.9 & 71.5 & 51.4 & 71.2 & 51.6 & 71.7 & 52.1\\ \hline
-\end{tabular}
-}
 \end{frame}
