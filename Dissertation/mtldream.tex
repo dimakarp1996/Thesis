@@ -341,20 +341,30 @@ cobot topics ~                  & 216k & 79.88/79.9  & 77.31/77.36 & 77.45/77.35
  & &             & мягкие & дополненные \\
  & & независимые & независимые & независимые \\
  & & метки & метки & метки \\ \hline \hline
-Эмоции               & 68.18/67.86 & R & R & R \\ \hline
-Токсичность              & 93.84/93.5  & R & R & R \\ \hline
-Тональность               & 72.55/72.21 & R & R & R \\ \hline
-Интенты MIDAS            & 72.73/71.56 & R & R & R \\ \hline
-DeepPavlov Topics  & 86.98/86.9  & R & R & R \\ \hline
-cobot topics  & 77.31/77.36 & R & R & R \\ \hline
-\begin{tabular}[c]{@{}l@{}}cobot dialogact\\ topics \end{tabular}              & 76.92/76.79 & R & R & R \\ \hline
-\begin{tabular}[c]{@{}l@{}}cobot dialogact \\intents \end{tabular}            & 76.83/76.76 & R & R & R \\ \hline
-Средее для 9 задач                  & 78.48/78.22 & R & R & R \\ \hline
+Эмоции               & 68.18/67.86 & 66.2/65.96 & R & 70.14/69.98 \\ \hline
+Токсичность              & 93.84/93.5  & 93.74/93.23 & R & 94.54/93.6 \\ \hline
+Тональность               & 72.55/72.21 & 71.47/71.24 & R & 74.59/74.4 \\ \hline
+Интенты MIDAS            & 72.73/71.56 & 74.55/73.66 & R & 74.37/73.86 \\ \hline
+DeepPavlov Topics  & 86.98/86.9  & 86.39/86.34 & R & 86.93/86.87 \\ \hline
+cobot topics  & 77.31/77.36 & 60.03/59.5 & R & 78.6/78.53 \\ \hline
+\begin{tabular}[c]{@{}l@{}}cobot dialogact\\ topics \end{tabular}              & 76.92/76.79 & 71.17/70.57 & R & 73.56/72.99 \\ \hline
+\begin{tabular}[c]{@{}l@{}}cobot dialogact \\intents \end{tabular}            & 76.83/76.76 & 76.2/76.1 & R & 77.27/77.19 \\ \hline
+Средее для 9 задач                  & 78.48/78.22 & 75.48/75.14 & R & 79.07/78.78 \\ \hline
 \end{tabular}
 }
 \end{table}
-
-
+NOPRED - 
+('emo', '57.57/50.04', 4923)
+('sentiment', '70.81/70.52', 4258)
+('toxic', '93.79/92.71', 16302)
+('factoid', '69.02/67.17', 397)
+('midas', '30.54/14.75', 1159)
+('dp_topics', '86.66/86.61', 223154)
+('cobot_topics', '34.22/28.74', 9757)
+('cobot_dialogact_topics', '66.43/65.3', 3941)
+('cobot_dialogact_intents', '76.47/76.37', 67732)
+('Average', '65.06/61.36', '')
+TWO PSEUDOLABEL SETTINGS - WIP
 % TODO ОТЛАДКА ТАБЛИЦЫ
 \subsection{Экономия памяти GPU, CPU и быстродействия} 
 \label{economy}
