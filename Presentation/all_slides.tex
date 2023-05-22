@@ -220,21 +220,46 @@
 
 \end{frame}
 
+\begin{frame}{Энкодер-агностичные модели - эффект уменьшения размера выборки, русские данные}
+\begin{table}[htbp]
+\caption{Средняя точность многозадачных моделей в зависимости от того, на какой доле русскоязычных данных они обучались, и того, добавлялись ли к ним англоязычные данные, для многоязычного distilbert.}
+\scalebox{0.99}{
+\begin{tabular}[baseline={(0,2.1)}]{|l||c|c|c|c|}
+\hline
+RU & S & M & S & M \\
+доля & RU & RU & RU+EN & RU+EN \\ % Sizes are different for RU and RU+EN, so I don't give them here
+\hline
+3 & 57.0 & \textbf{65.9} & \textbf{71.8} & 70.7 \\ 
+% \hline
+5 & 58.4 & \textbf{70.3} & \textbf{75.0} & 74.2\\ 
+% \hline
+10 & \textbf{75.7} & 75.2 & \textbf{77.9} & 77.4\\ 
+% \hline
+15 & \textbf{77.7} & 77.2 & \textbf{79.7} & 78.9\\ 
+% \hline
+20 & 78.4 & \textbf{79.0} & \textbf{80.6} & 80.1 \\ 
+% \hline
+25 & 79.5 & \textbf{79.6} & \textbf{81.4} & 80.9 \\ 
+% \hline
+50 & \textbf{82.5} & 82.3 & \textbf{83.2} & 82.8 \\ 
+% \hline
+100 & \textbf{84.4} & 84.3 & \textbf{85.2} & 84.4 \\ \hline
+\end{tabular}}
+\end{table}
+\end{frame}
 
-
-\begin{frame}{Энкодер-агностичные модели - эффект уменьшения размера выборки}
+\begin{frame}{Энкодер-агностичные модели - эффект уменьшения размера выборки, русские данные}
 \label{fig:thresholds_acc_ru}
-\begin{minipage}{1\textwidth}
+\begin{minipage}{0.5\textwidth}
 \begin{tikzpicture}[baseline={(0,2.1)}]%[scale=2]
 \begin{axis}[xlabel = RU доля,
 ylabel = Средняя точность,
 legend pos= south east,
-width=0.9\textwidth,
 xtick={0,1,2,3,4,5,6,7,8},
 xticklabels={2,3,5,10,15,20,25,50,100},
 ymin=50,ymax=90,
 legend cell align={left},
-legend style={nodes={scale=0.5, transform shape}}
+legend style={nodes={scale=0.7, transform shape}}
 ]
 \addplot[color=orange,dotted, mark=*] coordinates {
 (1, 57.02)
@@ -282,40 +307,13 @@ legend style={nodes={scale=0.5, transform shape}}
 \addlegendentry{M точность (RU+EN)}
 \end{axis}%
 \end{tikzpicture}
-% \hspace{3mm}
-% \captionof{figure}
-% \caption{Av}
-\end{minipage}
 
-\begin{minipage}{0.5\textwidth}
-\scalebox{0.5}{
-\begin{tabular}[baseline={(0,2.1)}]{|l||c|c|c|c|}
-\hline
-RU & S & M & S & M \\
-доля & RU & RU & RU+EN & RU+EN \\ % Sizes are different for RU and RU+EN, so I don't give them here
-\hline
-3 & 57.0 & \textbf{65.9} & \textbf{71.8} & 70.7 \\ 
-% \hline
-5 & 58.4 & \textbf{70.3} & \textbf{75.0} & 74.2\\ 
-% \hline
-10 & \textbf{75.7} & 75.2 & \textbf{77.9} & 77.4\\ 
-% \hline
-15 & \textbf{77.7} & 77.2 & \textbf{79.7} & 78.9\\ 
-% \hline
-20 & 78.4 & \textbf{79.0} & \textbf{80.6} & 80.1 \\ 
-% \hline
-25 & 79.5 & \textbf{79.6} & \textbf{81.4} & 80.9 \\ 
-% \hline
-50 & \textbf{82.5} & 82.3 & \textbf{83.2} & 82.8 \\ 
-% \hline
-100 & \textbf{84.4} & 84.3 & \textbf{85.2} & 84.4 \\ \hline
-\end{tabular}}
 \end{minipage}
 
 \end{frame}
 
 \begin{frame}{Энкодер-агностичные модели - эффект уменьшения размера выборки, английские данные}
-\scalebox{0.7}{
+\scalebox{1}{
 \begin{minipage}{0.5\textwidth}{
 \begin{tikzpicture}
 \label{fig:tr-ag:en_dialog_part}
@@ -359,7 +357,7 @@ legend style={nodes={scale=0.7, transform shape}}
 \end{tikzpicture}}
 \end{minipage}
 
-\begin{minipage}{0.4\textwidth}
+\begin{minipage}{0.2\textwidth}
 \scalebox{0.7}{
 \begin{tabular}[baseline={(0,2.1)}]{|l||c|c|}
 \hline
@@ -471,93 +469,37 @@ legend style={nodes={scale=0.7, transform shape}}
 
 
 \begin{frame}{Многоязычный перенос знаний между всеми языками из MASSIVE}
-% TODO COMPRESS N
-
-\begin{minipage}{0.5\textwidth}
-%\begin{table}[htbp]
-%{
-\scalebox{0.55}{
-\begin{tabular}[baseline={(0,2.1)}]{|c|c|c|c|c|} \hline
-\multirow{1}{*}{\textbf{Язык}}  & \multirow{1}{*}{\textbf{Код}} & \multirow{1}{*}{\textbf{Дист}} & \multirow{1}{*}{\textbf{N}}  &  \multicolumn{1}{c|}{\textbf{Точность}} \\ \hline
-русский & ru & 0 & 1.5M & 80.8  \\
-китайский (Тайвань) & zh-TW & 92.2 & 1M & 79.6 \\
-китайский & zh & 92.2 & 1M & 78.0 \\
-английский & en & 60.3 & 5.7M & 75.2 \\
-японский & ja & 93.3 & 1,1M & 72.4 \\
-словенский & sl & 4.2 & 162K & 70.3 \\
-шведский & sv & 59.5 & 3.8M & 70.2 \\
-%малайский & ms & n/c & 321K & 68.9 \\
-итальянский & it & 45.8 & 1.5M & 68.8 \\
-индонезийский & id & 91.2 & 441K & 68.7 \\
-нидерландский & nl & 64.6 & 1.9M & 68.7 \\
-португальский & pt & 61.6 & 1M & 68.6 \\
-испанский & es & 51.7 & 1.5M & 68.2 \\
-датский & da & 66.2 & 240K & 67.8 \\
-французский & fr & 61.0 & 2M & 65.5 \\
-персидский & fa & 72.4 & 644K & 65.2 \\
-турецкий & tr & 86.2 & 317K & 64.5 \\
-вьетнамский & vi & 95.0 & 1.2M & 64.3 \\
-норвежский букмол & nb & 67.2 & 495K & 64.3 \\
-польский & pl & 5.1 & 1.3M & 64.2 \\
-азербайджанский & az & 87.7 & 139K & 63.9 \\
-каталанский & ca & 60.3 & 592K & 61.4 \\
-венгерский & hu & 87.2 & 438K & 61.3 \\
-иврит & he & 88.9 & 232K & 60.9 \\
-хинди & hi & 69.8 & 127K & 60.7 \\
-корейский & ko & 89.5 & 429K & 60.4 \\
-\hline
-\end{tabular}
-}
-%}
-%\end{table}
-\end{minipage}
-\begin{minipage}{0.5\textwidth}
-{Метрики модели \textit{bert-base-multilingual-cased} на объединенном тестовом наборе данных {MASSIVE} для всех языков. Модель обучалась на версии \textbf{Q} набора данных {RuQTopics}. \textbf{Код} означает код языка(ISO 639-1), \textbf{N} означает число статей в Википедии на этом языке на 11 октября 2018 года, \textbf{Дист} означает лингвистическую дистанцию между этим языком и русским. Усреднено по трем запускам.}
-\end{minipage}
-\end{frame}
-
-\begin{frame}{Многоязычный перенос знаний между всеми языками из MASSIVE}
-% TODO UPDATE ALL RUNS
-\begin{minipage}{0.5\textwidth}
-\begin{table}[htbp]
-\caption{Метрики модели \textit{bert-base-multilingual-cased} на объединенном тестовом наборе данных {MASSIVE} для всех языков. Модель обучалась на версии \textbf{Q} набора данных {RuQTopics}. \textbf{Код} означает код языка(ISO 639-1), \textbf{N} означает число статей в Википедии на этом языке на 11 октября 2018 года, \textbf{Дист} означает лингвистическую дистанцию между этим языком и русским, посчитанную в соответствии с работой~\cite{lang_sim}. Усреднено по трем запускам.}
-{
-\scalebox{0.55}{
-\begin{tabular}[baseline={(0,2.1)}]{|c|c|c|c|c|} \hline
-\multirow{1}{*}{\textbf{Язык}}  & \multirow{1}{*}{\textbf{Код}} & \multirow{1}{*}{\textbf{Дист}} & \multirow{1}{*}{\textbf{N}}  &  \multicolumn{1}{c|}{\textbf{Точность}} \\ \hline
-румынский & ro & 55.0 & 389K & 57.1 \\
-урду & ur & 66.7 & 141K & 56.4 \\
-арабский & ar & 86.5 & 620K & 56.2 \\
-каннада & kn & 90.8 & 24K & 56.1 \\
-филиппинский & tl & 91.9 & 81K & 55.0 \\
-телугу & te & 96.7 & 69K & 53.7 \\
-финский & fi & 88.9 & 446K & 53.3 \\
-бирманский & my & 86.0 & 40K & 52.5 \\
-африкаанс & af & 64.8 & 63K & 52.4 \\
-тамильский & ta & 94.7 & 118K & 52.4 \\
-немецкий & de & 64.5 & 2,2M & 52.2 \\
-албанский & sq & 69.4 & 75K & 51.5 \\
-латышский & lv & 49.1 & 88K & 49.6 \\
-малаялам & ml & 96.7 & 59K & 48.7 \\
-армянский & hy & 77.8 & 247K & 48.1 \\
-бенгальский & bn & 66.3 & 61K & 47.3 \\
-тайский & th & 89.5 & 127K & 46.5 \\
-греческий & el & 75.3 & 154K & 46.3 \\
-грузинский & ka & 96.0 & 125K & 39.2 \\
-яванский & jv & 95.4 & 55K & 38.7 \\
-монгольский & mn & 86.2 & 18K & 36.6 \\
-исландский & is & 68.9 & 46K & 32.6 \\
-суахили & sw & 95.1 & 46K & 31.0 \\
-валлийский & cy & 75.5 & 101K & 28.5 \\
-кхмерский & km & 97.1 & 7K & 16.1 \\
-амхарский & am & 86.6 & 14K & 12.1 \\ \hline
-\hline
-\end{tabular}
-}
-}
-\end{table}
-\end{minipage}
-
+Метрики многоязычного BERT на {MASSIVE}. Модель обучалась на вопросах из 6 классах набора данных {RuQTopics}. \textbf{Код} означает код языка, \textbf{N} - число статей в Википедии на этом языке на момент выхода BERT, \textbf{Дист} - лингвистическую дистанцию между этим языком и русским. Усреднено по трем запускам.
+\scalebox{0.45}{
+\begin{tabular}[baseline={(0,2.1)}]{|c|c|c|c|c||c|c|c|c|c|} \hline
+\multirow{1}{*}{\textbf{Язык}}  & \multirow{1}{*}{\textbf{Код}} & \multirow{1}{*}{\textbf{Дист}} & \multirow{1}{*}{\textbf{N}}  &  \multicolumn{1}{c|}{\textbf{Точность}} &\multirow{1}{*}{\textbf{Язык}}  & \multirow{1}{*}{\textbf{Код}} & \multirow{1}{*}{\textbf{Дист}} & \multirow{1}{*}{\textbf{N}}  &  \multicolumn{1}{c|}{\textbf{Точность}}\\ \hline
+русский & ru & 0 & 1.5M & 80.8  & румынский & ro & 55.0 & 389K & 57.1 \\
+китайский (Тайвань) & zh-TW & 92.2 & 1M & 79.6 & урду & ur & 66.7 & 141K & 56.4  \\
+китайский & zh & 92.2 & 1M & 78.0 & арабский & ar & 86.5 & 620K & 56.2 \\
+английский & en & 60.3 & 5.7M & 75.2 & каннада & kn & 90.8 & 24K & 56.1\\
+японский & ja & 93.3 & 1,1M & 72.4 & филиппинский & tl & 91.9 & 81K & 55.0\\
+словенский & sl & 4.2 & 162K & 70.3 & телугу & te & 96.7 & 69K & 53.7 \\
+шведский & sv & 59.5 & 3.8M & 70.2 & финский & fi & 88.9 & 446K & 53.3 \\
+малайский & ms & >90 & 321K & 68.9 & амхарский & am & 86.6 & 14K & 12.1 \\
+итальянский & it & 45.8 & 1.5M & 68.8 & бирманский & my & 86.0 & 40K & 52.5\\
+индонезийский & id & 91.2 & 441K & 68.7 & африкаанс & af & 64.8 & 63K & 52.4 \\
+нидерландский & nl & 64.6 & 1.9M & 68.7 & тамильский & ta & 94.7 & 118K & 52.4 \\
+португальский & pt & 61.6 & 1M & 68.6 & немецкий & de & 64.5 & 2,2M & 52.2 \\
+испанский & es & 51.7 & 1.5M & 68.2 & албанский & sq & 69.4 & 75K & 51.5 \\
+датский & da & 66.2 & 240K & 67.8 & латышский & lv & 49.1 & 88K & 49.6 \\
+французский & fr & 61.0 & 2M & 65.5 & малаялам & ml & 96.7 & 59K & 48.7\\
+персидский & fa & 72.4 & 644K & 65.2 & армянский & hy & 77.8 & 247K & 48.1 \\
+турецкий & tr & 86.2 & 317K & 64.5 & бенгальский & bn & 66.3 & 61K & 47.3 \\
+вьетнамский & vi & 95.0 & 1.2M & 64.3 & тайский & th & 89.5 & 127K & 46.5 \\
+норвежский букмол & nb & 67.2 & 495K & 64.3 & греческий & el & 75.3 & 154K & 46.3 \\
+польский & pl & 5.1 & 1.3M & 64.2 & грузинский & ka & 96.0 & 125K & 39.2\\
+азербайджанский & az & 87.7 & 139K & 63.9 & яванский & jv & 95.4 & 55K & 38.7 \\
+каталанский & ca & 60.3 & 592K & 61.4 & монгольский & mn & 86.2 & 18K & 36.6 \\
+венгерский & hu & 87.2 & 438K & 61.3 & исландский & is & 68.9 & 46K & 32.6 \\
+иврит & he & 88.9 & 232K & 60.9 & суахили & sw & 95.1 & 46K & 31.0 \\
+хинди & hi & 69.8 & 127K & 60.7 & валлийский & cy & 75.5 & 101K & 28.5 \\
+корейский & ko & 89.5 & 429K & 60.4 & кхмерский & km & 97.1 & 7K & 16.1\\ \hline
+\end{tabular}}
 \end{frame}
 
 \begin{frame}{Многоязычный перенос знаний между всеми языками из MASSIVE - выводы}
@@ -666,18 +608,18 @@ cobot topics ~                  & 216k & 79.88 & 77.31 & 77.45        & 80.68 & 
 \scalebox{0.7}{
 \begin{tabular}{|c||c|c|c|c|} \hline
 \multirow{4}{*}{Задача}  &Новая & Старая & Старая & Старая \\
- & & & мягкие & дополненные \\
+ & &             & мягкие & дополненные \\
  & & независимые & независимые & независимые \\
  & & метки & метки & метки \\ \hline \hline
-Эмоции               & 68.18/67.86 & R & R & R \\ \hline
-Токсичность              & 93.84/93.5  & R & R & R \\ \hline
-Тональность               & 72.55/72.21 & R & R & R \\ \hline
-Интенты MIDAS            & 72.73/71.56 & R & R & R \\ \hline
-DeepPavlov Topics  & 86.98/86.9  & R & R & R \\ \hline
-cobot topics  & 77.31/77.36 & R & R & R \\ \hline
-\begin{tabular}[c]{@{}l@{}}cobot dialogact\\ topics \end{tabular}              & 76.92/76.79 & R & R & R \\ \hline
-\begin{tabular}[c]{@{}l@{}}cobot dialogact \\intents \end{tabular}            & 76.83/76.76 & R & R & R \\ \hline
-Средее для 9 задач                  & 78.48/78.22 & R & R & R \\ \hline
+Эмоции               & 68.18/67.86 & 66.2/65.96 & 57.57/50.04 & 70.14/69.98 \\ \hline
+Токсичность              & 93.84/93.5  & 93.74/93.23 & R & 94.54/93.6 \\ \hline
+Тональность               & 72.55/72.21 & 71.47/71.24 & 70.81/70.52 & 74.59/74.4 \\ \hline
+Интенты MIDAS            & 72.73/71.56 & 74.55/73.66 & 30.54/14.75 & 74.37/73.86 \\ \hline
+DeepPavlov Topics  & 86.98/86.9  & 86.39/86.34 & 86.66/86.61 & 86.93/86.87 \\ \hline
+cobot topics  & 77.31/77.36 & 60.03/59.5 & 34.22/28.74 & 78.6/78.53 \\ \hline
+\begin{tabular}[c]{@{}l@{}}cobot dialogact\\ topics \end{tabular}              & 76.92/76.79 & 71.17/70.57 & 66.43/65.3 & 73.56/72.99 \\ \hline
+\begin{tabular}[c]{@{}l@{}}cobot dialogact \\intents \end{tabular}            & 76.83/76.76 & 76.2/76.1 & 76.47/76.37 & 77.27/77.19 \\ \hline
+Средее для 9 задач                  & 78.48/78.22 & 75.48/75.14 & 65.06/61/36 & 79.07/78.78 \\ \hline
 \end{tabular}
 }
 \end{table}
