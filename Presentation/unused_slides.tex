@@ -1,0 +1,594 @@
+
+\begin{frame}{Энкодер-агностичные модели: сравнение с однозадачными, GLUE}
+\begin{table}{htbp}
+\caption{Метрики многозадачной энкодер-агностичной модели для набора задач GLUE. M.Corr означает корреляцию Мэттью, P/S означает корреляцию Пирсона-Спирмена, Acc точность, F1 - макро-F1. Режим S означает однозадачные модели, режим M означает многозадачные модели. Размер означает размер тренировочного набора данных.}
+%\resizebox{\textwidth}{!}
+\scalebox{0.52}{
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\multirow{3}{*}{Модель} & \multirow{3}{*}{Режим}  & Среднее & CoLA & SST-2 & MRPC &STS-B &QQP&MNLI & QNLI & RTE & AX  \\
+\cline{3-11}
+   &  & Размер  & 8.6k & 67.3k & 2.5k & 5.7k & 363.8k & 392.7k & 104.7k & 2.5k & как у MNLI  \\ 
+\cline{3-11}   
+   &  & метрика  & M.Corr & Acc & F1/Acc & P/S Corr & F1/Acc & Acc (m/mm) & Acc & Acc & M.Corr \\ \hline \hline
+Человек & - & 87.1 & 66.4 & 97.8 & 86.3/80.8 & 92.7/92.6 & 59.5/80.4 & 92.0/92.8 & 91.2 & 93.6 & - \\ \hline
+\textit{\multirow{2}{*}{distilbert}} & S & 73.3 & \textbf{42.4} & \textbf{92.1} & 85.6/\textbf{80.3} & 78.8/76.8 & \textbf{69.5/88.5} & \textbf{81.3/80.8} & \textbf{87.5} & 52.1 & 29.9  \\ 
+ & M & \textbf{74.5} & 36.0 & 91.0 & \textbf{85.7}/79.9 & \textbf{82.6/81.6} & 68.4/87.4 & 80.4/80.3 & 86.0 & \textbf{69.5} & \textbf{30.1} \\  \hline
+\textit{\multirow{2}{*}{bert}} & S & 77.3 & \textbf{53.7} & \textbf{93.2} & \textbf{87.7/82.8} & 83.8/82.2 & \textbf{70.3/88.9} & \textbf{83.8/83.1} & \textbf{90.6} & 62.1 & 32.1 \\ 
+ & M & \textbf{77.8} & 45.8 & 92.9 & 86.8/82.2 & \textbf{85.3/84.7} & 70.2/88.6 & 83.5/82.6 & 90.1 & \textbf{74.5} & \textbf{32.8} \\  \hline
+\textit{\multirow{2}{*}{bert-large}} & S & \textbf{79.5} & \textbf{59.2} & \textbf{94.9} & 85.0/80.6 & \textbf{85.8/84.5} & 70.5/89.1 & \textbf{86.7/85.6} & 92.2 & 70.1 & \textbf{39.4} \\ 
+ & M & \textbf{79.5} & 50.8 & 94.1 & \textbf{87.3/82.8} & 83.8/83.9 & \textbf{71.0/89.2} & 85.9/85.0 & \textbf{92.4} & \textbf{78.5} & 38.5 \\  \hline
+\end{tabular}}
+\end{table}
+%\end{table*}
+\end{frame}
+
+\begin{frame}{Энкодер-агностичные модели: перенос знаний между языками}
+%\resizebox{\textwidth}{!}
+\scalebox{0.48}{
+\begin{tabular}{|c|c|c||c|c|c|c|c|c|} \hline
+Модель & \begin{tabular}[c]{@{}l@{}}Тренировочные\\данные\end{tabular} & Режим & Среднее & \begin{tabular}[c]{@{}l@{}}Эмоции\end{tabular} & \begin{tabular}[c]{@{}l@{}}Тональность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Токсичность\end{tabular} & \begin{tabular}[c]{@{}l@{}}Интенты\end{tabular} & \begin{tabular}[c]{@{}l@{}}Темы\end{tabular} \\
+\hline \hline
+\textit{distilbert-mult} & RU & S & 84.7 & 77.4 & 77.7 & 96.7 & 83.5 & 88.1 \\ %\hline
+\textit{distilbert-mult} & RU & M & 84.3 & 78.1 & 76.8 & 96.5 & 81.9 & 88.2  \\ \hline
+\textit{distilbert-mult} & \begin{tabular}[c]{@{}l@{}}RU+EN,\\объединенные\end{tabular} & S & 85.2 & 78.9 & 77.4 & 96.8 & 84.7 & 88.4 \\ %\hline
+\textit{distilbert-mult} & \begin{tabular}[c]{@{}l@{}}RU+EN,\\объединенные\end{tabular} & M & 84.5 & 77.9 & 76.6 & 96.5 & 82.9 & 88.4 \\ \hline
+\textit{distilbert-mult} & \begin{tabular}[c]{@{}l@{}}RU+EN,\\отдельные\end{tabular} & M & 84.4 & 77.6 & 76.8 & 96.5 & 82.4 & 88.3 \\ \hline
+\textit{bert-mult} & RU & S & 84.7 & 76.6 & 77.8 & 96.9 & 83.9 & 88.4 \\ %\hline
+\textit{bert-mult} & RU & M & 84.8 & 78.4 & 76.3 & 96.8 & 83.7 & 89.0 \\ \hline
+\textit{bert-mult} & \begin{tabular}[c]{@{}l@{}}RU+EN,\\объединенные\end{tabular} & S & 85.6 & 78.9 & 77.6 & 96.9 & 85.0 & 89.4 \\ %\hline
+\textit{bert-mult} & \begin{tabular}[c]{@{}l@{}}RU+EN,\\объединенные\end{tabular} & M & 85.2 & 79.2 & 76.4 & 96.7 & 84.3 & 89.4 \\ \hline
+\textit{bert-mult} & \begin{tabular}[c]{@{}l@{}}RU+EN,\\отдельные\end{tabular} & M & 85.0 & 78.3 & 77.1 & 96.7 & 84.0 & 89.1 \\ \hline
+\end{tabular}}
+
+\end{frame}
+
+\begin{frame}{Точность при кросс-валидации}
+\scalebox{0.5}{
+\label{tab:crossvalidation}
+\begin{tabular}{|c||c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\multirow{2}{*}{\textbf{Модель}} & \multicolumn{2}{c|}{\textbf{Среднее}} & \multicolumn{2}{c|}{\textbf{Разб. 1}} & \multicolumn{2}{c|}{\textbf{Разб. 2}} &\multicolumn{2}{c|}{\textbf{Разб. 3}} & \multicolumn{2}{c|}{\textbf{Разб. 4}} & \multicolumn{2}{c|}{\textbf{Разб. 5}} \\ 
+\cline{2-13}
+& Точность & Макро-F1 & Точность & Макро-F1 & Точность & Макро-F1 & Точность & Макро-F1   & Точность & Макро-F1 & Точность & Макро-F1 \\ \hline
+%\textit{rusber} & 74.0 & 53.4 \\ \hline
+%\textit{ru} & 73.7 & 52.5 \\ \hline
+%\textit{rutiny} & 72.2 & 50.9 \\ \hline
+%\textit{mult} & 71.4 & 51.9 \\ \hline
+\textit{rusber} & 74.0 & 53.4 & 73.7 & 54.3 & 73.8 & 52.8 & 73.9 & 53.0 & 74.1 & 54.2 & 74.2 & 52.9\\
+\textit{ru} & 73.7 & 52.5 & 73.5 & 52.9 & 73.7 & 51.9 & 73.6 & 52.3 & 73.9 & 53.1 & 73.9 & 52.3\\
+\textit{rutiny} & 72.2 & 50.9 & 72.0 & 49.7 & 72.2 & 50.9 & 72.0 & 51.4 & 72.4 & 51.1 & 72.3 & 51.6\\
+\textit{mult} & 71.4 & 51.9 & 71.2 & 52.4 & 71.5 & 51.9 & 71.5 & 51.4 & 71.2 & 51.6 & 71.7 & 52.1\\ \hline
+\end{tabular}
+}
+\end{frame}
+
+\begin{frame}{Энкодер-агностичные модели - эффект уменьшения размера выборки по задачам}
+
+
+
+\pgfplotsset{every tick label/.append style={font=\tiny}}
+\begin{figure}[!ht]
+\begin{subfigure}{0.48\textwidth}
+\begin{tikzpicture}[scale=1]
+\begin{axis}[xlabel = Число тренировочных примеров,
+ylabel = Точность,
+title=Средняя точность,
+legend pos= south east,
+width=\textwidth,
+% width=10cm,
+% height=10cm,
+% xmin=2,
+% xmax=100,
+xtick={0,1,2,3,4,5,6,7},
+xticklabels={5k, 8k, 14k, 19k, 24k, 27k, 41k, 271k},
+ymin=40,ymax=90,
+legend cell align={left},
+legend style={nodes={scale=0.5, transform shape}}
+]
+\addplot[color=orange,dotted, mark=*] coordinates {
+(0, 44.9)
+(1, 59.6)
+(2, 69.1)
+(3, 73.5)
+(4, 76.7)
+(5, 77.1)
+(6, 78.5)
+(7, 82.9)
+};
+\addlegendentry{Однозадачная точность (EN)}
+\addplot[color=red,solid,mark=*] coordinates {
+(0, 64.8)
+(1, 68.8)
+(2, 71.7)
+(3, 74.2)
+(4, 75.4)
+(5, 75.9)
+(6, 77.4)
+(7, 82.1)
+};
+\addlegendentry{Многозадачная точность (EN)}
+\end{axis}
+\end{tikzpicture}
+\end{subfigure}
+\begin{subfigure}{0.48\textwidth}
+\begin{tikzpicture}[scale=1]
+\begin{axis}[xlabel = Число обучающих примеров,
+ylabel = Точность,
+title=Классификация эмоций,
+legend pos= south east,
+width=\textwidth,
+% width=10cm,
+% height=10cm,
+% xmin=2,
+% xmax=100,
+xtick={0,1,2,3,4,5,6,7},
+xticklabels={0.8k, 1.2k, 2k, 2.7k, 3.6k, 3.9k, 5.9k, 39.5k},
+ymin=45,ymax=80,
+legend cell align={left},
+legend style={nodes={scale=0.5, transform shape}}
+]
+
+\addplot[color=orange,dotted, mark=*] coordinates {
+(0, 48.7)
+(1, 60.6)
+(2, 62.5)
+(3, 63.3)
+(4, 64.6)
+(5, 64.6)
+(6, 65.8)
+(7, 70.3)
+};
+\addlegendentry{Однозадачная точность (EN)}
+\addplot[color=red,solid,mark=*] coordinates {
+(0, 57.6)
+(1, 58.6)
+(2, 60.5)
+(3, 61.1)
+(4, 62.1)
+(5, 62.6)
+(6, 64.0)
+(7, 67.7)};
+\addlegendentry{Многозадачная точность (EN)}
+\end{axis}%
+\end{tikzpicture}
+\end{subfigure}
+
+\medskip
+
+\begin{subfigure}{0.48\textwidth}
+\begin{tikzpicture}[scale=1]
+\begin{axis}[xlabel = Число обучающих примеров,
+ylabel = Точность,
+title=Классификация тональности,
+legend pos= south east,
+width=\textwidth,
+% width=10cm,
+% height=10cm,
+% xmin=2,
+% xmax=100,
+xtick={0,1,2,3,4,5,6,7},
+xticklabels={2.6k, 3.8k, 6.4k, 8.9k, 11.5k, 12.7k, 19.1k, 127.7k},
+ymin=35,ymax=80,
+legend cell align={left},
+legend style={nodes={scale=0.5, transform shape}}
+]
+\addplot[color=orange,dotted, mark=*] coordinates {
+(0, 39.6)
+(1, 65.2)
+(2, 66.9)
+(3, 67.9)
+(4, 68.2)
+(5, 68.3)
+(6, 69.3)
+(7, 74.7)
+};
+\addlegendentry{Однозадачная точность (EN)}
+\addplot[color=red,solid,mark=*] coordinates {
+(0, 61.4)
+(1, 62.5)
+(2, 64.4)
+(3, 65.8)
+(4, 66.5)
+(5, 66.6)
+(6, 68.3)
+(7, 75.2)};
+\addlegendentry{Многозадачная точность (EN)}
+\end{axis}%
+\end{tikzpicture}
+\end{subfigure}
+\begin{subfigure}{0.48\textwidth}
+\begin{tikzpicture}[scale=1]
+\begin{axis}[xlabel = Число обучающих примеров,
+ylabel = Точность,
+title=Классификация токсичности,
+legend pos= south east,
+width=\textwidth,
+% width=10cm,
+% height=10cm,
+% xmin=2,
+% xmax=100,
+xtick={0,1,2,3,4,5,6,7},
+xticklabels={1.6k, 2.4k, 4.0k, 5.6k, 7.2k, 8k, 12k, 80k},
+ymin=85,ymax=95,
+legend cell align={left},
+legend style={nodes={scale=0.5, transform shape}}
+]
+\addplot[color=orange,dotted, mark=*] coordinates {
+(0, 91.8)
+(1, 91.8)
+(2, 91.8)
+(3, 91.8)
+(4, 91.8)
+(5, 92.2)
+(6, 92.2)
+(7, 91.5)
+};
+\addlegendentry{Однозадачная точность (EN)}
+\addplot[color=red,solid,mark=*] coordinates {
+(0, 90.8)
+(1, 91.0)
+(2, 90.8)
+(3, 91.0)
+(4, 91.4)
+(5, 91.5)
+(6, 91.6)
+(7, 90.6)};
+\addlegendentry{Многозадачная точность (EN)}
+\end{axis}%
+\end{tikzpicture}
+\end{subfigure}
+
+\medskip
+
+\begin{subfigure}{0.48\textwidth}
+\begin{tikzpicture}
+\begin{axis}[xlabel = Число обучающих примеров,
+ylabel = Точность,
+title=Классификация интентов,
+legend pos= south east,
+width=\textwidth,
+% width=10cm,
+% height=10cm,
+% xmin=2,
+% xmax=100,
+xtick={1,2,3,4,5,6,7},
+xticklabels={0.3k, 0.6k, 1.2k, 1.7k, 2.3k, 2.9k, 5.8k, 11.5k},
+ymin=25,ymax=85,
+legend cell align={left},
+legend style={nodes={scale=0.5, transform shape}}
+]
+\addplot[color=orange,dotted, mark=*] coordinates {
+%(0, 2.6)
+(1, 26.5)
+(2, 42.7)
+(3, 61.4)
+(4, 74.4)
+(5, 75.5)
+(6, 78.7)
+(7, 87.4)
+};
+\addlegendentry{Однозадачная точность (EN)}
+\addplot[color=red,solid,mark=*] coordinates {
+%(0, 44.2)
+(1, 55.5)
+(2, 62.4)
+(3, 70.0)
+(4, 72.4)
+(5, 74.3)
+(6, 76.9)
+(7, 86.3)};
+\addlegendentry{Многозадачная точность (EN)}
+\end{axis}
+\end{tikzpicture}
+\end{subfigure}
+\begin{subfigure}{0.48\textwidth}
+\begin{tikzpicture}
+\begin{axis}[xlabel = Число обучающих примеров,
+ylabel = Точность,
+title=Тематическая классификация,
+legend pos= south east,
+width=\textwidth,
+% width=10cm,
+% height=10cm,
+% xmin=2,
+% xmax=100,
+xtick={0,1,2,3,4,5,6,7},
+xticklabels={0.3k, 0.6k, 1.2k, 1.7k, 2.3k, 2.9k, 5.8k, 11.5k},
+ymin=35,ymax=90,
+legend cell align={left},
+legend style={nodes={scale=0.5, transform shape}}
+]
+\addplot[color=orange,dotted, mark=*] coordinates {
+(0, 41.4)
+(1, 54.0)
+(2, 81.6)
+(3, 83.3)
+(4, 84.2)
+(5, 84.8)
+(6, 86.3)
+(7, 91.0)
+};
+\addlegendentry{Однозадачная точность (EN)}
+\addplot[color=red,solid,mark=*] coordinates {
+(0, 69.9)
+(1, 76.4)
+(2, 80.2)
+(3, 83.1)
+(4, 84.4)
+(5, 84.6)
+(6, 86.4)
+(7, 90.8)
+};
+\addlegendentry{Многозадачная точность (EN)}
+\end{axis}%
+\end{tikzpicture}
+\end{subfigure}
+
+
+\caption{Однозадачная и многозадачная точность для каждой задачи. Английский язык.}
+\label{fig:tr-ag:en_dialog_part_n_samples}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Энкодер-агностичные модели - эффект уменьшения размера выборки по задачам}
+
+\begin{figure}[!ht]
+\begin{subfigure}{0.48\textwidth}
+\begin{tikzpicture}[scale=1]
+\begin{axis}[xlabel = Число тренировочных примеров,
+ylabel = Точность,
+title=Средняя точность,
+legend pos= south east,
+width=\textwidth,
+% width=10cm,
+% height=10cm,
+% xmin=2,
+% xmax=100,
+xtick={0,1,2,3,4,5,6,7},
+xticklabels={6k,10k,21k,31k,41k,51k,103k,205k},
+ymin=50,ymax=90,
+legend cell align={left},
+legend style={nodes={scale=0.5, transform shape}}
+]
+\addplot[color=orange,dotted, mark=*] coordinates {
+(0, 57.02)
+(1, 58.379999999999995)
+(2, 75.66666666666667)
+(3, 77.7)
+(4, 78.36666666666667)
+(5, 79.53333333333333)
+(6, 82.5)
+(7, 84.39999999999999)
+};
+\addlegendentry{Однозадачная точность (RU)}
+\addplot[color=red,solid,mark=*] coordinates {
+(0, 65.88)
+(1, 70.3)
+(2, 75.23333333333333)
+(3, 77.23333333333333)
+(4, 79.0)
+(5, 79.60000000000001)
+(6, 82.3)
+(7, 84.33333333333333)};
+\addlegendentry{Многозадачная точность (RU)}
+\end{axis}
+\end{tikzpicture}
+\end{subfigure}
+\begin{subfigure}{0.48\textwidth}
+\begin{tikzpicture}[scale=1]
+\begin{axis}[xlabel = Число обучающих примеров,
+ylabel = Точность,
+title=Классификация эмоций,
+legend pos= south east,
+width=\textwidth,
+% width=10cm,
+% height=10cm,
+% xmin=2,
+% xmax=100,
+xtick={0,1,2,3,4,5,6,7},
+xticklabels={196, 327, 655, 983, 1311, 1639, 3278, 6557},
+ymin=45,ymax=80,
+legend cell align={left},
+legend style={nodes={scale=0.5, transform shape}}
+]
+\addplot[color=orange,dotted, mark=*] coordinates {
+(0, 49.14)
+(1, 48.260000000000005)
+(2, 64.5)
+(3, 66.10000000000001)
+(4, 64.26666666666667)
+(5, 66.96666666666665)
+(6, 73.96666666666667)
+(7, 76.46666666666667)
+};
+\addlegendentry{Однозадачная точность (RU)}
+\addplot[color=red,solid,mark=*] coordinates {
+(0, 62.61999999999999)
+(1, 64.82000000000001)
+(2, 68.73333333333333)
+(3, 70.73333333333333)
+(4, 71.36666666666667)
+(5, 72.3)
+(6, 75.0)
+(7, 78.13333333333334)};
+\addlegendentry{Многозадачная точность (RU)}
+\end{axis}%
+\end{tikzpicture}
+\end{subfigure}
+
+\medskip
+
+\begin{subfigure}{0.48\textwidth}
+\begin{tikzpicture}[scale=1]
+\begin{axis}[xlabel = Число обучающих примеров,
+ylabel = Точность,
+title=Классификация тональности,
+legend pos= south east,
+width=\textwidth,
+% width=10cm,
+% height=10cm,
+% xmin=2,
+% xmax=100,
+xtick={0,1,2,3,4,5,6,7},
+xticklabels={2k, 4k, 8k, 12k, 17k, 21k, 41k, 83k},
+ymin=65,ymax=80,
+legend cell align={left},
+legend style={nodes={scale=0.5, transform shape}}
+]
+\addplot[color=orange,dotted, mark=*] coordinates {
+(0, 69.46000000000001)
+(1, 71.02000000000001)
+(2, 73.3)
+(3, 73.96666666666665)
+(4, 74.36666666666666)
+(5, 75.13333333333334)
+(6, 76.36666666666667)
+(7, 77.16666666666667)
+};
+\addlegendentry{Однозадачная точность (RU)}
+\addplot[color=red,solid,mark=*] coordinates {
+(0, 68.99999999999999)
+(1, 70.14)
+(2, 71.46666666666665)
+(3, 71.7)
+(4, 72.96666666666667)
+(5, 72.66666666666667)
+(6, 74.56666666666666)
+(7, 76.23333333333333)};
+\addlegendentry{Многозадачная точность (RU)}
+\end{axis}%
+\end{tikzpicture}
+\end{subfigure}
+\begin{subfigure}{0.48\textwidth}
+\begin{tikzpicture}[scale=1]
+\begin{axis}[xlabel = Число обучающих примеров,
+ylabel = Точность,
+title=Классификация токсичности,
+legend pos= south east,
+width=\textwidth,
+% width=10cm,
+% height=10cm,
+% xmin=2,
+% xmax=100,
+xtick={0,1,2,3,4,5,6,7},
+xticklabels={3k, 5k, 9k, 14k, 19k, 23k, 47k, 93k},
+ymin=90,ymax=100,
+legend cell align={left},
+legend style={nodes={scale=0.5, transform shape}}
+]
+\addplot[color=orange,dotted, mark=*] coordinates {
+(0, 91.50000000000001)
+(1, 92.70000000000002)
+(2, 93.93333333333334)
+(3, 94.80000000000001)
+(4, 95.06666666666666)
+(5, 95.36666666666667)
+(6, 96.13333333333333)
+(7, 96.7)
+};
+\addlegendentry{Однозадачная точность (RU)}
+\addplot[color=red,solid,mark=*] coordinates {
+(0, 91.24000000000001)
+(1, 92.6)
+(2, 93.96666666666665)
+(3, 94.60000000000001)
+(4, 95.0)
+(5, 95.33333333333333)
+(6, 96.0)
+(7, 96.5)};
+\addlegendentry{Многозадачная точность (RU)}
+\end{axis}%
+\end{tikzpicture}
+\end{subfigure}
+
+\medskip
+
+\begin{subfigure}{0.48\textwidth}
+\begin{tikzpicture}
+\begin{axis}[xlabel = Число обучающих примеров,
+ylabel = Точность,
+title=Классификация интентов,
+legend pos= south east,
+width=\textwidth,
+% width=10cm,
+% height=10cm,
+% xmin=2,
+% xmax=100,
+xtick={0,1,2,3,4,5,6,7},
+xticklabels={0.3k, 0.6k, 1.2k, 1.7k, 2.3k, 2.9k, 5.8k, 11.5k},
+ymin=25,ymax=85,
+legend cell align={left},
+legend style={nodes={scale=0.5, transform shape}}
+]
+\addplot[color=orange,dotted, mark=*] coordinates {
+(0, 38.9)
+(1, 29.920000000000005)
+(2, 67.7)
+(3, 72.16666666666667)
+(4, 75.33333333333333)
+(5, 76.60000000000001)
+(6, 79.96666666666668)
+(7, 83.46666666666665)
+};
+\addlegendentry{Однозадачная точность (RU)}
+\addplot[color=red,solid,mark=*] coordinates {
+(0, 42.64)
+(1, 52.98)
+(2, 64.03333333333335)
+(3, 68.6)
+(4, 73.5)
+(5, 73.83333333333333)
+(6, 79.5)
+(7, 82.36666666666667)};
+\addlegendentry{Многозадачная точность (RU)}
+\end{axis}
+\end{tikzpicture}
+\end{subfigure}
+\begin{subfigure}{0.48\textwidth}
+\begin{tikzpicture}
+\begin{axis}[xlabel = Число обучающих примеров,
+ylabel = Точность,
+title=Тематическая классификация,
+legend pos= south east,
+width=\textwidth,
+% width=10cm,
+% height=10cm,
+% xmin=2,
+% xmax=100,
+xtick={0,1,2,3,4,5,6,7},
+xticklabels={0.3k, 0.6k, 1.2k, 1.7k, 2.3k, 2.9k, 5.8k, 11.5k},
+ymin=35,ymax=90,
+legend cell align={left},
+legend style={nodes={scale=0.5, transform shape}}
+]
+\addplot[color=orange,dotted, mark=*] coordinates {
+(0, 36.16)
+(1, 50.06)
+(2, 78.80000000000001)
+(3, 81.56666666666666)
+(4, 82.86666666666666)
+(5, 83.60000000000001)
+(6, 86.13333333333334)
+(7, 88.2)
+};
+\addlegendentry{Однозадачная точность (RU)}
+\addplot[color=red,solid,mark=*] coordinates {
+(0, 42.64)
+(1, 52.98)
+(2, 64.03333333333335)
+(3, 68.6)
+(4, 73.5)
+(5, 73.83333333333333)
+(6, 79.5)
+(7, 82.36666666666667)};
+\addlegendentry{Многозадачная точность (RU)}
+\end{axis}%
+\end{tikzpicture}
+\end{subfigure}
+
+
+\caption{Однозадачная и многозадачная точность для каждой задачи. Русский язык.}
+\label{fig:tr-ag:ru_dialog_part_n_samples}
+\end{figure}
+\end{frame}

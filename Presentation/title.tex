@@ -1,22 +1,23 @@
 \setbeamertemplate{title page}
 {
-    \ifnumequal{\value{logotitle}}{1}{
-        \IfFileExists{images/logo.pdf}{
-            \begin{minipage}[c]{0.15\textwidth}
-                \begin{flushleft}
-                    \usebeamercolor[fg]{titlegraphic}\inserttitlegraphic
-                \end{flushleft}
-            \end{minipage}%
-            \hfill
-            \begin{minipage}[c]{0.8\linewidth}
-                \centering
-                \usebeamerfont{institute}\insertinstitute\par
-            \end{minipage}
-        }{
-            \centering
-            \usebeamerfont{institute}\insertinstitute\par
-        }
-    }{
+    %\ifnumequal{\value{logotitle}}{1}{
+    %    \IfFileExists{images/logo.pdf}{
+    %        \begin{minipage}[c]{0.15\textwidth}
+    %            \begin{flushleft}
+    %                \usebeamercolor[fg]{titlegraphic}\inserttitlegraphic
+    %            \end{flushleft}
+    %        \end{minipage}%
+    %        \hfill
+    %        \begin{minipage}[c]{0.8\linewidth}
+    %            \centering
+    %            \usebeamerfont{institute}\insertinstitute\par
+    %        \end{minipage}
+    %    }{
+    %        \centering
+    %        \usebeamerfont{institute}\insertinstitute\par
+    %    }
+    %}
+    {
         \centering
         \usebeamerfont{institute}\insertinstitute\par
     }
@@ -42,10 +43,10 @@
 }
 \date{\texorpdfstring{\thesisCity, \thesisYear}{}}
 \institute{\texorpdfstring{\thesisOrganization}{}}
-\IfFileExists{images/logo.pdf}{
-    \titlegraphic{\includegraphics[width=\textwidth]{images/logo}}
-    \ifnumequal{\value{logoother}}{1}{
-        \logo{\includegraphics[width=0.15\textwidth]{images/logo}}
-    }{}
-}{}
+%\IfFileExists{images/logo.pdf}{
+%    \titlegraphic{\includegraphics[width=\textwidth]{images/logo}}
+%    \ifnumequal{\value{logoother}}{1}{
+%        \logo{\includegraphics[width=0.15\textwidth]{images/logo}}
+%    }{}
+%}{}
 \subtitle{Представление на соискание учёной степени \thesisDegree\ по специальности \thesisSpecialtyNumber\ \thesisSpecialtyTitle}

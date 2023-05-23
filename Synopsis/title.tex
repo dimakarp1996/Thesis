@@ -3,12 +3,12 @@
 \noindent%
 \begin{tabularx}{\textwidth}{@{}lXr@{}}%
     & & \large{На правах рукописи}\\
-    \IfFileExists{images/logo.pdf}{\includegraphics[height=2.5cm]{logo}}{\rule[0pt]{0pt}{2.5cm}}  & &
-    \ifnumequal{\value{showperssign}}{0}{%
-        \rule[0pt]{0pt}{1.5cm}
-    }{
-        \includegraphics[height=1.5cm]{personal-signature.png}
-    }\\
+    %\IfFileExists{images/logo.pdf}{\includegraphics[height=2.5cm]{logo}}{\rule[0pt]{0pt}{2.5cm}}  & &
+    %\ifnumequal{\value{showperssign}}{0}{%
+    %    \rule[0pt]{0pt}{1.5cm}
+    %}{
+    %    \includegraphics[height=1.5cm]{personal-signature.png}
+    %}\\
 \end{tabularx}
 
 \vspace{0pt plus1fill} %число перед fill = кратность относительно некоторого расстояния fill, кусками которого заполнены пустые места
@@ -69,26 +69,26 @@
                               \fi
                               \vspace{0.013\paperheight}\\
     \fi
-    Официальные оппоненты:  &
-    \ifnumequal{\value{showopplead}}{0}{\vspace{13\onelineskip plus1fill}}{%
-        \textbf{\opponentOneFio,}\par
-        \opponentOneRegalia,\par
-        \opponentOneJobPlace,\par
-        \opponentOneJobPost\par
-        \vspace{0.01\paperheight}
-        \textbf{\opponentTwoFio,}\par
-        \opponentTwoRegalia,\par
-        \opponentTwoJobPlace,\par
-        \opponentTwoJobPost
-    \ifdefined\opponentThreeFio
-        \par
-        \vspace{0.01\paperheight}
-        \textbf{\opponentThreeFio,}\par
-        \opponentThreeRegalia,\par
-        \opponentThreeJobPlace,\par
-        \opponentThreeJobPost
-    \fi
-    }%
+%    Официальные оппоненты:  &
+%    \ifnumequal{\value{showopplead}}{0}{\vspace{13\onelineskip plus1fill}}{%
+%        \textbf{\opponentOneFio,}\par
+%        \opponentOneRegalia,\par
+%        \opponentOneJobPlace,\par
+%        \opponentOneJobPost\par
+%        \vspace{0.01\paperheight}
+%        \textbf{\opponentTwoFio,}\par
+%        \opponentTwoRegalia,\par
+%        \opponentTwoJobPlace,\par
+%        \opponentTwoJobPost
+%    \ifdefined\opponentThreeFio
+%        \par
+%        \vspace{0.01\paperheight}
+%        \textbf{\opponentThreeFio,}\par
+%        \opponentThreeRegalia,\par
+%        \opponentThreeJobPlace,\par
+%        \opponentThreeJobPost
+%    \fi
+%    }%
     \vspace{0.013\paperheight} \\
     \ifdefined\leadingOrganizationTitle
     Ведущая организация:    &
