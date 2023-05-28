@@ -40,8 +40,8 @@
     \item {Использование псевдоразметки данных в многозадачных моделях для решения задач GLUE}
     \item {Энкодер-агностичные модели}
     \item {Исследование переноса знаний в многоязычных моделях на новом тематическом наборе данных}
-    \item {Диалоговая платформа DREAM}
-    \item {Использование в диалоговой платформе {DREAM} многозадачных моделей}
+    \item {Диалоговая платформа Dream}
+    \item {Использование в диалоговой платформе {Dream} многозадачных моделей}
 \end{enumerate}
 \end{frame}
 
@@ -823,17 +823,17 @@ Corr(\textbf{Точность}, \textbf{Дист})|$\textbf{N}^{0.7}$ = -0.151 (
 \end{frame}
 
 
-\begin{frame}{5. Диалоговая платформа DREAM: архитектура в конкурсе «Alexa Prize Challenge 3»}    
+\begin{frame}{5. Диалоговая платформа Dream: архитектура в конкурсе «Alexa Prize Challenge 3»}
     \centering
     \includegraphics[width=1\linewidth]{images/Alexa1_.png} 
 \end{frame}
 
-\begin{frame}{5. Диалоговая платформа DREAM: архитектура в конкурсе «Alexa Prize Challenge 4»}
+\begin{frame}{5. Диалоговая платформа Dream: архитектура в конкурсе «Alexa Prize Challenge 4»}
     \centering
     \includegraphics[width=1\linewidth]{images/Alexa2_.png} 
 \end{frame}
 
-\begin{frame}{5. Диалоговая платформа DREAM: вклад автора}
+\begin{frame}{5. Диалоговая платформа Dream: вклад автора}
 \begin{enumerate}
  \item Навыки для обсуждения книг (Book Skill), эмоций (Emotion Skill), сплетен (Gossip Skill, коронавируса (Coronavirus Skill), слухов (Gossip Skill), для обоснования диалога (Grounding Skill), ранжирующий навык TF-IDF (TF-IDF Retrieval), а также генеративный навык, не тестировавшийся на пользователях.
  \item Аннотаторы для классификации эмоций (Emotion Classification), интентов (Intent Catcher), момента остановки диалога (Stop Detect).
@@ -842,14 +842,14 @@ Corr(\textbf{Точность}, \textbf{Дист})|$\textbf{N}^{0.7}$ = -0.151 (
 \end{frame}
 \begin{frame}{6. Многозадачные модели: зачем нужны ?}
 \begin{enumerate}
-\item Экономия на вычислительных ресурсах. Стоимость GPU для DREAM во время Alexa Prize 4 до 9000\$/мес.
+\item Экономия на вычислительных ресурсах. Стоимость GPU для Dream во время Alexa Prize 4 до 9000\$/мес.
 \item Замена удаленных сервисов от Amazon, т.к они были доступны не всегда.
 \end{enumerate}
 \end{frame}
 
 \begin{frame}{6. Многозадачные модели: с одним линейным слоем}
 \begin{enumerate}
-\item Замена классификаторов от Amazon (Cobot Topics, Cobot DialogAct Topics, Cobot Conversation Evaluator), чтобы система DREAM могла работать безотносительно политики этой компании.
+\item Замена классификаторов от Amazon (Cobot Topics, Cobot DialogAct Topics, Cobot Conversation Evaluator), чтобы система Dream могла работать безотносительно политики этой компании.
 \item Замена однозадачных классификаторов (Emotion Classification, Sentiment Classification, Toxic Classification) для экономии вычислительных ресурсов.
 \end{enumerate}
 \begin{table}[htbp]
@@ -952,7 +952,7 @@ cobot topics  & 77.31/77.36 & 60.03/59.5 & 34.22/28.74 & 78.6/78.53 \\ \hline
   \item {Выявлены закономерности переноса знаний при псевдоразметке данных для многозадачных нейросетевых моделей с одним линейным слоем.}
   \item {Выявлены закономерности переноса знаний в энкодер-агностичных многозадачных нейросетевых моделях между различными диалоговыми задачами и языками. Была получена оценка зависимости этого переноса от размера обучающей выборки. Была проверена также справедливость выводов о межъязыковом переносе для однозадачных моделей.}
   \item {Получена оценка зависимости межъязыкового переноса знаний на разговорных данных в многоязычных нейросетевых моделях от размера предобучающей выборки и генеалогической близости языков к языку дообучения.}
-  \item {Получена оценка качества работы различных многозадачных нейросетевых архитектур на задачах диалоговой платформы DREAM.}
+  \item {Получена оценка качества работы различных многозадачных нейросетевых архитектур на задачах диалоговой платформы Dream.}
 \end{enumerate}    
 \end{frame}
 
@@ -996,11 +996,11 @@ Proceedings of InterSpeech 2023. — 2023.
 \item Karpov, D. Monolingual and Cross-Lingual Knowledge Transfer for
 Topic Classification (готовится к публикации)/ D. Karpov,
 M. Burtsev // Proceedings of AINL 2023. — 2023.
-\item DREAM technical report for the Alexa Prize 2019 / Y. Kuratov
+\item Dream technical report for the Alexa Prize 2019 / Y. Kuratov
 [и др.] // 3rd Proc. Alexa Prize. — 2019.
-\item DREAM technical report for the Alexa Prize 4  / D. Baymurzina
+\item Dream technical report for the Alexa Prize 4  / D. Baymurzina
 [и др.] // 4th Proc. Alexa Prize. — 2021.
-\item Юсупов И.Ф. и Баймурзина Д.Р. и Кузнецов Д.П. и Чернявский Д.В. и Дмитриевский А. и Ермакова Е.С. и Игнатов Ф.С. и Карпов Д.А. и Корнев Д.А. и Ли Т.А. и Пугин П.Ю. и Бурцев М.С., К. Ю. и. Диалоговая система DREAM в конкурсе Alexa
+\item Юсупов И.Ф. и Баймурзина Д.Р. и Кузнецов Д.П. и Чернявский Д.В. и Дмитриевский А. и Ермакова Е.С. и Игнатов Ф.С. и Карпов Д.А. и Корнев Д.А. и Ли Т.А. и Пугин П.Ю. и Бурцев М.С., К. Ю. и. Диалоговая система Dream в конкурсе Alexa
 Prize Challenge 2019 // Труды Московского физико-технического
 института. — 2021. — Т. 13, 3 (51). — С. 62—89
 \end{enumerate}
