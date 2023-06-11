@@ -8,14 +8,14 @@
 
 
 
-\begin{frame}{3. Энкодер-агностичные модели: задача}
+\begin{frame}{Encoder-agnostic models: task}
 \begin{enumerate}
     \item Определить закономерности переноса знаний в энкодер-агностичных многозадачных нейросетевых моделях между различными диалоговыми задачами.
     \item Провести оценку зависимости этого переноса от размера обучающей выборки.
  \end{enumerate}
 \end{frame}
 
-\begin{frame}{3. Энкодер-агностичные модели: архитектура}
+\begin{frame}{Encoder-agnostic models: architecture}
 В 2 словах - отдельный задаче-специфичный линейный слой на каждую задачу, который применяется к выходу энкодера.
 Достоинства архитектуры:
 \begin{itemize}
@@ -24,10 +24,10 @@
   \item Не требует псевдоразметки
   \item Можно быстро заменить энкодер
 \end{itemize}
-Архитектура интегрирована в open-source библиотеку DeepPavlov.
+The architecture is integrated into the open-source DeepPavlov library.
 \end{frame}
 
-\begin{frame}{3. Энкодер-агностичные модели: данные, сэмплирование}
+\begin{frame}{Encoder-agnostic models: data, sampling}
 Принцип подбора данных:
 \begin{itemize}
     \item Разговорные задачи
@@ -36,21 +36,21 @@
 Сэмплирование примеров на каждом этапе обучения - батч из каждого набора данных с вероятностью пропорционально размеру (plain sampling).
 \end{frame}
 
-\begin{frame}{3. Энкодер-агностичные модели: данные}
+\begin{frame}{Encoder-agnostic models: данные}
 \begin{itemize}
     \item Для классификации \textbf{эмоций} -- русскоязычный набор данных CEDR, собранный из различных интернет-источников, и англоязычный набор данных go\_emotions, собранный из комментариев на ресурсе «Реддит». Использовалось семь типов эмоций по Экману -- ярость, страх, грусть, удовольствие, удивление, отвращение, нейтральная.
     \item Для классификации \textbf{тональности} -- англоязычный набор данных DynaSent(r1), состоящий из предложений, возникающих в диалогах, и русскоязычный набор данных RuReviews, состоящий из отзывов крупного российского электронного магазина. Использовалось три класса -- положительный, отрицательный, нейтральный.
 \end{itemize}
 \end{frame}
 
-\begin{frame}{3. Энкодер-агностичные модели: данные}
+\begin{frame}{Encoder-agnostic models: данные}
 \begin{itemize}
     \item Для классификации \textbf{токсичности} -- русскоязычный набор комментариев с ресурса «Двач» (RuToxic) и англоязычный набор комментариев из Википедии (Wiki Talk). Использовалось два класса -- токсичный и не токсичный.
     \item Для классификации \textbf{тем и классификации интентов} -- набор данных MASSIVE, состоящий из обращенных к диалоговой системе фраз пользователей. Набор существует и использовался как в англоязычном, так и в русскоязычном варианте. Каждая фраза из набора принадлежит к одной из 60 тем и к одному из 18 интентов.
 \end{itemize}
 \end{frame}
 
-\begin{frame}{3. Энкодер-агностичные модели: сравнение с однозадачными, английский язык}
+\begin{frame}{Encoder-agnostic models: сравнение с однозадачными, английский язык}
 \begin{table}[htbp]
 \centering
 \caption {Метрики англоязычных моделей (точность/макро-F1) для пяти англоязычных диалоговых задач.Режим S означает однозадачные модели, режим M означает многозадачные модели. Усреднено по трем запускам.}
@@ -68,7 +68,7 @@
  \end{frame}
 
 
-\begin{frame}{Энкодер-агностичные модели: сравнение с однозадачными, GLUE}
+\begin{frame}{Encoder-agnostic models: сравнение с однозадачными, GLUE}
 \begin{table}[htbp]
 \caption{Метрики многозадачной энкодер-агностичной модели для набора задач GLUE. M.Corr означает корреляцию Мэттью, P/S означает корреляцию Пирсона-Спирмена, Acc точность, F1 - макро-F1. Режим S означает однозадачные модели, режим M означает многозадачные модели. Размер означает размер тренировочного набора данных.}
 %\resizebox{\textwidth}{!}
@@ -77,7 +77,7 @@
 \hline
 \multirow{3}{*}{Модель} & \multirow{3}{*}{Режим}  & Среднее & CoLA & SST-2 & MRPC &STS-B &QQP&MNLI & QNLI & RTE & AX  \\
 \cline{3-11}
-   &  & Размер  & 8.6k & 67.3k & 2.5k & 5.7k & 363.8k & 392.7k & 104.7k & 2.5k & как у MNLI  \\ 
+   &  & Размер  & 8.6k & 67.3k & 2.5k & 5.7k & 363.8k & 392.7k & 104.7k & 2.5k & As MNLI  \\ 
 \cline{3-11}   
    &  & метрика  & M.Corr & Acc & F1/Acc & P/S Corr & F1/Acc & Acc (m/mm) & Acc & Acc & M.Corr \\ \hline \hline
 Человек & - & 87.1 & 66.4 & 97.8 & 86.3/80.8 & 92.7/92.6 & 59.5/80.4 & 92.0/92.8 & 91.2 & 93.6 & - \\ \hline
@@ -92,7 +92,7 @@
 
 
  
- \begin{frame}{3. Энкодер-агностичные модели: сравнение с однозадачными, русский язык}
+ \begin{frame}{Encoder-agnostic models: сравнение с однозадачными, русский язык}
 \begin{table}[htbp]
 \centering
 \caption {Метрики русскоязычных моделей (точность/f1 macro) для пяти диалоговых задач. Режим S означает однозадачные модели, режим M означает многозадачные модели. Усреднено по трем запускам.} 
@@ -111,7 +111,7 @@
 
 \end{frame}
 
-\begin{frame}{3. Энкодер-агностичные модели - эффект уменьшения размера выборки, данные на английском языке}
+\begin{frame}{Энкодер-агностичные модели - эффект уменьшения размера выборки, данные на английском языке}
 \scalebox{1}{
 \begin{minipage}{0.5\textwidth}{
 \begin{tikzpicture}
@@ -176,7 +176,7 @@ legend style={nodes={scale=0.7, transform shape}}
 \end{frame}
 
 
-\begin{frame}{3. Энкодер-агностичные модели - эффект уменьшения размера выборки, данные на русском языке}
+\begin{frame}{Энкодер-агностичные модели - эффект уменьшения размера выборки, данные на русском языке}
 \begin{table}[htbp]
 \caption{Средняя точность многозадачных моделей на русских данных в зависимости от того, на какой доле русскоязычных данных они обучались, и того, добавлялись ли к ним англоязычные данные, для многоязычного distilbert.}
 \scalebox{0.99}{
@@ -204,7 +204,7 @@ RU & S & M & S & M \\
 \end{table}
 \end{frame}
 
-\begin{frame}{3. Энкодер-агностичные модели - эффект уменьшения размера выборки, данные на русском языке}
+\begin{frame}{Энкодер-агностичные модели - эффект уменьшения размера выборки, данные на русском языке}
 \label{fig:thresholds_acc_ru}
 \begin{minipage}{0.5\textwidth}
 \begin{tikzpicture}[baseline={(0,2.1)}]%[scale=2]
@@ -227,7 +227,7 @@ legend style={nodes={scale=0.7, transform shape}}
 (7, 82.5)
 (8, 84.39999999999999)
 };
-\addlegendentry{S точность (RU)}
+\addlegendentry{S accuracy (RU)}
 \addplot[color=red,solid,mark=*] coordinates {
 (1, 65.88)
 (2, 70.3)
@@ -238,7 +238,7 @@ legend style={nodes={scale=0.7, transform shape}}
 (7, 82.3)
 (8, 84.33333333333333)
 };
-\addlegendentry{M точность (RU)}
+\addlegendentry{M accuracy (RU)}
 \addplot[color=cyan,dashed, mark=*] coordinates {
 (1, 70.73333333333333)
 (2, 74.23333333333333)
@@ -249,7 +249,7 @@ legend style={nodes={scale=0.7, transform shape}}
 (7, 82.83333333333333)
 (8, 84.36666666666667)
 };
-\addlegendentry{S точность (RU+EN)}
+\addlegendentry{S accuracy (RU+EN)}
 \addplot[color=blue,dashed,mark=*] coordinates {
 (1, 71.8)
 (2, 74.96666666666667)
@@ -260,7 +260,7 @@ legend style={nodes={scale=0.7, transform shape}}
 (7, 83.23333333333333)
 (8, 85.16666666666667)
 };
-\addlegendentry{M точность (RU+EN)}
+\addlegendentry{M accuracy (RU+EN)}
 \end{axis}%
 \end{tikzpicture}
 
@@ -269,15 +269,15 @@ legend style={nodes={scale=0.7, transform shape}}
 \end{frame}
 
 
-\begin{frame}{Энкодер-агностичные модели - эффект уменьшения размера выборки по задачам}
+\begin{frame}{Encoder-agnostic models: the effect of training sample reduction by task}
 
 \pgfplotsset{every tick label/.append style={font=\tiny}}
 \begin{figure}[!ht]
 \begin{subfigure}{0.48\textwidth}
 \begin{tikzpicture}[scale=1]
-\begin{axis}[xlabel = Число тренировочных примеров,
-ylabel = Точность,
-title=Средняя точность,
+\begin{axis}[xlabel = Number of training samples,
+ylabel = Accuracy,
+title=Average accuracy,
 legend pos= south east,
 width=\textwidth,
 % width=10cm,
@@ -316,9 +316,9 @@ legend style={nodes={scale=0.5, transform shape}}
 \end{subfigure}
 \begin{subfigure}{0.48\textwidth}
 \begin{tikzpicture}[scale=1]
-\begin{axis}[xlabel = Число обучающих примеров,
-ylabel = Точность,
-title=Классификация эмоций,
+\begin{axis}[xlabel = Number of training samples,
+ylabel = Accuracy,
+title=Emotion classification,
 legend pos= south east,
 width=\textwidth,
 % width=10cm,
@@ -358,14 +358,14 @@ legend style={nodes={scale=0.5, transform shape}}
 \end{figure}
 \end{frame}
 
-\begin{frame}{Энкодер-агностичные модели - эффект уменьшения размера выборки по задачам}
+\begin{frame}{Encoder-agnostic models: the effect of training sample reduction by task}
 \pgfplotsset{every tick label/.append style={font=\tiny}}
 \begin{figure}
 \begin{subfigure}{0.48\textwidth}
 \begin{tikzpicture}[scale=1]
-\begin{axis}[xlabel = Число обучающих примеров,
-ylabel = Точность,
-title=Классификация тональности,
+\begin{axis}[xlabel = Number of training samples,
+ylabel = Accuracy,
+title=Sentiment classification,
 legend pos= south east,
 width=\textwidth,
 % width=10cm,
@@ -404,9 +404,9 @@ legend style={nodes={scale=0.5, transform shape}}
 \end{subfigure}
 \begin{subfigure}{0.48\textwidth}
 \begin{tikzpicture}[scale=1]
-\begin{axis}[xlabel = Число обучающих примеров,
-ylabel = Точность,
-title=Классификация токсичности,
+\begin{axis}[xlabel = Number of training samples,
+ylabel = Accuracy,
+title=Toxicity classification,
 legend pos= south east,
 width=\textwidth,
 % width=10cm,
@@ -446,14 +446,14 @@ legend style={nodes={scale=0.5, transform shape}}
 \end{figure}
 \end{frame}
 
-\begin{frame}{Энкодер-агностичные модели - эффект уменьшения размера выборки по задачам}
+\begin{frame}{Encoder-agnostic models: the effect of training sample reduction by task}
 \pgfplotsset{every tick label/.append style={font=\tiny}}
 \begin{figure}
 \begin{subfigure}{0.48\textwidth}
 \begin{tikzpicture}
-\begin{axis}[xlabel = Число обучающих примеров,
-ylabel = Точность,
-title=Классификация интентов,
+\begin{axis}[xlabel = Number of training samples,
+ylabel = Accuracy,
+title=Intent classification,
 legend pos= south east,
 width=\textwidth,
 % width=10cm,
@@ -492,9 +492,9 @@ legend style={nodes={scale=0.5, transform shape}}
 \end{subfigure}
 \begin{subfigure}{0.48\textwidth}
 \begin{tikzpicture}
-\begin{axis}[xlabel = Число обучающих примеров,
-ylabel = Точность,
-title=Тематическая классификация,
+\begin{axis}[xlabel = Number of training samples,
+ylabel = Accuracy,
+title=Topic classification,
 legend pos= south east,
 width=\textwidth,
 % width=10cm,
@@ -534,7 +534,7 @@ legend style={nodes={scale=0.5, transform shape}}
 \end{figure}
 \end{frame}
 
-\begin{frame}{3. Энкодер-агностичные модели: выводы}
+\begin{frame}{Encoder-agnostic models: conclusions}
 \begin{enumerate}
 \item Многозадачные энкодер-агностичные модели - почти как однозадачные. Если для какой-то задачи данных мало, но для другой похожей задачи их много - то даже лучше.
 \item Если данных становится очень мало, то многозадачные модели становятся сильно лучше однозадачных. Опять же, зависит от размера данных для задачи.
