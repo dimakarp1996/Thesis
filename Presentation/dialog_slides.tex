@@ -537,9 +537,9 @@ legend style={nodes={scale=0.5, transform shape}}
 
 \begin{frame}{Encoder-agnostic models: conclusions}
 \begin{enumerate}
-\item Многозадачные энкодер-агностичные модели - почти как однозадачные. Если для какой-то задачи данных мало, но для другой похожей задачи их много - то даже лучше.
-\item Если данных становится очень мало, то многозадачные модели становятся сильно лучше однозадачных. Опять же, зависит от размера данных для задачи.
-\item Добавление английских данных к русским - улучшает метрики многоязычных моделей, чем меньше русских данных - тем сильнее (до нескольких процентов). Это верно и для однозадачных моделей, при любом языке валидации.
+\item Multi-task encoder-agnostic models almost match single-task ones by their metrics. Such multi-task models can even overcome single-task models for tasks where dataset is small, for example, if the other similar task for the multi-task model has sufficiently larger dataset. 
+\item In case of the very small data size, multi-task encoder-agnostic models start strongly overcoming single-task ones. This effect also depends on the data size for task. 
+\item Adding English data to Russian improves metrics of the multilingual models, the smaller is the Russian data size, the larger is improvement (it can be up to several percent). It is true also for single-task models, with any validation language.
 \end{enumerate}
 \end{frame}
 
