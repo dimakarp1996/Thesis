@@ -6,49 +6,50 @@
     
 \end{frame}
 
-
-
 \begin{frame}{Encoder-agnostic models: task}
 \begin{enumerate}
-    \item Определить закономерности переноса знаний в энкодер-агностичных многозадачных нейросетевых моделях между различными диалоговыми задачами.
-    \item Провести оценку зависимости этого переноса от размера обучающей выборки.
+    \item Examine the knowledgw transfer in the encoder-agnostic multitask neural models between different dialog tasks. 
+    \item Estimate the dependence of this knowledge transfer from the training sample size
  \end{enumerate}
 \end{frame}
-
+​
 \begin{frame}{Encoder-agnostic models: architecture}
-В 2 словах - отдельный задаче-специфичный линейный слой на каждую задачу, который применяется к выходу энкодера.
-Достоинства архитектуры:
+Shortly: separate task-specific linear layer for every task, which is applied to the encoder output. 
+Positive sides of this architecture:
 \begin{itemize}
-  \item Вычислительная и архитектурная простота
-  \item Расширяемость на различные типы задач
-  \item Не требует псевдоразметки
-  \item Можно быстро заменить энкодер
+  \item Computational and architectural simplicity
+  \item Expandability on the different task types
+  \item No need in pseudolabeling
+  \item Possibility of the quick encoder replacement
 \end{itemize}
 The architecture is integrated into the open-source DeepPavlov library.
 \end{frame}
-
+​
 \begin{frame}{Encoder-agnostic models: data, sampling}
-Принцип подбора данных:
+The principles of data selection:
 \begin{itemize}
-    \item Разговорные задачи
-    \item Совпадающие классы для английского и русского языка
+    \item Conversational tasks
+    \item Matching classes for English and Russian languages
 \end{itemize}
-Сэмплирование примеров на каждом этапе обучения - батч из каждого набора данных с вероятностью пропорционально размеру (plain sampling).
+On the training stage, the batch from each dataset is sampled with the probability proportional to this training dataset size (plain sampling).
+\end{frame}
+​
+\begin{frame}{Encoder-agnostic models: data }
+\begin{itemize}
+    \item For \textbf{emotion} classification -- Russian CEDR dataset, collected from different web-sources, and English go\_emotions dataset, collected from the Reddit comments
+We used seven Ekman types for emotions: anger, fear, sadness, joy, surprise, disgust, neutral. 
+    \item For \textbf{sentiment}  classification -- English DynaSent(r1) dataset, which consists from the sentences occurring in dialogs, and Russian RuReviews dataset, which consists from the reviews from the large Russian electronic shop. We used three classes: positive, negative, neutral. 
+\end{itemize}
+\end{frame}
+​
+\begin{frame}{Encoder-agnostic models: data}
+\begin{itemize}
+    \item For the \textbf{toxicity} classification -- Russian comment dataset from «Dvach» (RuToxic) and English comment dataset from  «Wikipedia» (Wiki Talk). We used two classes: toxic and not toxic.
+    \item For the \textbf{intent and topic} classification -- MASSIVE dataset, which consists of the user phrases addressed to the dialog system. We have used this dataset in Russian variant and in English variant. Every phrase from this dataset belongs to one of the 60 topics and one of the 18 intents. 
+\end{itemize}
 \end{frame}
 
-\begin{frame}{Encoder-agnostic models: данные}
-\begin{itemize}
-    \item Для классификации \textbf{эмоций} -- русскоязычный набор данных CEDR, собранный из различных интернет-источников, и англоязычный набор данных go\_emotions, собранный из комментариев на ресурсе «Реддит». Использовалось семь типов эмоций по Экману -- ярость, страх, грусть, удовольствие, удивление, отвращение, нейтральная.
-    \item Для классификации \textbf{тональности} -- англоязычный набор данных DynaSent(r1), состоящий из предложений, возникающих в диалогах, и русскоязычный набор данных RuReviews, состоящий из отзывов крупного российского электронного магазина. Использовалось три класса -- положительный, отрицательный, нейтральный.
-\end{itemize}
-\end{frame}
 
-\begin{frame}{Encoder-agnostic models: данные}
-\begin{itemize}
-    \item Для классификации \textbf{токсичности} -- русскоязычный набор комментариев с ресурса «Двач» (RuToxic) и англоязычный набор комментариев из Википедии (Wiki Talk). Использовалось два класса -- токсичный и не токсичный.
-    \item Для классификации \textbf{тем и классификации интентов} -- набор данных MASSIVE, состоящий из обращенных к диалоговой системе фраз пользователей. Набор существует и использовался как в англоязычном, так и в русскоязычном варианте. Каждая фраза из набора принадлежит к одной из 60 тем и к одному из 18 интентов.
-\end{itemize}
-\end{frame}
 
 \begin{frame}{Encoder-agnostic models: сравнение с однозадачными, английский язык}
 \begin{table}[htbp]
