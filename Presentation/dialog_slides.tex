@@ -28,10 +28,10 @@ The architecture is integrated into the open-source DeepPavlov library.
 \end{frame}
 
 \begin{frame}{Encoder-agnostic models: data, sampling}
-Принцип подбора данных:
+The principles of data selection:
 \begin{itemize}
-    \item Разговорные задачи
-    \item Совпадающие классы для английского и русского языка
+    \item Conversational tasks
+    \item Matching classes for English and Russian languages
 \end{itemize}
 Сэмплирование примеров на каждом этапе обучения - батч из каждого набора данных с вероятностью пропорционально размеру (plain sampling).
 \end{frame}
@@ -50,14 +50,14 @@ The architecture is integrated into the open-source DeepPavlov library.
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Encoder-agnostic models: сравнение с однозадачными, английский язык}
+\begin{frame}{Encoder-agnostic models: comparison to the single-task, English language}
 \begin{table}[htbp]
 \centering
-\caption {Метрики англоязычных моделей (точность/макро-F1) для пяти англоязычных диалоговых задач.Режим S означает однозадачные модели, режим M означает многозадачные модели. Усреднено по трем запускам.}
+\caption{Accuracy / F1-macro on the English data for the encoder-agnostic transformer-based model. English cased models trained on English data. Mode S stands for single-task, and mode M stands for multi-task.}
 \scalebox{0.7}{
 \begin{tabular}{|c|c|c|c|c|c|c|c|}
 \hline
-\multirow{2}{*}{\textbf{Модель}} & \multirow{2}{*}{\textbf{Режим}} & \multirow{2}{*}{\textbf{Среднее}} & Эмоции & Тональность & Токсичность & Интенты & Темы \\
+\multirow{2}{*}{\textbf{Model}} & \multirow{2}{*}{\textbf{Mode}} & \multirow{2}{*}{\textbf{Average}} & Emotions & Sentiment & Toxicity & Intents & Topics \\
 & & & 39.4k & 80.5k & 127.6k & 11.5k & 11.5k \\ \hline \hline
 \textit{\multirow{2}{*}{distilbert}} & S & \textbf{82.9} & \textbf{70.3} & 74.7 & 91.5 & \textbf{87.4} & \textbf{91.0} \\ %\hline
  & M  & 82.1 & 67.7 & \textbf{75.2} & 90.6 & 86.3 & 90.8  \\ \hline
@@ -68,38 +68,17 @@ The architecture is integrated into the open-source DeepPavlov library.
  \end{frame}
 
 
-\begin{frame}{Encoder-agnostic models: сравнение с однозадачными, GLUE}
-\begin{table}[htbp]
-\caption{Метрики многозадачной энкодер-агностичной модели для набора задач GLUE. M.Corr означает корреляцию Мэттью, P/S означает корреляцию Пирсона-Спирмена, Acc точность, F1 - макро-F1. Режим S означает однозадачные модели, режим M означает многозадачные модели. Размер означает размер тренировочного набора данных.}
-%\resizebox{\textwidth}{!}
-\scalebox{0.52}{
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|}
-\hline
-\multirow{3}{*}{Модель} & \multirow{3}{*}{Режим}  & Среднее & CoLA & SST-2 & MRPC &STS-B &QQP&MNLI & QNLI & RTE & AX  \\
-\cline{3-11}
-   &  & Размер  & 8.6k & 67.3k & 2.5k & 5.7k & 363.8k & 392.7k & 104.7k & 2.5k & As MNLI  \\ 
-\cline{3-11}   
-   &  & метрика  & M.Corr & Acc & F1/Acc & P/S Corr & F1/Acc & Acc (m/mm) & Acc & Acc & M.Corr \\ \hline \hline
-Человек & - & 87.1 & 66.4 & 97.8 & 86.3/80.8 & 92.7/92.6 & 59.5/80.4 & 92.0/92.8 & 91.2 & 93.6 & - \\ \hline
-\textit{\multirow{2}{*}{distilbert}} & S & 73.3 & \textbf{42.4} & \textbf{92.1} & 85.6/\textbf{80.3} & 78.8/76.8 & \textbf{69.5/88.5} & \textbf{81.3/80.8} & \textbf{87.5} & 52.1 & 29.9  \\ 
- & M & \textbf{74.5} & 36.0 & 91.0 & \textbf{85.7}/79.9 & \textbf{82.6/81.6} & 68.4/87.4 & 80.4/80.3 & 86.0 & \textbf{69.5} & \textbf{30.1} \\  \hline
-\textit{\multirow{2}{*}{bert}} & S & 77.3 & \textbf{53.7} & \textbf{93.2} & \textbf{87.7/82.8} & 83.8/82.2 & \textbf{70.3/88.9} & \textbf{83.8/83.1} & \textbf{90.6} & 62.1 & 32.1 \\ 
- & M & \textbf{77.8} & 45.8 & 92.9 & 86.8/82.2 & \textbf{85.3/84.7} & 70.2/88.6 & 83.5/82.6 & 90.1 & \textbf{74.5} & \textbf{32.8} \\  \hline
-\end{tabular}}
-\end{table}
-%\end{table*}
-\end{frame}
 
 
  
- \begin{frame}{Encoder-agnostic models: сравнение с однозадачными, русский язык}
+ \begin{frame}{Encoder-agnostic models: comparison to the single-task, Russian language}
 \begin{table}[htbp]
 \centering
-\caption {Метрики русскоязычных моделей (точность/f1 macro) для пяти диалоговых задач. Режим S означает однозадачные модели, режим M означает многозадачные модели. Усреднено по трем запускам.} 
+\caption {Accuracy / F1-macro on the Russian data for the encoder-agnostic transformer-based model. Russian cased models trained on Russian data. Mode S stands for single-task, and mode M stands for multi-task. Averaged by 3 runs.} 
 \scalebox{0.7}{
 \begin{tabular}{|c|c|c|c|c|c|c|c|}
 \hline
-\multirow{2}{*}{\textbf{Модель}} & \multirow{2}{*}{\textbf{Режим}} & \multirow{2}{*}{\textbf{Среднее}} & Эмоции & Тональность & Токсичность & Интенты & Темы \\
+\multirow{2}{*}{\textbf{Model}} & \multirow{2}{*}{\textbf{Mode}} & \multirow{2}{*}{\textbf{Average}} & Emotions & Sentiment & Toxicity & Intents & Topics \\
 & & & 6.5k & 82.6k & 93.3k & 11.5k & 11.5k \\ \hline \hline
 \textit{\multirow{2}{*}{distilrubert}} & S & 86.9 & 82.2 & 77.9 & 97.1 & 86.7 & 90.4  \\
  & M & 86.3 & 81.0 & 77.7 & 96.9 & 85.2 & 90.7 \\ \hline
@@ -107,83 +86,48 @@ The architecture is integrated into the open-source DeepPavlov library.
  & M & 86.2 & 80.5 & 77.6 & 96.8 & 85.3 & 90.5 \\ \hline
  \end{tabular}}
  \end{table}
- 
 
 \end{frame}
 
-\begin{frame}{Энкодер-агностичные модели - эффект уменьшения размера выборки, данные на английском языке}
-\scalebox{1}{
-\begin{minipage}{0.5\textwidth}{
-\begin{tikzpicture}
-\label{fig:tr-ag:en_dialog_part}
-\begin{axis}[xlabel = Процент используемых тренировочных данных,
-ylabel = Средняя точность,
-legend pos= south east,
-% width=10cm,
-% height=10cm,
-% xmin=2,
-% xmax=100,
-xtick={2,3,5,7,9,10,15},
-ymin=40,ymax=85,
-legend cell align={left},
-legend style={nodes={scale=0.7, transform shape}}
-]
-\addplot[color=blue,solid, mark=*] coordinates {
-(2, 64.8)%50
-(3, 68.8)%50
-(5, 71.7)%100
-(7,74.2)
-%(7.5,74.6)
-% (8,74.9)
-(9,75.4)
-(10, 75.9)%300
-(15, 77.4)
-};
-\addlegendentry{Многозадачные модели}
-\addplot[color=green,dashed,mark=*] coordinates {
-(2, 44.9)%50
-(3, 59.6)%100
-(5, 69.1)%300
-(7,73.5)
-%(7.5,73.5)
-% (8,73.8)%500
-(9,76.7)
-(10,77.1)
-(15, 78.5)
-};
-\addlegendentry{Однозадачные модели}
-\end{axis}%
-\end{tikzpicture}}
-\end{minipage}
 
-\begin{minipage}{0.2\textwidth}
-\scalebox{0.7}{
-\begin{tabular}[baseline={(0,2.1)}]{|l||c|c|}
-\hline
-Доля & S & M \\ % Sizes are different for RU and RU+EN, so I don't give them here
+\begin{frame}{Encoder-agnostic models: cross-lingual knowledge transfer}
+\caption{Accuracy / F1-macro on the Russian data for the encoder-agnostic transformer-based model. Multilingual cased models, batch size 160, plain sampling. Mode S stands for single-task, and mode M stands for multi-task. In the 'Training data' column, RU stands for the Russian language, 'RU+EN' means that Russian and English data are merged by task, and 'RU $\oplus$ EN' means that Russian and English tasks are treated as separate tasks.}
+\scalebox{0.48}{
+\begin{tabular}{|c|c|c||c|c|c|c|c|c|} \hline
+Model & \begin{tabular}[c]{@{}l@{}}Training\\data\end{tabular} & Mode & Average & \begin{tabular}[c]{@{}l@{}}Emotions\end{tabular} & \begin{tabular}[c]{@{}l@{}}Sentiment\end{tabular} & \begin{tabular}[c]{@{}l@{}}Toxicity\end{tabular} & \begin{tabular}[c]{@{}l@{}}Intents\end{tabular} & \begin{tabular}[c]{@{}l@{}}Topics\end{tabular} \\
 \hline \hline
-2 & 44.9 & 64.8 \\ \hline
-3 & 59.6 & 68.8  \\ \hline
-5 & 69.1 & 71.7 \\ \hline
-7 & 73.5 & 74.2  \\ \hline
-9 & 76.7 & 75.4  \\ \hline
-10 & 77.1 & 75.9 \\ \hline
-15 & 78.5 & 77.4  \\ \hline
+\textit{distilbert-mult} & RU & S & \textbf{84.7/81.0} & 77.4/69.1 & \textbf{77.7/77.9} & \textbf{96.7/94.8} & \textbf{83.5/76.6} & 88.1/86.9 & 10058 \\ 
+% \hline
+\textit{distilbert-mult} & RU & M & 84.3/80.2 & \textbf{78.1/70.5} & 76.8/76.7 & 96.5/94.4 & 81.9/72.3 & \textbf{88.2/87.1} & 9821 \\ 
+ \hline
+\textit{distilbert-mult} & RU+EN & S & \textbf{85.2/81.8} & \textbf{78.9}/70.2 & \textbf{77.4/77.3} & \textbf{96.8/94.9} & \textbf{84.7/79.1} & \textbf{88.4/87.4} & 31843 \\ 
+% \hline
+\textit{distilbert-mult} & RU+EN & M & 84.5/81.1 & 77.9/\textbf{70.7} & 76.6/76.7 & 96.5/94.5 & 82.9/76.5 & \textbf{88.4}/87.2 & 17790 \\ 
+% \hline
+\textit{distilbert-mult} & RU $\oplus$ EN & M & 84.4/80.6 & 77.6/70.0 & 76.8/77.1 & 96.5/94.5 & 82.4/73.9 & 88.3/87.2 & 23688 \\ 
+\hline
+\textit{bert-mult} & RU & S & 84.7/80.2 & 76.6/64.2 & \textbf{77.8/78.2} & \textbf{96.9/95.1} & \textbf{83.9}/76.3 & 88.4/87.0 & 10884 \\ 
+% \hline
+\textit{bert-mult} & RU & M & \textbf{84.8/81.4} & \textbf{78.4/71.4} & 76.3/76.3 & 96.8/94.8 & 83.7/\textbf{76.6} & \textbf{89.0/87.8} & 12810 \\ 
+ \hline
+\textit{bert-mult} & RU+EN & S & \textbf{85.6/82.3} & 78.9/70.1 & \textbf{77.6/77.8} & \textbf{96.9/94.9} & \textbf{85.0/80.4} & \textbf{89.4/88.5} & 23752 \\ 
+% \hline
+\textit{bert-mult} & RU+EN & M & 85.2/\textbf{82.3} & \textbf{79.2/72.7} & 76.4/76.6 & 96.7/94.8 & 84.3/79.3 & \textbf{89.4}/88.3 & 20755 \\ 
+% \hline
+\textit{bert-mult} & RU $\oplus$ EN & M & 85.0/81.6 & 78.3/71.4 & 77.1/77.0 & 96.7/94.7 & 84.0/76.7 & 89.1/88.0 & 22701 \\ \hline
 \end{tabular}}
-\end{minipage}
-}
-%
+
 \end{frame}
 
 
-\begin{frame}{Энкодер-агностичные модели - эффект уменьшения размера выборки, данные на русском языке}
+\begin{frame}{Encoder-agnostic models: the effect of training size reduction}
 \begin{table}[htbp]
-\caption{Средняя точность многозадачных моделей на русских данных в зависимости от того, на какой доле русскоязычных данных они обучались, и того, добавлялись ли к ним англоязычные данные, для многоязычного distilbert.}
+\caption{Average accuracy on the Russian data for \textit{distilbert-base-multilingual-cased}, batch size 160, plain sampling. 'S' stands for single-task mode, 'M' stands for multi-task mode, 'RU share' means the share of Russian training data, 'RU' means training only on the given percentage of Russian data, 'RU+EN' means training on the given percentage of Russian data with added full size English data.}
 \scalebox{0.99}{
 \begin{tabular}[baseline={(0,2.1)}]{|l||c|c|c|c|}
 \hline
 RU & S & M & S & M \\
-доля & RU & RU & RU+EN & RU+EN \\ % Sizes are different for RU and RU+EN, so I don't give them here
+share & RU & RU & RU+EN & RU+EN \\ % Sizes are different for RU and RU+EN, so I don't give them here
 \hline
 3 & 57.0 & \textbf{65.9} & \textbf{71.8} & 70.7 \\ 
 % \hline
@@ -204,12 +148,12 @@ RU & S & M & S & M \\
 \end{table}
 \end{frame}
 
-\begin{frame}{Энкодер-агностичные модели - эффект уменьшения размера выборки, данные на русском языке}
+\begin{frame}{Encoder-agnostic models: the effect of training sample reduction by task}
 \label{fig:thresholds_acc_ru}
 \begin{minipage}{0.5\textwidth}
 \begin{tikzpicture}[baseline={(0,2.1)}]%[scale=2]
-\begin{axis}[xlabel = RU доля,
-ylabel = Средняя точность,
+\begin{axis}[xlabel = RU share,
+ylabel = Average accuracy,
 legend pos= south east,
 xtick={0,1,2,3,4,5,6,7,8},
 xticklabels={2,3,5,10,15,20,25,50,100},
@@ -542,5 +486,5 @@ legend style={nodes={scale=0.5, transform shape}}
 \end{enumerate}
 \end{frame}
 
-\begin{frame}{Спасибо за внимание}
+\begin{frame}{Thanks for your attention}
 \end{frame}
