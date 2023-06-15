@@ -8,11 +8,11 @@
 
 \begin{frame}{Encoder-agnostic models: task}
 \begin{enumerate}
-    \item Examine the knowledgw transfer in the encoder-agnostic multitask neural models between different dialog tasks. 
+    \item Examine the knowledge transfer in the encoder-agnostic multitask neural models between different dialog tasks. 
     \item Estimate the dependence of this knowledge transfer from the training sample size
  \end{enumerate}
 \end{frame}
-​
+
 \begin{frame}{Encoder-agnostic models: architecture}
 Shortly: separate task-specific linear layer for every task, which is applied to the encoder output. 
 Positive sides of this architecture:
@@ -24,28 +24,28 @@ Positive sides of this architecture:
 \end{itemize}
 The architecture is integrated into the open-source DeepPavlov library.
 \end{frame}
-​
+
 \begin{frame}{Encoder-agnostic models: data, sampling}
 The principles of data selection:
 \begin{itemize}
     \item Conversational tasks
     \item Matching classes for English and Russian languages
 \end{itemize}
-On the training stage, the batch from each dataset is sampled with the probability proportional to this training dataset size (plain sampling).
+In the training stage, the batch from each dataset is sampled with the probability proportional to this training dataset size (plain sampling).
 \end{frame}
-​
+
 \begin{frame}{Encoder-agnostic models: data }
 \begin{itemize}
-    \item For \textbf{emotion} classification -- Russian CEDR dataset, collected from different web-sources, and English go\_emotions dataset, collected from the Reddit comments
-We used seven Ekman types for emotions: anger, fear, sadness, joy, surprise, disgust, neutral. 
-    \item For \textbf{sentiment}  classification -- English DynaSent(r1) dataset, which consists from the sentences occurring in dialogs, and Russian RuReviews dataset, which consists from the reviews from the large Russian electronic shop. We used three classes: positive, negative, neutral. 
+    \item For \textbf{emotion} classification -- Russian CEDR dataset, collected from different web sources, and English go\_emotions dataset, collected from the Reddit comments
+We used seven Ekman types for emotions: anger, fear, sadness, joy, surprise, disgust, and neutral. 
+    \item For \textbf{sentiment}  classification -- English DynaSent(r1) dataset, which consists of the sentences occurring in dialogs, and Russian RuReviews dataset, which consists of the reviews from the large Russian electronic shop. We used three classes: positive, negative, and neutral. 
 \end{itemize}
 \end{frame}
-​
+
 \begin{frame}{Encoder-agnostic models: data}
 \begin{itemize}
     \item For the \textbf{toxicity} classification -- Russian comment dataset from «Dvach» (RuToxic) and English comment dataset from  «Wikipedia» (Wiki Talk). We used two classes: toxic and not toxic.
-    \item For the \textbf{intent and topic} classification -- MASSIVE dataset, which consists of the user phrases addressed to the dialog system. We have used this dataset in Russian variant and in English variant. Every phrase from this dataset belongs to one of the 60 topics and one of the 18 intents. 
+    \item For the \textbf{intent and topic} classification -- MASSIVE dataset, which consists of the user phrases addressed to the dialog system. We have used this dataset in the Russian variant and in the English variant. Every phrase from this dataset belongs to one of the 60 topics and one of the 18 intents. 
 \end{itemize}
 \end{frame}
 
@@ -54,7 +54,7 @@ We used seven Ekman types for emotions: anger, fear, sadness, joy, surprise, dis
 \begin{frame}{Encoder-agnostic models: comparison to the single-task, English language}
 \begin{table}[htbp]
 \centering
-\caption{Accuracy / F1-macro on the English data for the encoder-agnostic transformer-based model. English cased models trained on English data. Mode S stands for single-task, and mode M stands for multi-task.}
+\caption{Accuracy on the English data for the encoder-agnostic transformer-based model. English cased models trained on English data. Mode S stands for single-task, and mode M stands for multi-task.}
 \scalebox{0.7}{
 \begin{tabular}{|c|c|c|c|c|c|c|c|}
 \hline
@@ -75,16 +75,16 @@ We used seven Ekman types for emotions: anger, fear, sadness, joy, surprise, dis
  \begin{frame}{Encoder-agnostic models: comparison to the single-task, Russian language}
 \begin{table}[htbp]
 \centering
-\caption {Accuracy / F1-macro on the Russian data for the encoder-agnostic transformer-based model. Russian cased models trained on Russian data. Mode S stands for single-task, and mode M stands for multi-task. Averaged by 3 runs.} 
+\caption {Accuracy on the Russian data for the encoder-agnostic transformer-based model. Russian cased models trained on Russian data. Mode S stands for single-task, and mode M stands for multi-task. Averaged by 3 runs.} 
 \scalebox{0.7}{
 \begin{tabular}{|c|c|c|c|c|c|c|c|}
 \hline
 \multirow{2}{*}{\textbf{Model}} & \multirow{2}{*}{\textbf{Mode}} & \multirow{2}{*}{\textbf{Average}} & Emotions & Sentiment & Toxicity & Intents & Topics \\
 & & & 6.5k & 82.6k & 93.3k & 11.5k & 11.5k \\ \hline \hline
-\textit{\multirow{2}{*}{distilrubert}} & S & 86.9 & 82.2 & 77.9 & 97.1 & 86.7 & 90.4  \\
- & M & 86.3 & 81.0 & 77.7 & 96.9 & 85.2 & 90.7 \\ \hline
-\textit{\multirow{2}{*}{rubert}} & S & 86.5 & 80.9 & 78.0 & 97.2 & 86.2 & 90.0  \\ 
- & M & 86.2 & 80.5 & 77.6 & 96.8 & 85.3 & 90.5 \\ \hline
+\textit{\multirow{2}{*}{distilrubert}} & S & \textbf{86.9} & \textbf{82.2} & \textbf{77.9} & \textbf{97.1} & \textbf{86.7} & 90.4  \\
+ & M & 86.3 & 81.0 & 77.7 & 96.9 & 85.2 & \textbf{90.7} \\ \hline
+\textit{\multirow{2}{*}{rubert}} & S & \textbf{86.5} & \textbf{80.9} & \textbf{78.0} & \textbf{97.2} & \textbf{86.2} & 90.0  \\ 
+ & M & 86.2 & 80.5 & 77.6 & 96.8 & 85.3 & \textbf{90.5} \\ \hline
  \end{tabular}}
  \end{table}
 
@@ -92,38 +92,40 @@ We used seven Ekman types for emotions: anger, fear, sadness, joy, surprise, dis
 
 
 \begin{frame}{Encoder-agnostic models: cross-lingual knowledge transfer}
-\caption{Accuracy / F1-macro on the Russian data for the encoder-agnostic transformer-based model. Multilingual cased models, batch size 160, plain sampling. Mode S stands for single-task, and mode M stands for multi-task. In the 'Training data' column, RU stands for the Russian language, 'RU+EN' means that Russian and English data are merged by task, and 'RU $\oplus$ EN' means that Russian and English tasks are treated as separate tasks.}
+\begin{table}[htbp]
+\caption{Accuracy on the Russian data for the encoder-agnostic transformer-based model. Multilingual cased models, batch size 160, plain sampling. Mode S stands for single-task, and mode M stands for multi-task. In the 'Training data' column, RU stands for the Russian language, 'RU+EN' means that Russian and English data are merged by task, and 'RU $\oplus$ EN' means that Russian and English tasks are treated as separate tasks.}
 \scalebox{0.48}{
 \begin{tabular}{|c|c|c||c|c|c|c|c|c|} \hline
 Model & \begin{tabular}[c]{@{}l@{}}Training\\data\end{tabular} & Mode & Average & \begin{tabular}[c]{@{}l@{}}Emotions\end{tabular} & \begin{tabular}[c]{@{}l@{}}Sentiment\end{tabular} & \begin{tabular}[c]{@{}l@{}}Toxicity\end{tabular} & \begin{tabular}[c]{@{}l@{}}Intents\end{tabular} & \begin{tabular}[c]{@{}l@{}}Topics\end{tabular} \\
 \hline \hline
-\textit{distilbert-mult} & RU & S & \textbf{84.7/81.0} & 77.4/69.1 & \textbf{77.7/77.9} & \textbf{96.7/94.8} & \textbf{83.5/76.6} & 88.1/86.9 & 10058 \\ 
+\textit{distilbert-mult} & RU & S & \textbf{84.7} & 77.4 & \textbf{77.7} & \textbf{96.7} & \textbf{83.5} & 88.1 \\ 
 % \hline
-\textit{distilbert-mult} & RU & M & 84.3/80.2 & \textbf{78.1/70.5} & 76.8/76.7 & 96.5/94.4 & 81.9/72.3 & \textbf{88.2/87.1} & 9821 \\ 
+\textit{distilbert-mult} & RU & M & 84.3 & \textbf{78.1} & 76.8 & 96.5 & 81.9 & \textbf{88.2}  \\ 
  \hline
-\textit{distilbert-mult} & RU+EN & S & \textbf{85.2/81.8} & \textbf{78.9}/70.2 & \textbf{77.4/77.3} & \textbf{96.8/94.9} & \textbf{84.7/79.1} & \textbf{88.4/87.4} & 31843 \\ 
+\textit{distilbert-mult} & RU+EN & S & \textbf{85.2} & \textbf{78.9} & \textbf{77.4} & \textbf{96.8} & \textbf{84.7} & \textbf{88.4}  \\ 
 % \hline
-\textit{distilbert-mult} & RU+EN & M & 84.5/81.1 & 77.9/\textbf{70.7} & 76.6/76.7 & 96.5/94.5 & 82.9/76.5 & \textbf{88.4}/87.2 & 17790 \\ 
+\textit{distilbert-mult} & RU+EN & M & 84.5 & 77.9 & 76.6 & 96.5/94.5 & 82.9/76.5 & \textbf{88.4}/87.2  \\ 
 % \hline
-\textit{distilbert-mult} & RU $\oplus$ EN & M & 84.4/80.6 & 77.6/70.0 & 76.8/77.1 & 96.5/94.5 & 82.4/73.9 & 88.3/87.2 & 23688 \\ 
+\textit{distilbert-mult} & RU $\oplus$ EN & M & 84.4 & 77.6 & 76.8 & 96.5 & 82.4 & 88.3 \\ 
 \hline
-\textit{bert-mult} & RU & S & 84.7/80.2 & 76.6/64.2 & \textbf{77.8/78.2} & \textbf{96.9/95.1} & \textbf{83.9}/76.3 & 88.4/87.0 & 10884 \\ 
+\textit{bert-mult} & RU & S & 84.7 & 76.6 & \textbf{77.8} & \textbf{96.9} & \textbf{83.9} & 88.4  \\ 
 % \hline
-\textit{bert-mult} & RU & M & \textbf{84.8/81.4} & \textbf{78.4/71.4} & 76.3/76.3 & 96.8/94.8 & 83.7/\textbf{76.6} & \textbf{89.0/87.8} & 12810 \\ 
+\textit{bert-mult} & RU & M & \textbf{84.8} & \textbf{78.4} & 76.3 & 96.8 & 83.7 & \textbf{89.0}  \\ 
  \hline
-\textit{bert-mult} & RU+EN & S & \textbf{85.6/82.3} & 78.9/70.1 & \textbf{77.6/77.8} & \textbf{96.9/94.9} & \textbf{85.0/80.4} & \textbf{89.4/88.5} & 23752 \\ 
+\textit{bert-mult} & RU+EN & S & \textbf{85.6} & 78.9 & \textbf{77.6} & \textbf{96.9} & \textbf{85.0} & \textbf{89.4}  \\ 
 % \hline
-\textit{bert-mult} & RU+EN & M & 85.2/\textbf{82.3} & \textbf{79.2/72.7} & 76.4/76.6 & 96.7/94.8 & 84.3/79.3 & \textbf{89.4}/88.3 & 20755 \\ 
+\textit{bert-mult} & RU+EN & M & 85.2 & \textbf{79.2} & 76.4 & 96.7 & 84.3 & \textbf{89.4} \\ 
 % \hline
-\textit{bert-mult} & RU $\oplus$ EN & M & 85.0/81.6 & 78.3/71.4 & 77.1/77.0 & 96.7/94.7 & 84.0/76.7 & 89.1/88.0 & 22701 \\ \hline
+\textit{bert-mult} & RU $\oplus$ EN & M & 85.0 & 78.3 & 77.1 & 96.7 & 84.0 & 89.1  \\ \hline
 \end{tabular}}
+\end{table}
 
 \end{frame}
 
 
 \begin{frame}{Encoder-agnostic models: the effect of training size reduction}
 \begin{table}[htbp]
-\caption{Average accuracy on the Russian data for \textit{distilbert-base-multilingual-cased}, batch size 160, plain sampling. 'S' stands for single-task mode, 'M' stands for multi-task mode, 'RU share' means the share of Russian training data, 'RU' means training only on the given percentage of Russian data, 'RU+EN' means training on the given percentage of Russian data with added full size English data.}
+\caption{Average accuracy on the Russian data for \textit{distilbert-base-multilingual-cased}, batch size 160, plain sampling. 'S' stands for single-task mode, 'M' stands for multi-task mode, 'RU share' means the share of Russian training data, 'RU' means training only on the given percentage of Russian data, 'RU+EN' means training on the given percentage of Russian data with added full-size English data.}
 \scalebox{0.99}{
 \begin{tabular}[baseline={(0,2.1)}]{|l||c|c|c|c|}
 \hline
@@ -481,9 +483,9 @@ legend style={nodes={scale=0.5, transform shape}}
 
 \begin{frame}{Encoder-agnostic models: conclusions}
 \begin{enumerate}
-\item Multi-task encoder-agnostic models almost match single-task ones by their metrics. Such multi-task models can even overcome single-task models for tasks where dataset is small, for example, if the other similar task for the multi-task model has sufficiently larger dataset. 
-\item In case of the very small data size, multi-task encoder-agnostic models start strongly overcoming single-task ones. This effect also depends on the data size for task. 
-\item Adding English data to Russian improves metrics of the multilingual models, the smaller is the Russian data size, the larger is improvement (it can be up to several percent). It is true also for single-task models, with any validation language.
+\item Multi-task encoder-agnostic models almost match single-task ones by their metrics. Such multi-task models can even overcome single-task models for tasks where the dataset is small, for example, if the other similar task for the multi-task model has a sufficiently larger dataset. 
+\item In case of the very small data size, multi-task encoder-agnostic models start strongly overcoming single-task ones. This effect also depends on the data size for the task. 
+\item Adding English data to Russian improves metrics of the multilingual models, and the smaller the Russian data size is, the larger an improvement is(it can be up to several percent). It is true also for single-task models, with any validation language.
 \end{enumerate}
 \end{frame}
 
