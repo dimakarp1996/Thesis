@@ -2,6 +2,7 @@
 
 \newif\ifpresentation % Условие, проверяющее, что документ --- презентация
 \presentationtrue
+
 \documentclass[10pt, xcolor={dvipsnames, table, hyperref}]{beamer}
 
 \input{common/setup}               % Общие настройки шаблона
@@ -23,7 +24,7 @@
 
 % Вывести информацию о версиях используемых библиотек в лог сборки
 \listfiles
-
+\pgfplotsset{compat=1.10}
 \begin{document}
 \input{Presentation/all_slides}      % Первые слайды презентации
 %\input{Presentation/content}       % Настройки заглавной странице
