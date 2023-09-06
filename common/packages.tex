@@ -16,6 +16,12 @@
 \RequirePackage{etoolbox}[2015/08/02]               % Для продвинутой проверки разных условий
 \providebool{presentation}
 
+%%% Цвета %%%
+\ifpresentation
+\else
+    \usepackage[dvipsnames, table, hyperref, monochrome]{xcolor} % Совместимо с tikz
+\fi
+
 %%% Поля и разметка страницы %%%
 \usepackage{pdflscape}                              % Для включения альбомных страниц
 \usepackage{subcaption} % subplots
@@ -95,12 +101,6 @@
 % Много авторов
 
 % Красная строка
-
-%%% Цвета %%%
-\ifpresentation
-\else
-    \usepackage[dvipsnames, table, hyperref]{xcolor} % Совместимо с tikz
-\fi
 
 %%% Таблицы %%%
 \usepackage{longtable,ltcaption}                    % Длинные таблицы
